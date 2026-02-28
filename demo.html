@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Soul Signature Demo | Codex Aeterna</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="See the shape of your thoughts. Generate a soul signature from your text." />
+  
+  <!-- Google Analytics - Replace GA_MEASUREMENT_ID with your actual ID -->
+  <!--
+  <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'GA_MEASUREMENT_ID');
+  </script>
+  -->
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/img/favicon-180x180.png">
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  <div class="page">
+    <header>
+      <a href="index.html" class="logo">
+        <img src="assets/img/logo-symbol-512.png" alt="Codex Aeterna logo — stylized consciousness signature symbol" class="logo-mark">
+        <div class="logo-text">
+          <span>Codex Aeterna</span>
+          <span>Memory becomes immortal</span>
+        </div>
+      </a>
+      <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <nav>
+        <a href="index.html#how-it-works">How it works</a>
+        <a href="index.html#offerings">The Archive</a>
+        <a href="cognitive_fingerprints_full.html">Research</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="demo.html" class="active">Try Demo</a>
+        <a href="sentient.html" class="highlight">Sentient</a>
+        <a href="index.html#contact">Reserve</a>
+      </nav>
+    </header>
+
+    <main>
+      <h1 class="page-title">SOUL SIGNATURE</h1>
+      <p class="page-subtitle">See the shape of your thoughts</p>
+
+      <div class="demo-section">
+        <div class="input-panel">
+          <h2>Enter Your Text</h2>
+          <textarea id="textInput" placeholder="Paste your text here...
+
+Journal entries, emails, social media posts, essays — any text that represents your voice.
+
+Minimum 500 words recommended for meaningful patterns."></textarea>
+          <div class="controls">
+            <button id="generateBtn" class="btn btn-primary" onclick="generateSoul()">Generate Soul</button>
+            <button id="micBtn" class="btn btn-secondary" onclick="toggleVoice()">🎤 Speak</button>
+            <button class="btn btn-secondary" onclick="loadSample()">Load Sample</button>
+            <button class="btn btn-secondary" onclick="clearAll()">Clear</button>
+          </div>
+        </div>
+
+        <div class="output-panel">
+          <h2>Your Soul Signature</h2>
+          <div class="canvas-container">
+            <canvas id="soulCanvas" width="400" height="500"></canvas>
+            <p class="placeholder" id="placeholder">Enter text and click Generate</p>
+          </div>
+          <div class="stats" id="stats" style="display: none;">
+            <div class="stats-row">
+              <span class="stats-label">Words analyzed</span>
+              <span class="stats-value" id="statWords">-</span>
+            </div>
+            <div class="stats-row">
+              <span class="stats-label">Unique connections</span>
+              <span class="stats-value" id="statEdges">-</span>
+            </div>
+            <div class="stats-row">
+              <span class="stats-label">Vocabulary nodes</span>
+              <span class="stats-value" id="statNodes">-</span>
+            </div>
+            <div class="stats-row">
+              <span class="stats-label">Hub ratio</span>
+              <span class="stats-value" id="statHub">-</span>
+            </div>
+          </div>
+          <div class="controls" style="justify-content: center; margin-top: 20px;">
+            <button id="downloadBtn" class="btn btn-secondary" onclick="downloadSoul()" disabled>Download PNG</button>
+            <button id="animateBtn" class="btn btn-secondary" onclick="animateSoul()" style="display: none;">Animate</button>
+          </div>
+          <p id="animProgress" style="text-align: center; color: var(--accent); font-size: 0.9rem; min-height: 1.4em; margin-top: 8px;"></p>
+        </div>
+      </div>
+
+      <p class="footer-note">
+        This is a simplified preview. Full resolution signatures with professional rendering available at 
+        <a href="index.html#contact">Codex Aeterna</a>.
+      </p>
+    </main>
+
+    <footer>
+      <span>© <span id="year"></span> Codex Aeterna LLC. All rights reserved.</span>
+      <span>Patent pending · "Memory becomes immortal."</span>
+    </footer>
+  </div>
+
+  <!-- Scripts -->
+  <script src="assets/js/demo.min.js"></script>
+  <script>
+    // Set current year in footer
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

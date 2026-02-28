@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4,000 Years of Cognitive Fingerprints | Codex Aeterna</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #0a0a0f;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            font-weight: 300;
+            letter-spacing: 0.1em;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #f0c674, #e0b050);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            color: #888;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+        
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin: 30px 0;
+            padding: 20px;
+            background: linear-gradient(145deg, #12121a, #0d0d12);
+            border-radius: 12px;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 300;
+            color: #f0c674;
+        }
+        
+        .stat-label {
+            font-size: 0.75rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 30px 0;
+            padding: 15px 10px;
+            background: linear-gradient(90deg, #1a1510 0%, #12121a 50%, #101520 100%);
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+        
+        .era {
+            text-align: center;
+            min-width: 80px;
+            padding: 0 5px;
+        }
+        
+        .era-date {
+            font-size: 0.7rem;
+            color: #f0c674;
+            margin-bottom: 3px;
+        }
+        
+        .era-name {
+            font-size: 0.65rem;
+            color: #666;
+        }
+        
+        .dials-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            margin: 30px 0;
+        }
+        
+        @media (max-width: 1200px) {
+            .dials-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+        
+        @media (max-width: 900px) {
+            .dials-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        
+        @media (max-width: 600px) {
+            .dials-grid { grid-template-columns: 1fr; }
+        }
+        
+        .dial-card {
+            background: linear-gradient(145deg, #12121a, #0d0d12);
+            border: 1px solid #2a2a3a;
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        
+        .dial-card:hover {
+            transform: translateY(-3px);
+            border-color: #3a3a4a;
+        }
+        
+        .dial-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+        
+        .dial-title {
+            font-size: 1.05rem;
+            font-weight: 500;
+            color: #fff;
+        }
+        
+        .dial-meta {
+            font-size: 0.7rem;
+            color: #555;
+            margin-top: 3px;
+        }
+        
+        .dial-era {
+            font-size: 0.65rem;
+            color: #888;
+            background: #1a1a25;
+            padding: 3px 8px;
+            border-radius: 10px;
+        }
+        
+        .dial-container {
+            position: relative;
+            width: 160px;
+            height: 160px;
+            margin: 0 auto 15px;
+        }
+        
+        .dial-svg {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .hub-list {
+            margin-top: 10px;
+        }
+        
+        .hub-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 4px 0;
+            border-bottom: 1px solid #1a1a25;
+            font-size: 0.8rem;
+        }
+        
+        .hub-item:last-child {
+            border-bottom: none;
+        }
+        
+        .hub-word {
+            color: #ccc;
+            font-family: 'Consolas', monospace;
+        }
+        
+        .hub-clock {
+            color: #555;
+            font-size: 0.7rem;
+        }
+        
+        .zone-label {
+            font-size: 0.65rem;
+            color: #888;
+            text-align: center;
+            margin-top: 8px;
+            font-style: italic;
+        }
+        
+        .pattern-section {
+            margin-top: 50px;
+            padding: 30px;
+            background: linear-gradient(145deg, #12121a, #0d0d12);
+            border: 1px solid #2a2a3a;
+            border-radius: 16px;
+        }
+        
+        .pattern-title {
+            font-size: 1.4rem;
+            margin-bottom: 25px;
+            color: #f0c674;
+            text-align: center;
+        }
+        
+        .pattern-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        
+        @media (max-width: 800px) {
+            .pattern-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        
+        @media (max-width: 500px) {
+            .pattern-grid { grid-template-columns: 1fr; }
+        }
+        
+        .pattern-item {
+            padding: 15px;
+            background: #0a0a0f;
+            border-radius: 10px;
+            border-left: 3px solid;
+        }
+        
+        .pattern-name {
+            font-size: 0.85rem;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+        
+        .pattern-zone {
+            font-size: 0.75rem;
+            color: #888;
+            margin-bottom: 8px;
+        }
+        
+        .pattern-desc {
+            font-size: 0.75rem;
+            color: #666;
+            line-height: 1.4;
+        }
+        
+        .insight-section {
+            margin-top: 40px;
+            padding: 30px;
+            background: linear-gradient(145deg, #1a1510, #12100d);
+            border: 1px solid #3a3020;
+            border-radius: 16px;
+        }
+        
+        .insight-title {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: #f0c674;
+        }
+        
+        .insight-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+        }
+        
+        @media (max-width: 700px) {
+            .insight-grid { grid-template-columns: 1fr; }
+        }
+        
+        .insight-card {
+            padding: 20px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+        }
+        
+        .insight-card h3 {
+            font-size: 0.95rem;
+            color: #f0c674;
+            margin-bottom: 10px;
+        }
+        
+        .insight-card p {
+            font-size: 0.85rem;
+            color: #999;
+            line-height: 1.6;
+        }
+        
+        footer {
+            margin-top: 60px;
+            text-align: center;
+            padding: 30px;
+            border-top: 1px solid #222;
+        }
+        
+        .brand {
+            font-size: 1.3rem;
+            letter-spacing: 0.3em;
+            color: #f0c674;
+            margin-bottom: 10px;
+        }
+        
+        .tagline {
+            font-size: 0.85rem;
+            color: #666;
+            font-style: italic;
+        }
+
+        /* Color coding by era */
+        .ancient { border-left-color: #8B4513; }
+        .classical { border-left-color: #4169E1; }
+        .medieval { border-left-color: #9370DB; }
+        .renaissance { border-left-color: #2E8B57; }
+        .romantic { border-left-color: #DA70D6; }
+        .modern { border-left-color: #FF8C00; }
+    </style>
+    <style>
+        .site-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 0 24px;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .site-nav a.logo-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: inherit;
+        }
+        .site-nav .logo-mark {
+            height: 32px;
+            width: auto;
+        }
+        .site-nav .logo-text span:first-child {
+            display: block;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #e0e0e0;
+        }
+        .site-nav .logo-text span:last-child {
+            display: block;
+            font-size: 0.7rem;
+            color: #666;
+            letter-spacing: 0.05em;
+        }
+        .site-nav nav {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+        .site-nav nav a {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            color: #aaa;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .site-nav nav a:hover { color: #e0e0e0; }
+        .site-nav nav a.active { color: #f0c674; }
+        .site-nav nav a.highlight {
+            background: rgba(240,198,116,0.12);
+            color: #f0c674;
+        }
+        .site-nav .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            gap: 5px;
+            background: none;
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 8px;
+            padding: 8px 10px;
+            cursor: pointer;
+            margin-left: auto;
+        }
+        .site-nav .hamburger span {
+            display: block;
+            width: 20px;
+            height: 2px;
+            background: #aaa;
+            border-radius: 2px;
+            transition: transform 0.2s ease, opacity 0.2s ease;
+        }
+        .site-nav.nav-open .hamburger span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .site-nav.nav-open .hamburger span:nth-child(2) { opacity: 0; }
+        .site-nav.nav-open .hamburger span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+        @media (max-width: 767px) {
+            .site-nav { flex-wrap: wrap; align-items: center; }
+            .site-nav .hamburger { display: flex; }
+            .site-nav nav {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                gap: 4px;
+                padding-top: 10px;
+                margin-top: 8px;
+                border-top: 1px solid rgba(255,255,255,0.08);
+            }
+            .site-nav.nav-open nav { display: flex; background: #1a1a2e; border-radius: 12px; padding: 8px; margin-top: 10px; }
+            .site-nav nav a { border-radius: 8px; padding: 10px 12px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="site-nav">
+            <a href="index.html" class="logo-link">
+                <img src="assets/img/logo-symbol-512.png" alt="Codex Aeterna" class="logo-mark">
+                <div class="logo-text">
+                    <span>Codex Aeterna</span>
+                    <span>Memory becomes immortal</span>
+                </div>
+            </a>
+            <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+            <nav>
+                <a href="index.html#how-it-works">How it works</a>
+                <a href="index.html#offerings">The Archive</a>
+                <a href="cognitive_fingerprints_full.html" class="active">Research</a>
+                <a href="gallery.html">Gallery</a>
+                <a href="demo.html">Try Demo</a>
+                <a href="sentient.html" class="highlight">Sentient</a>
+                <a href="index.html#contact">Reserve</a>
+            </nav>
+        </div>
+        <header>
+            <h1>4,000 Years of Mind</h1>
+            <p class="subtitle">Cognitive Fingerprints Across Civilizations</p>
+        </header>
+        
+        <div class="stats-bar">
+            <div class="stat">
+                <div class="stat-value">12</div>
+                <div class="stat-label">Texts Analyzed</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">4,000</div>
+                <div class="stat-label">Years Spanned</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">1.2M+</div>
+                <div class="stat-label">Graph Edges</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">150K+</div>
+                <div class="stat-label">Unique Words</div>
+            </div>
+        </div>
+        
+        <div class="timeline">
+            <div class="era"><div class="era-date">~1550 BCE</div><div class="era-name">Egypt</div></div>
+            <div class="era"><div class="era-date">~750 BCE</div><div class="era-name">Greece</div></div>
+            <div class="era"><div class="era-date">~500 BCE</div><div class="era-name">Biblical</div></div>
+            <div class="era"><div class="era-date">~1320</div><div class="era-name">Medieval Italy</div></div>
+            <div class="era"><div class="era-date">~1400</div><div class="era-name">Medieval England</div></div>
+            <div class="era"><div class="era-date">~1600</div><div class="era-name">Renaissance</div></div>
+            <div class="era"><div class="era-date">1605</div><div class="era-name">Early Modern</div></div>
+            <div class="era"><div class="era-date">1667</div><div class="era-name">English Epic</div></div>
+            <div class="era"><div class="era-date">1833</div><div class="era-name">Romantic</div></div>
+            <div class="era"><div class="era-date">1844</div><div class="era-name">French Novel</div></div>
+            <div class="era"><div class="era-date">1869</div><div class="era-name">Russian Epic</div></div>
+            <div class="era"><div class="era-date">2020s</div><div class="era-name">Digital</div></div>
+        </div>
+        
+        <div class="dials-grid">
+            <!-- Book of the Dead -->
+            <div class="dial-card">
+                <div class="dial-header">
+                    <div>
+                        <div class="dial-title">Book of the Dead</div>
+                        <div class="dial-meta">8,697 words · 43K edges</div>
+                    </div>
+                    <span class="dial-era">~1550 BCE</span>
+                </div>
+                <div class="dial-container">
+                    <svg class="dial-svg" viewBox="0 0 160 160">
+                        <circle cx="80" cy="80" r="70" fill="none" stroke="#2a2a3a" stroke-width="1"/>
+                        <circle cx="80" cy="80" r="55" fill="none" stroke="#1a1a25" stroke-width="1"/>
+                        <g fill="#444" font-size="8" text-anchor="middle">
+                            <text x="80" y="18">12</text><text x="115" y="30">1</text>
+                            <text x="140" y="55">2</text><text x="150" y="84">3</text>
+                            <text x="140" y="113">4</text><text x="115" y="138">5</text>
+                            <text x="80" y="150">6</text><text x="45" y="138">7</text>
+                            <text x="20" y="113">8</text><text x="10" y="84">9</text>
+                            <text x="20" y="55">10</text><text x="45" y="30">11</text>
+                        </g>
+                        <circle cx="40" cy="40" r="16" fill="#8B4513" opacity="0.6"/>
+                        <circle cx="22" cy="100" r="12" fill="#CD853F" opacity="0.5"/>
+                        <circle cx="110" cy="28" r="10" fill="#D2691E" opacity="0.5"/>
+                    </svg>
+                </div>
+                <div class="zone-label">11:00 & 8:00 — Gods, Ritual</div>
+                <div class="hub-list">
+                    <div class="hub-item"><span class="hub-word">osiris</span><span class="hub-clock">8:00</span></div>
+                    <div class="hub-item"><span class="hub-word">gods</span><span class="hub-clock">11:00</span></div>
+                    <div class="hub-item"><span class="hub-word">horus</span><span class="hub-clock">10:00</span></div>
+                </div>
+            </div>
+            
+            <!-- Iliad -->
+            <div class="dial-card">
+                <div class="dial-header">
+                    <div>
+                        <div class="dial-title">Iliad</div>
+                        <div class="dial-meta">11,540 words · 75K edges</div>
+                    </div>
+                    <span class="dial-era">~750 BCE</span>
+                </div>
+                <div class="dial-container">
+                    <svg class="dial-svg" viewBox="0 0 160 160">
+                        <circle cx="80" cy="80" r="70" fill="none" stroke="#2a2a3a" stroke-width="1"/>
+                        <circle cx="80" cy="80" r="55" fill="none" stroke="#1a1a25" stroke-width="1"/>
+                        <g fill="#444" font-size="8" text-anchor="middle">
+                            <text x="80" y="18">12</text><text x="115" y="30">1</text>
+                            <text x="140" y="55">2</text><text x="150" y="84">3</text>
+                            <text x="140" y="113">4</text><text x="115" y="138">5</text>
+                            <text x="80" y="150">6</text><text x="45" y="138">7</text>
+                            <text x="20" y="113">8</text><text x="10" y="84">9</text>
+                            <text x="20" y="55">10</text><text x="45" y="30">11</text>
+                        </g>
+                        <circle cx="25" cy="50" r="18" fill="#CD7F32" opacity="0.6"/>
+                        <circle cx="115" y="130" r="14" fill="#B8860B" opacity="0.5"/>
+                        <circle cx="40" cy="35" r="10" fill="#DAA520" opacity="0.5"/>
+                    </svg>
+                </div>
+                <div class="zone-label">10:00 & 5:00 — Heroes, War</div>
+                <div class="hub-list">
+                    <div class="hub-item"><span class="hub-word">hector</span><span class="hub-clock">10:00</span></div>
+                    <div class="hub-item"><span class="hub-word">achilles</span><span class="hub-clock">3:00</span></div>
+                    <div class="hub-item"><span class="hub-word">jove</span><span class="hub-clock">9:00</span></div>
+                </div>
+            </div>
+            
+            <!-- Bible -->
+            <div class="dial-card">
+                <div class="dial-header">
+                    <div>
+                        <div class="dial-title">Bible (KJV)</div>
+                        <div class="dial-meta">12,431 words · 166K edges</div>
+                    </div>
+                    <span class="dial-era">~500 BCE</span>
+                </div>
+                <div class="dial-container">
+                    <svg class="dial-svg" viewBox="0 0 160 160">
+                        <circle cx="80" cy="80" r="70" fill="none" stroke="#2a2a3a" stroke-width="1"/>
+                        <circle cx="80" cy="80" r="55" fill="none" stroke="#1a1a25" stroke-width="1"/>
+                        <g fill="#444" font-size="8" text-anchor="middle">
+                            <text x="80" y="18">12</text><text x="115" y="30">1</text>
+                            <text x="140" y="55">2</text><text x="150" y="84">3</text>
+                            <text x="140" y="113">4</text><text x="115" y="138">5</text>
+                            <text x="80" y="150">6</text><text x="45" y="138">7</text>
+                            <text x="20" y="113">8</text><text x="10" y="84">9</text>
+                            <text x="20" y="55">10</text><text x="45" y="30">11</text>
+                        </g>
+                        <circle cx="12" cy="80" r="22" fill="#4169E1" opacity="0.6"/>
+                        <circle cx="28" cy="48" r="12" fill="#6495ED" opacity="0.5"/>
+                    </svg>
+                </div>
+                <div class="zone-label">9:00 (West) — Authority, Covenant</div>
+                <div class="hub-list">
+                    <div class="hub-item"><span class="hub-word">lord</span><span class="hub-clock">9:00</span></div>
+                    <div class="hub-item"><span class="hub-word">israel</span><span class="hub-clock">9:00</span></div>
+                    <div class="hub-item"><span class="hub-word">king</span><span class="hub-clock">9:00</span></div>
+                </div>
+            </div>
+            
+            <!-- Divine Comedy -->
+            <div class="dial-card">
+                <div class="dial-header">
+                    <div>
+                        <div class="dial-title">Divine Comedy</div>
+                        <div class="dial-meta">10,217 words · 49K edges</div>
+                    </div>
+                    <span class="dial-era">~1320</span>
+                </div>
+                <div class="dial-container">
+                    <svg class="dial-svg" viewBox="0 0 160 160">
+                        <circle cx="80" cy="80" r="70" fill="none" stroke="#2a2a3a" stroke-width="1"/>
+                        <circle cx="80" cy="80" r="55" fill="none" stroke="#1a1a25" stroke-width="1"/>
+                        <g fill="#444" font-size="8" text-anchor="middle">
+                            <text x="80" y="18">12</text><text x="115" y="30">1</text>
+                            <text x="140" y="55">2</text><text x="150" y="84">3</text>
+                            <text x="140" y="113">4</text><text x="115" y="138">5</text>
+                            <text x="80" y="150">6</text><text x="45" y="138">7</text>
+                            <text x="20" y="113">8</text><text x="10" y="84">9</text>
+                            <text x="20" y="55">10</text><text x="45" y="30">11</text>
+                        </g>
+                        <circle cx="80" cy="14" r="16" fill="#9370DB" opacity="0.6"/>
+                        <circle cx="40" cy="40" r="14" fill="#8A2BE2" opacity="0.5"/>
+                    </svg>
+                </div>
+                <div class="zone-label">12:00 & 11:00 — Self, Florence</div>
+                <div class="hub-list">
+                    <div class="hub-item"><span class="hub-word">dante</span><span class="hub-clock">12:00</span></div>
+                    <div class="hub-item"><span class="hub-word">florence</span><span class="hub-clock">11:00</span></div>
+                    <div class="hub-item"><span class="hub-word">virgil</span><span class="hub-clock">4:00</span></div>
+                </div>
+            </div>
+            
+            <!-- Canterbury Tales -->
+            <div class="dial-card">
+                <div class="dial-header">
+                    <div>
+                        <div class="dial-title">Canterbury Tales</div>
+                        <div class="dial-meta">17,422 words · 107K edges</div>
+                    </div>
+                    <span class="dial-era">~1400</span>
+                </div>
+                <div class="dial-container">
+                    <svg class="dial-svg" viewBox="0 0 160 160">
+                        <circle cx="80" cy="80" r="70" fill="none" stroke="#2a2a3a" stroke-width="1"/>
+                        <circle cx="80" cy="80" r="55" fill="none" stroke="#1a1a25" stroke-width="1"/>
+                        <g fill="#444" font-size="8" text-anchor="middle">
+                            <text x="80" y="18">12</text><text x="115" y="30">1</text>
+                            <text x="140" y="55">2</text><text x="150" y="84">3</text>
+                            <text x="140" y="113">4</text><text x="115" y="138">5</text>
+                            <text x="80" y="150">6</text><text x="45" y="138">7</text>
+                            <text x="20" y="113">8</text><text x="10" y="84">9</text>
+                            <text x="20" y="55">10</text><text x="45" y="30">11</text>
+                        </g>
+                        <circle cx="40" cy="40" r="14" fill="#9370DB" opacity="0.6"/>
+                        <circle cx="80" cy="148" r="14" fill="#8A2BE2" opacity="0.5"/>
+                    </svg>
+                </div>
+                <div class="zone-label">11:00 & 6:00 — Speech, Tales</div>
+                <div class="hub-list">
+                    <div class="hub-item"><span class="hub-word">full</span><span class="hub-clock">11:00</span></div>
+                    <div class="hub-item"><span class="hub-word">quoth</span><span class="hub-clock">7:00</span></div>
+                    <div class="hub-item"><span class="hub-word">love</span><span class="hub-clock">9:00</span></div>
+                </div>
+            </div>
+            
+            <!-- Hamlet -->
+            <div class="dial-card">
+                <div class="dial-header">
+                    <div>
+                        <div class="dial-title">Hamlet</div>
+                        <div class="dial-meta">4,671 words · 13K edges</div>
+                    </div>
+                    <span class="dial-era">~1600</span>
+                </div>
+                <div class="dial-container">
+                    <svg class="dial-svg" viewBox="0 0 160 160">
+                        <circle cx="80" cy="80" r="70" fill="none" stroke="#2a2a3a" stroke-width="1"/>
+                        <circle cx="80" cy="80" r="55" fill="none" stroke="#1a1a25" stroke-width="1"/>
+                        <g fill="#444" font-size="8" text-anchor="middle">
+                            <text x="80" y="18">12</text><text x="115" y="30">1</text>
+                            <text x="140" y="55">2</text><text x="150" y="84">3</text>
+                            <text x="140" y="113">4</text><text x="115" y="138">5</text>
+                            <text x="80" y="150">6</text><text x="45" y="138">7</text>
+                            <text x="20" y="113">8</text><text x="10" y="84">9</text>
+                            <text x="20" y="55">10</text><text x="45" y="30">11</text>
+                        </g>
+                        <circle cx="12" cy="80" r="20" fill="#2E8B57" opacity="0.6"/>
+                        <circle cx="25" cy="50" r="14" fill="#3CB371" opacity="0.5"/>
+                    </svg>
+                </div>
+                <div class="zone-label">9:00 & 10:00 — Authority, Doubt</div>
+                <div class="hub-list">
+                    <div class="hub-item"><span class="hub-word">lord</span><span class="hub-clock">9:00</span></div>
+                    <div class="hub-item"><span class="hub-word">king</span><span class="hub-clock">9:00</span></div>
+                    <div class="hub-item"><span class="hub-word">hamlet</span><span class="hub-clock">10:00</span></div>
+                </div>
+            </div>
+            
+            <!-- Don Quixote -->
+            <div class="dial-card">
+                <div class="dial-header">
+                    <div>
+                        <div class="dial-title">Don Quixote</div>
+                        <div class="dial-meta">15,369 words · 138K edges</div>
+                    </div>
+                    <span class="dial-era">1605</span>
+                </div>
+                <div class="dial-container">
+                    <svg class="dial-svg" viewBox="0 0 160 160">
+                        <circle cx="80" cy="80" r="70" fill="none" stroke="#2a2a3a" stroke-width="1"/>
+                        <circle cx="80" cy="80" r="55" fill="none" stroke="#1a1a25" stroke-width="1"/>
+                        <g fill="#444" font-size="8" text-anchor="middle">
+                            <text x="80" y="18">12</text><text x="115" y="30">1</text>
+                            <text x="140" y="55">2</text><text x="150" y="84">3</text>
+                            <text x="140" y="113">4</text><text x="115" y="138">5</text>
+                            <text x="80" y="150">6</text><text x="45" y="138">7</text>
+                            <text x="20" y="113">8</text><text x="10" y="84">9</text>
+                            <text x="20" y="55">10</text><text x="45" y="30">11</text>
+                        </g>
+                        <circle cx="80" cy="14" r="16" fill="#2E8B57" opacity="0.6"/>
+                        <circle cx="48" cy="135" r="14" fill="#228B22" opacity="0.5"/>
+                        <circle cx="80" cy="148" r="12" fill="#3CB371" opacity="0.5"/>
+                    </svg>
+                </div>
+                <div class="zone-label">12:00 & 6:00-7:00 — Character Names</div>
+                <div class="hub-list">
+                    <div class="hub-item"><span class="hub-word">don</span><span class="hub-clock">12:00</span></div>
+                    <div class="hub-item"><span class="hub-word">quixote</span><span class="hub-clock">7:00</span></div>
+                    <div class="hub-item"><span class="hub-word">sancho</span><span class="hub-clock">6:00</span></div>
+                </div>
+            </div>
+            
+            <!-- Paradise Lost -->
+            <div class="dial-card">
+                <div class="dial-header">
+                    <div>
+                        <div class="dial-title">Paradise Lost</div>
+                        <div class="dial-meta">8,885 words · 39K edges</div>
+                    </div>
+                    <span class="dial-era">1667</span>
+                </div>
+                <div class="dial-container">
+                    <svg class="dial-svg" viewBox="0 0 160 160">
+                        <circle cx="80" cy="80" r="70" fill="none" stroke="#2a2a3a" stroke-width="1"/>
+                        <circle cx="80" cy="80" r="55" fill="none" stroke="#1a1a25" stroke-width="1"/>
+                        <g fill="#444" font-size="8" text-anchor="middle">
+                            <text x="80" y="18">12</text><text x="115" y="30">1</text>
+                            <text x="140" y="55">2</text><text x="150" y="84">3</text>
+                            <text x="140" y="113">4</text><text x="115" y="138">5</text>
+                            <text x="80" y="150">6</text><text x="45" y="138">7</text>
+                            <text x="20" y="113">8</text><text x="10" y="84">9</text>
+                            <text x="20" y="55">10</text><text x="45" y="30">11</text>
+                        </g>
+                        <circle cx="25" cy="50" r="24" fill="#4682B4" opacity="0.6"/>
+                    </svg>
+                </div>
+                <div class="zone-label">10:00 Dominant — Vertical Cosmos</div>
+                <div class="hub-list">
+                    <div class="hub-item"><span class="hub-word">heaven</span><span class="hub-clock">10:00</span></div>
+                    <div class="hub-item"><span class="hub-word">god</span><span class="hub-clock">10:00</span></div>
+                    <div class="hub-item"><span class="hub-word">high</span><span class="hub-clock">10:00</span></div>
+                </div>
+            </div>
+            
+            <!-- Eugene Onegin -->
+            <div class="dial-card">
+                <div class="dial-header">
+                    <div>
+                        <div class="dial-title">Eugene Onegin</div>
+                        <div class="dial-meta">7,394 words · 21K edges</div>
+                    </div>
+                    <span class="dial-era">1833</span>
+                </div>
+                <div class="dial-container">
+                    <svg class="dial-svg" viewBox="0 0 160 160">
+                        <circle cx="80" cy="80" r="70" fill="none" stroke="#2a2a3a" stroke-width="1"/>
+                        <circle cx="80" cy="80" r="55" fill="none" stroke="#1a1a25" stroke-width="1"/>
+                        <g fill="#444" font-size="8" text-anchor="middle">
+                            <text x="80" y="18">12</text><text x="115" y="30">1</text>
+                            <text x="140" y="55">2</text><text x="150" y="84">3</text>
+                            <text x="140" y="113">4</text><text x="115" y="138">5</text>
+                            <text x="80" y="150">6</text><text x="45" y="138">7</text>
+                            <text x="20" y="113">8</text><text x="10" y="84">9</text>
+                            <text x="20" y="55">10</text><text x="45" y="30">11</text>
+                        </g>
+                        <circle cx="20" cy="95" r="14" fill="#DA70D6" opacity="0.6"/>
+                        <circle cx="130" cy="115" r="12" fill="#BA55D3" opacity="0.5"/>
+                    </svg>
+                </div>
+                <div class="zone-label">8:00 & 9:00 — Romantic Love</div>
+                <div class="hub-list">
+                    <div class="hub-item"><span class="hub-word">tattiana</span><span class="hub-clock">4:00</span></div>
+                    <div class="hub-item"><span class="hub-word">love</span><span class="hub-clock">9:00</span></div>
+                    <div class="hub-item"><span class="hub-word">heart</span><span class="hub-clock">10:00</span></div>
+                </div>
+            </div>
+            
+            <!-- Monte Cristo -->
+            <div class="dial-card">
+                <div class="dial-header">
+                    <div>
+                        <div class="dial-title">Monte Cristo</div>
+                        <div class="dial-meta">15,573 words · 161K edges</div>
+                    </div>
+                    <span class="dial-era">1844</span>
+                </div>
+                <div class="dial-container">
+                    <svg class="dial-svg" viewBox="0 0 160 160">
+                        <circle cx="80" cy="80" r="70" fill="none" stroke="#2a2a3a" stroke-width="1"/>
+                        <circle cx="80" cy="80" r="55" fill="none" stroke="#1a1a25" stroke-width="1"/>
+                        <g fill="#444" font-size="8" text-anchor="middle">
+                            <text x="80" y="18">12</text><text x="115" y="30">1</text>
+                            <text x="140" y="55">2</text><text x="150" y="84">3</text>
+                            <text x="140" y="113">4</text><text x="115" y="138">5</text>
+                            <text x="80" y="150">6</text><text x="45" y="138">7</text>
+                            <text x="20" y="113">8</text><text x="10" y="84">9</text>
+                            <text x="20" y="55">10</text><text x="45" y="30">11</text>
+                        </g>
+                        <circle cx="80" cy="14" r="16" fill="#DC143C" opacity="0.6"/>
+                        <circle cx="148" cy="80" r="14" fill="#B22222" opacity="0.5"/>
+                    </svg>
+                </div>
+                <div class="zone-label">12:00 & 3:00 — Revenge Names</div>
+                <div class="hub-list">
+                    <div class="hub-item"><span class="hub-word">cristo</span><span class="hub-clock">12:00</span></div>
+                    <div class="hub-item"><span class="hub-word">villefort</span><span class="hub-clock">3:00</span></div>
+                    <div class="hub-item"><span class="hub-word">danglars</span><span class="hub-clock">12:00</span></div>
+                </div>
+            </div>
+            
+            <!-- War and Peace -->
+            <div class="dial-card">
+                <div class="dial-header">
+                    <div>
+                        <div class="dial-title">War and Peace</div>
+                        <div class="dial-meta">17,234 words · 196K edges</div>
+                    </div>
+                    <span class="dial-era">1869</span>
+                </div>
+                <div class="dial-container">
+                    <svg class="dial-svg" viewBox="0 0 160 160">
+                        <circle cx="80" cy="80" r="70" fill="none" stroke="#2a2a3a" stroke-width="1"/>
+                        <circle cx="80" cy="80" r="55" fill="none" stroke="#1a1a25" stroke-width="1"/>
+                        <g fill="#444" font-size="8" text-anchor="middle">
+                            <text x="80" y="18">12</text><text x="115" y="30">1</text>
+                            <text x="140" y="55">2</text><text x="150" y="84">3</text>
+                            <text x="140" y="113">4</text><text x="115" y="138">5</text>
+                            <text x="80" y="150">6</text><text x="45" y="138">7</text>
+                            <text x="20" y="113">8</text><text x="10" y="84">9</text>
+                            <text x="20" y="55">10</text><text x="45" y="30">11</text>
+                        </g>
+                        <circle cx="48" cy="135" r="18" fill="#228B22" opacity="0.6"/>
+                        <circle cx="22" cy="100" r="12" fill="#32CD32" opacity="0.5"/>
+                    </svg>
+                </div>
+                <div class="zone-label">7:00 Unique — Social Rank</div>
+                <div class="hub-list">
+                    <div class="hub-item"><span class="hub-word">pierre</span><span class="hub-clock">7:00</span></div>
+                    <div class="hub-item"><span class="hub-word">prince</span><span class="hub-clock">7:00</span></div>
+                    <div class="hub-item"><span class="hub-word">princess</span><span class="hub-clock">7:00</span></div>
+                </div>
+            </div>
+            
+            <!-- Elon Musk -->
+            <div class="dial-card">
+                <div class="dial-header">
+                    <div>
+                        <div class="dial-title">Elon Musk</div>
+                        <div class="dial-meta">21,917 words · 205K edges</div>
+                    </div>
+                    <span class="dial-era">2020s</span>
+                </div>
+                <div class="dial-container">
+                    <svg class="dial-svg" viewBox="0 0 160 160">
+                        <circle cx="80" cy="80" r="70" fill="none" stroke="#2a2a3a" stroke-width="1"/>
+                        <circle cx="80" cy="80" r="55" fill="none" stroke="#1a1a25" stroke-width="1"/>
+                        <g fill="#444" font-size="8" text-anchor="middle">
+                            <text x="80" y="18">12</text><text x="115" y="30">1</text>
+                            <text x="140" y="55">2</text><text x="150" y="84">3</text>
+                            <text x="140" y="113">4</text><text x="115" y="138">5</text>
+                            <text x="80" y="150">6</text><text x="45" y="138">7</text>
+                            <text x="20" y="113">8</text><text x="10" y="84">9</text>
+                            <text x="20" y="55">10</text><text x="45" y="30">11</text>
+                        </g>
+                        <circle cx="130" cy="115" r="18" fill="#FF8C00" opacity="0.6"/>
+                        <circle cx="40" cy="40" r="12" fill="#FFD700" opacity="0.5"/>
+                    </svg>
+                </div>
+                <div class="zone-label">4:00-5:00 — Future, Affirmation</div>
+                <div class="hub-list">
+                    <div class="hub-item"><span class="hub-word">tesla</span><span class="hub-clock">5:00</span></div>
+                    <div class="hub-item"><span class="hub-word">yeah</span><span class="hub-clock">4:00</span></div>
+                    <div class="hub-item"><span class="hub-word">great</span><span class="hub-clock">11:00</span></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="pattern-section">
+            <h2 class="pattern-title">Cognitive Zones Across Time</h2>
+            <div class="pattern-grid">
+                <div class="pattern-item ancient">
+                    <div class="pattern-name">Book of the Dead</div>
+                    <div class="pattern-zone">11:00 & 8:00</div>
+                    <div class="pattern-desc">Divine names and ritual invocation. The mind orbits gods.</div>
+                </div>
+                <div class="pattern-item classical">
+                    <div class="pattern-name">Iliad</div>
+                    <div class="pattern-zone">10:00 & 5:00</div>
+                    <div class="pattern-desc">Heroes and warfare. Hector, Achilles, spear, battle.</div>
+                </div>
+                <div class="pattern-item classical">
+                    <div class="pattern-name">Bible</div>
+                    <div class="pattern-zone">9:00 West Wall</div>
+                    <div class="pattern-desc">Authority and covenant. Lord, Israel, King cluster together.</div>
+                </div>
+                <div class="pattern-item medieval">
+                    <div class="pattern-name">Divine Comedy</div>
+                    <div class="pattern-zone">12:00 & 11:00</div>
+                    <div class="pattern-desc">The poet inserts himself. Dante, Florence — self as center.</div>
+                </div>
+                <div class="pattern-item medieval">
+                    <div class="pattern-name">Canterbury Tales</div>
+                    <div class="pattern-zone">11:00 & 6:00</div>
+                    <div class="pattern-desc">Speech and storytelling. Quoth, tale, full.</div>
+                </div>
+                <div class="pattern-item renaissance">
+                    <div class="pattern-name">Hamlet</div>
+                    <div class="pattern-zone">9:00 & 10:00</div>
+                    <div class="pattern-desc">Authority in crisis. Lord and King — a covenant drama.</div>
+                </div>
+                <div class="pattern-item renaissance">
+                    <div class="pattern-name">Don Quixote</div>
+                    <div class="pattern-zone">12:00 & 6:00</div>
+                    <div class="pattern-desc">The first modern novel. Character names as anchors.</div>
+                </div>
+                <div class="pattern-item renaissance">
+                    <div class="pattern-name">Paradise Lost</div>
+                    <div class="pattern-zone">10:00 Dominant</div>
+                    <div class="pattern-desc">Vertical cosmos. Heaven, God, high — pure hierarchy.</div>
+                </div>
+                <div class="pattern-item romantic">
+                    <div class="pattern-name">Eugene Onegin</div>
+                    <div class="pattern-zone">8:00 & 9:00</div>
+                    <div class="pattern-desc">Romantic interiority. Love, heart, life.</div>
+                </div>
+                <div class="pattern-item romantic">
+                    <div class="pattern-name">Monte Cristo</div>
+                    <div class="pattern-zone">12:00 & 3:00</div>
+                    <div class="pattern-desc">Revenge targets positioned on the dial.</div>
+                </div>
+                <div class="pattern-item romantic">
+                    <div class="pattern-name">War and Peace</div>
+                    <div class="pattern-zone">7:00 Unique</div>
+                    <div class="pattern-desc">Social rank obsession. Pierre, Prince, Princess.</div>
+                </div>
+                <div class="pattern-item modern">
+                    <div class="pattern-name">Elon Musk</div>
+                    <div class="pattern-zone">4:00 & 5:00</div>
+                    <div class="pattern-desc">Future-building. Tesla, true, yeah — affirmation engine.</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="insight-section">
+            <h2 class="insight-title">Key Discoveries</h2>
+            <div class="insight-grid">
+                <div class="insight-card">
+                    <h3>Hamlet = Bible</h3>
+                    <p>Both dominated by 9:00 (West). "Lord" and "King" anchor both texts. Shakespeare's tragedy is structurally a covenant drama — authority in crisis.</p>
+                </div>
+                <div class="insight-card">
+                    <h3>Musk = Book of the Dead</h3>
+                    <p>Both share heavy 11:00 presence. "Great/good" mirrors "gods/great." Separated by 4,000 years, they use superlatives as cognitive pillars.</p>
+                </div>
+                <div class="insight-card">
+                    <h3>Paradise Lost Stands Alone</h3>
+                    <p>6 of 10 hubs at 10:00. Milton's mind orbits pure vertical hierarchy — heaven, god, high. No other text concentrates like this.</p>
+                </div>
+                <div class="insight-card">
+                    <h3>The Novel Emerges</h3>
+                    <p>Don Quixote invented the modern pattern: character names as structural anchors. Monte Cristo and War and Peace follow the same template.</p>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <div class="brand">CODEX AETERNA</div>
+            <div class="tagline">Every soul has a signature. We etch it into eternity.</div>
+        </footer>
+    </div>
+</body>
+</html>

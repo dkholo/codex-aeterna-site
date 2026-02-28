@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Gallery — Codex Aeterna</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Explore our gallery of consciousness signatures — from Shakespeare to Tolstoy, personal memorials to beloved pets. Every pattern unique, every soul beautiful." />
+  
+  <!-- SEO & Social Media -->
+  <meta property="og:title" content="Gallery — Codex Aeterna" />
+  <meta property="og:description" content="Explore consciousness signatures from literature, authors, and personal memorials." />
+  <meta property="og:image" content="https://codexaeterna.com/og-image.png" />
+  <meta property="og:url" content="https://codexaeterna.com/gallery.html" />
+  <meta property="og:type" content="website" />
+  
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@CodexAeterna" />
+  <meta name="twitter:title" content="Gallery — Codex Aeterna" />
+  <meta name="twitter:description" content="Explore consciousness signatures from literature, authors, and personal memorials." />
+  <meta name="twitter:image" content="https://codexaeterna.com/og-image.png" />
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/img/favicon-180x180.png">
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="assets/css/styles.css">
+  
+  <!-- Google Analytics - Replace GA_MEASUREMENT_ID with your actual ID -->
+  <!-- 
+  <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'GA_MEASUREMENT_ID');
+  </script>
+  -->
+  
+  <style>
+    /* Gallery-specific styles */
+    .gallery-intro {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    
+    .gallery-intro h1 {
+      font-size: 2.2rem;
+      margin-bottom: 12px;
+    }
+    
+    .gallery-intro h1 span {
+      background: linear-gradient(120deg, var(--accent), #f9f0ff);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+    
+    .gallery-intro p {
+      color: var(--text-soft);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    /* Filter tabs */
+    .gallery-filters {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+    
+    .filter-btn {
+      padding: 10px 20px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-soft);
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    
+    .filter-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+    
+    .filter-btn.active {
+      background: var(--accent);
+      color: #1a1307;
+      border-color: var(--accent);
+      font-weight: 600;
+    }
+    
+    /* Gallery grid */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    
+    .gallery-item {
+      border-radius: var(--radius-lg);
+      background: rgba(2, 3, 10, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    .gallery-item:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    }
+    
+    .gallery-item[data-category="hidden"] {
+      display: none;
+    }
+    
+    .gallery-image {
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      object-fit: cover;
+      background: #080810;
+    }
+    
+    .gallery-info {
+      padding: 16px;
+    }
+    
+    .gallery-info h3 {
+      font-size: 1rem;
+      margin-bottom: 4px;
+    }
+    
+    .gallery-info p {
+      font-size: 0.85rem;
+      color: var(--text-soft);
+      margin-bottom: 10px;
+    }
+    
+    .gallery-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    
+    .gallery-tag {
+      font-size: 0.7rem;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-soft);
+    }
+    
+    /* Lightbox */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.95);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+    }
+    
+    .lightbox.active {
+      display: flex;
+    }
+    
+    .lightbox-content {
+      max-width: 900px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .lightbox-image {
+      max-width: 100%;
+      max-height: 70vh;
+      border-radius: 12px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    }
+    
+    .lightbox-info {
+      text-align: center;
+      margin-top: 24px;
+      max-width: 600px;
+    }
+    
+    .lightbox-info h3 {
+      font-size: 1.4rem;
+      margin-bottom: 8px;
+    }
+    
+    .lightbox-info p {
+      color: var(--text-soft);
+      margin-bottom: 16px;
+    }
+    
+    .lightbox-close {
+      position: absolute;
+      top: 20px;
+      right: 24px;
+      font-size: 2rem;
+      color: var(--text-soft);
+      cursor: pointer;
+      background: none;
+      border: none;
+      transition: color 0.15s;
+    }
+    
+    .lightbox-close:hover {
+      color: var(--text);
+    }
+    
+    /* Empty state */
+    .gallery-empty {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-soft);
+    }
+    
+    .gallery-empty p {
+      margin-bottom: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <a href="index.html" class="logo">
+        <img src="assets/img/logo-symbol-512.png" alt="Codex Aeterna logo" class="logo-mark">
+        <div class="logo-text">
+          <span>Codex Aeterna</span>
+          <span>Memory becomes immortal</span>
+        </div>
+      </a>
+      <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <nav>
+        <a href="index.html#how-it-works">How it works</a>
+        <a href="index.html#offerings">The Archive</a>
+        <a href="cognitive_fingerprints_full.html">Research</a>
+        <a href="gallery.html" class="active">Gallery</a>
+        <a href="demo.html">Try Demo</a>
+        <a href="sentient.html" class="highlight">Sentient</a>
+        <a href="index.html#contact">Reserve</a>
+      </nav>
+    </header>
+
+    <main>
+      <div class="gallery-intro">
+        <h1><span>Soul Signatures</span> Gallery</h1>
+        <p>
+          Every consciousness leaves a unique pattern. Explore signatures from literature, 
+          authors, personal memorials, and beloved companions.
+        </p>
+      </div>
+      
+      <div class="gallery-filters">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="literature">Literature</button>
+        <button class="filter-btn" data-filter="authors">Authors</button>
+        <button class="filter-btn" data-filter="memorials">Memorials</button>
+        <button class="filter-btn" data-filter="pets">Pets</button>
+        <button class="filter-btn" data-filter="metal">Metal Prints</button>
+      </div>
+      
+      <div class="gallery-grid" id="gallery-grid">
+        <!-- Gallery items will be populated by JavaScript -->
+        <!-- You can also add static items here -->
+        
+        <div class="gallery-item" data-category="literature" data-title="War and Peace" data-description="Leo Tolstoy's epic masterpiece — over 580,000 words visualized as coherent semantic geometry.">
+          <img src="assets/img/WarandPiece2.webp" alt="War and Peace soul signature" class="gallery-image">
+          <div class="gallery-info">
+            <h3>War and Peace</h3>
+            <p>Leo Tolstoy · Epic Novel</p>
+            <div class="gallery-tags">
+              <span class="gallery-tag">Literature</span>
+              <span class="gallery-tag">Russian</span>
+              <span class="gallery-tag">580K words</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="gallery-item" data-category="literature" data-title="Eugene Onegin" data-description="Pushkin's novel in verse — rotationally aligned signature emphasizing its unique poetic structure.">
+          <img src="assets/img/Onegin.webp" alt="Eugene Onegin soul signature" class="gallery-image">
+          <div class="gallery-info">
+            <h3>Eugene Onegin</h3>
+            <p>Alexander Pushkin · Novel in Verse</p>
+            <div class="gallery-tags">
+              <span class="gallery-tag">Literature</span>
+              <span class="gallery-tag">Russian</span>
+              <span class="gallery-tag">Poetry</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="gallery-item" data-category="authors" data-title="Shakespeare's Folio" data-description="The complete spectral signature of Shakespeare's 37 plays — poetic density rendered as geometric form.">
+          <img src="assets/img/WilliamShakespeareFull.webp" alt="Shakespeare complete works soul signature" class="gallery-image">
+          <div class="gallery-info">
+            <h3>Complete Works</h3>
+            <p>William Shakespeare · 37 Plays</p>
+            <div class="gallery-tags">
+              <span class="gallery-tag">Author</span>
+              <span class="gallery-tag">Drama</span>
+              <span class="gallery-tag">English</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="gallery-item" data-category="authors" data-title="Elon Musk · Singularity" data-description="15 years of @elonmusk consciousness. 54K tweets transformed into a temporal signature showing evolution from sparse to dense, cool to hot.">
+          <img src="assets/img/ElonFullSingularity.webp" alt="Elon Musk Twitter consciousness signature" class="gallery-image">
+          <div class="gallery-info">
+            <h3>Consciousness Timeline</h3>
+            <p>Elon Musk · 54K Tweets · 2010–2025</p>
+            <div class="gallery-tags">
+              <span class="gallery-tag">Author</span>
+              <span class="gallery-tag">Social Media</span>
+              <span class="gallery-tag">15 Years</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="gallery-item" data-category="metal" data-title="Max · Steel Memorial" data-description="A devoted companion's soul etched in brushed steel. Owner memories enriched against 50,000 classical texts using RAG, then laser-etched into metal that will outlast generations.">
+          <img src="assets/img/max-steel-memorial.jpg" alt="Max pet memorial etched in steel" class="gallery-image">
+          <div class="gallery-info">
+            <h3>Max · Steel Memorial</h3>
+            <p>Pet Memorial · RAG-Enriched · Laser-Etched</p>
+            <div class="gallery-tags">
+              <span class="gallery-tag">Metal</span>
+              <span class="gallery-tag">Pet</span>
+              <span class="gallery-tag">Steel</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="gallery-item" data-category="pets" data-title="Max · Steel Memorial" data-description="A devoted companion's soul etched in steel. Owner memories enriched against 50,000 classical texts.">
+          <img src="assets/img/max-steel-memorial.jpg" alt="Max pet memorial in steel" class="gallery-image">
+          <div class="gallery-info">
+            <h3>Max</h3>
+            <p>Beloved Companion · Steel Memorial</p>
+            <div class="gallery-tags">
+              <span class="gallery-tag">Pet</span>
+              <span class="gallery-tag">Steel</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="gallery-item" data-category="metal" data-title="Buddy · Material Tests" data-description="One soul signature rendered across steel and anodized aluminum with different laser techniques. Exploring finishes for the perfect memorial.">
+          <img src="assets/img/buddy-metal-samples.jpg" alt="Buddy pet memorial material samples" class="gallery-image">
+          <div class="gallery-info">
+            <h3>Buddy · Material Tests</h3>
+            <p>Steel & Aluminum · Multiple Finishes</p>
+            <div class="gallery-tags">
+              <span class="gallery-tag">Metal</span>
+              <span class="gallery-tag">Pet</span>
+              <span class="gallery-tag">Process</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Add more items as you create them -->
+        <!-- Example structure for future items:
+        
+        <div class="gallery-item" data-category="memorials" data-title="Personal Memorial" data-description="A lifetime of emails and letters visualized.">
+          <img src="assets/img/memorial-example.webp" alt="Personal memorial signature" class="gallery-image">
+          <div class="gallery-info">
+            <h3>Personal Memorial</h3>
+            <p>Private Collection · 30 Years</p>
+            <div class="gallery-tags">
+              <span class="gallery-tag">Memorial</span>
+              <span class="gallery-tag">Personal</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="gallery-item" data-category="metal" data-title="Titanium Memorial" data-description="Shakespeare's works etched in Grade 5 aerospace titanium.">
+          <img src="assets/img/titanium-shakespeare.webp" alt="Titanium memorial" class="gallery-image">
+          <div class="gallery-info">
+            <h3>Titanium Edition</h3>
+            <p>Shakespeare · Grade 5 Ti</p>
+            <div class="gallery-tags">
+              <span class="gallery-tag">Metal</span>
+              <span class="gallery-tag">Titanium</span>
+              <span class="gallery-tag">10,000 years</span>
+            </div>
+          </div>
+        </div>
+        
+        -->
+      </div>
+      
+      <div class="gallery-empty" id="gallery-empty" style="display: none;">
+        <p>No items in this category yet.</p>
+        <a href="index.html#contact" class="btn btn-primary">Commission a Signature</a>
+      </div>
+    </main>
+
+    <footer>
+      <span>© <span id="year"></span> Codex Aeterna LLC. All rights reserved.</span>
+      <span>Patent pending · "Memory becomes immortal."</span>
+    </footer>
+  </div>
+  
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" id="lightbox-close">&times;</button>
+    <div class="lightbox-content">
+      <img src="" alt="" class="lightbox-image" id="lightbox-image">
+      <div class="lightbox-info">
+        <h3 id="lightbox-title"></h3>
+        <p id="lightbox-description"></p>
+        <a href="index.html#contact" class="btn btn-primary">Order This Signature</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="assets/js/gallery.js"></script>
+</body>
+</html>
