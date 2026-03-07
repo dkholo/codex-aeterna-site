@@ -1,9 +1,10 @@
 {
+  "trailingSlash": false,
   "redirects": [
     {
-      "source": "/:path*",
+      "source": "/(.*)",
       "has": [{ "type": "host", "value": "www.codexaeterna.com" }],
-      "destination": "https://codexaeterna.com/:path*",
+      "destination": "https://codexaeterna.com/$1",
       "permanent": true
     }
   ]
