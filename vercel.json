@@ -1,0 +1,10 @@
+{
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "www.codexaeterna.com" }],
+      "destination": "https://codexaeterna.com/:path*",
+      "permanent": true
+    }
+  ]
+}
