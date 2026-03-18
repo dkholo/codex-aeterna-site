@@ -854,3 +854,182 @@ header.nav-open .hamburger span:nth-child(3) {
 @media (max-width: 768px) {
   #micBtn { display: none; }
 }
+
+/* ============================================
+   KI RESULT PANEL
+   ============================================ */
+
+#kiResultPanel {
+  margin-top: 24px;
+  text-align: left;
+}
+
+.ki-score-display {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.ki-score-number {
+  font-size: 3.6rem;
+  font-weight: 700;
+  background: linear-gradient(120deg, var(--accent), #ffecb0);
+  -webkit-background-clip: text;
+  color: transparent;
+  line-height: 1.1;
+}
+
+.ki-score-subtitle {
+  font-size: 0.85rem;
+  color: var(--text-soft);
+  margin-top: 4px;
+  letter-spacing: 0.06em;
+}
+
+.ki-score-label {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 3px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(242, 196, 107, 0.3);
+  background: rgba(242, 196, 107, 0.08);
+  font-size: 0.78rem;
+  color: var(--accent);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.ki-archetype {
+  text-align: center;
+  margin-bottom: 16px;
+  padding: 14px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.ki-archetype-name {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: 0.04em;
+}
+
+.ki-archetype-similarity {
+  font-size: 0.82rem;
+  color: var(--accent);
+  margin-top: 2px;
+}
+
+.ki-archetype-desc {
+  font-size: 0.84rem;
+  color: var(--text-soft);
+  margin-top: 6px;
+  line-height: 1.4;
+}
+
+.ki-interpretation {
+  font-size: 0.88rem;
+  color: var(--text-soft);
+  line-height: 1.5;
+  margin-bottom: 20px;
+  padding: 12px 14px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  border-left: 3px solid var(--accent);
+}
+
+.ki-components {
+  margin-bottom: 16px;
+}
+
+.ki-components-title {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-soft);
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+
+.ki-component {
+  margin-bottom: 10px;
+}
+
+.ki-component-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 3px;
+}
+
+.ki-component-name {
+  font-size: 0.82rem;
+  color: var(--text);
+}
+
+.ki-component-weight {
+  font-size: 0.72rem;
+  color: var(--text-soft);
+}
+
+.ki-component-value {
+  font-size: 0.82rem;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.ki-component-bar-track {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.ki-component-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), #ffecb0);
+  border-radius: 2px;
+  transition: width 0.4s ease;
+}
+
+.ki-component-desc {
+  font-size: 0.72rem;
+  color: #555;
+  margin-top: 2px;
+}
+
+.ki-raw-toggle {
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.ki-raw-btn {
+  font-size: 0.78rem;
+  padding: 6px 14px;
+}
+
+.ki-raw-stats {
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  font-size: 0.82rem;
+}
+
+.ki-raw-stats .stats-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.ki-raw-stats .stats-row:last-child {
+  border-bottom: none;
+}
+
+.ki-raw-stats .stats-label {
+  color: #666;
+}
+
+.ki-raw-stats .stats-value {
+  color: var(--accent);
+}

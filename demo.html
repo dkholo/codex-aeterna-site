@@ -76,24 +76,7 @@ Minimum 500 words recommended for meaningful patterns."></textarea>
             <canvas id="soulCanvas" width="400" height="500"></canvas>
             <p class="placeholder" id="placeholder">Enter text and click Generate</p>
           </div>
-          <div class="stats" id="stats" style="display: none;">
-            <div class="stats-row">
-              <span class="stats-label">Words analyzed</span>
-              <span class="stats-value" id="statWords">-</span>
-            </div>
-            <div class="stats-row">
-              <span class="stats-label">Unique connections</span>
-              <span class="stats-value" id="statEdges">-</span>
-            </div>
-            <div class="stats-row">
-              <span class="stats-label">Vocabulary nodes</span>
-              <span class="stats-value" id="statNodes">-</span>
-            </div>
-            <div class="stats-row">
-              <span class="stats-label">Hub ratio</span>
-              <span class="stats-value" id="statHub">-</span>
-            </div>
-          </div>
+          <div id="kiResultPanel" style="display: none;"></div>
           <div class="controls" style="justify-content: center; margin-top: 20px;">
             <button id="downloadBtn" class="btn btn-secondary" onclick="downloadSoul()" disabled>Download PNG</button>
             <button id="revealBtn" class="btn btn-secondary" onclick="revealSoul()" style="display: none;">Reveal</button>
