@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="canonical" href="https://codexaeterna.com/galaxy.html" />
+  <meta charset="UTF-8" />
+  <title>Codex Galaxy | Codex Aeterna</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Explore the cognitive galaxy — 50,000 books and podcasts mapped by their soul signatures." />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/img/favicon-180x180.png">
+
+  <!-- Site stylesheet for header/footer consistency -->
+  <link rel="stylesheet" href="assets/css/styles.css">
+
+  <style>
+    /* Galaxy-specific overrides */
+    body { background: #05060a; overflow: hidden; }
+
+    .page {
+      max-width: 100%; padding: 0;
+      display: flex; flex-direction: column;
+      height: 100vh;
+    }
+
+    header {
+      padding: 12px 24px; margin-bottom: 0;
+      background: rgba(5, 6, 10, 0.85);
+      backdrop-filter: blur(12px);
+      z-index: 100; position: relative;
+    }
+
+    footer {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      padding: 8px 24px;
+      background: rgba(5, 6, 10, 0.7);
+      backdrop-filter: blur(8px);
+      z-index: 100; font-size: 0.75rem;
+    }
+
+    /* ── Galaxy viewport ── */
+    #galaxy-container {
+      flex: 1; position: relative;
+      overflow: hidden; cursor: grab;
+      background: #05060a;
+    }
+    #galaxy-container:active { cursor: grabbing; }
+
+    /* Single wrapper for image + stars — panned/zoomed together */
+    #galaxy-world {
+      position: absolute;
+      transform-origin: 0 0;
+      will-change: transform;
+      width: 2798px; height: 1536px;
+      z-index: 5;
+    }
+
+    /* The galaxy image fills the world */
+    #galaxy-image {
+      display: block;
+      width: 2798px; height: 1536px;
+      image-rendering: auto;
+    }
+
+    /* Interactive star overlay — sits on top of image, same coordinate space */
+    #star-overlay {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+    }
+
+    /* Individual interactive stars */
+    .star {
+      position: absolute;
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: all;
+      cursor: pointer;
+      transition: box-shadow 0.25s, transform 0.25s;
+      z-index: 10;
+    }
+    .star:hover {
+      transform: translate(-50%, -50%) scale(2.5);
+      z-index: 50;
+    }
+    .star.book {
+      background: radial-gradient(circle,
+        #fff 0%, #ffe680 20%, rgba(255,220,100,0.9) 40%,
+        rgba(255,200,60,0.5) 65%, transparent 100%);
+      box-shadow: 0 0 18px 6px rgba(255,220,100,0.8),
+                  0 0 40px 12px rgba(255,200,60,0.3);
+      border: 1px solid rgba(255,240,180,0.6);
+    }
+    .star.book:hover {
+      box-shadow: 0 0 30px 10px rgba(255,220,100,1),
+                  0 0 60px 20px rgba(255,200,60,0.5);
+    }
+    .star.podcast {
+      background: radial-gradient(circle,
+        #fff 0%, #80d4ff 20%, rgba(100,200,255,0.9) 40%,
+        rgba(80,170,255,0.5) 65%, transparent 100%);
+      box-shadow: 0 0 18px 6px rgba(100,200,255,0.8),
+                  0 0 40px 12px rgba(80,170,255,0.3);
+      border: 1px solid rgba(180,230,255,0.6);
+    }
+    .star.podcast:hover {
+      box-shadow: 0 0 30px 10px rgba(100,200,255,1),
+                  0 0 60px 20px rgba(80,170,255,0.5);
+    }
+
+    /* ── Personal star (from Soul Interview) ── */
+    .star.personal {
+      width: 24px; height: 24px;
+      background: radial-gradient(circle,
+        #fff 0%, #ffd700 15%, rgba(255,215,0,0.95) 35%,
+        rgba(255,180,0,0.6) 55%, rgba(255,150,0,0.2) 75%, transparent 100%);
+      box-shadow: 0 0 24px 8px rgba(255,215,0,0.9),
+                  0 0 50px 16px rgba(255,180,0,0.4),
+                  0 0 80px 30px rgba(255,150,0,0.15);
+      border: 1.5px solid rgba(255,240,200,0.8);
+      animation: personalPulse 2s ease-in-out infinite;
+      z-index: 60;
+    }
+    .star.personal:hover {
+      box-shadow: 0 0 40px 14px rgba(255,215,0,1),
+                  0 0 80px 28px rgba(255,180,0,0.6),
+                  0 0 120px 40px rgba(255,150,0,0.25);
+    }
+    @keyframes personalPulse {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+      50% { transform: translate(-50%, -50%) scale(1.3); opacity: 0.85; }
+    }
+
+    /* Your star banner */
+    .your-star-banner {
+      position: fixed; top: 80px; left: 50%; transform: translateX(-50%);
+      z-index: 200; padding: 12px 28px;
+      background: rgba(8, 10, 20, 0.9);
+      border: 1px solid rgba(255, 215, 0, 0.3);
+      border-radius: 12px; backdrop-filter: blur(16px);
+      color: var(--text); font-size: 0.9rem; text-align: center;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+      animation: bannerFadeIn 1s ease-out;
+    }
+    .your-star-banner .star-name { color: #ffd700; font-weight: 600; }
+    .your-star-banner .star-archetype { color: var(--text-soft); font-size: 0.78rem; margin-top: 2px; }
+    @keyframes bannerFadeIn {
+      from { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+      to { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+
+    /* ── Hero overlay ── */
+    .galaxy-hero {
+      position: absolute; top: 0; left: 0; right: 0;
+      text-align: center; padding: 28px 20px 0;
+      pointer-events: none; z-index: 10;
+    }
+    .galaxy-hero h1 {
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      font-weight: 300; letter-spacing: 0.25em;
+      text-transform: uppercase; color: var(--text);
+      margin-bottom: 6px;
+    }
+    .galaxy-hero p {
+      font-size: 0.95rem; color: var(--text-soft);
+      letter-spacing: 0.05em;
+    }
+
+    /* ── Tooltip ── */
+    #tooltip {
+      position: fixed; display: none;
+      z-index: 200;
+      background: rgba(8, 10, 20, 0.92);
+      border: 1px solid rgba(242, 196, 107, 0.25);
+      border-radius: 12px; padding: 14px 16px;
+      min-width: 220px; max-width: 300px;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+    }
+    .tt-author { color: var(--accent); font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 2px; }
+    .tt-title { color: var(--text); font-size: 0.95rem; font-weight: 500; margin-bottom: 6px; }
+    .tt-meta { display: flex; gap: 12px; font-size: 0.75rem; color: var(--text-soft); margin-bottom: 8px; }
+    .tt-portrait { width: 120px; height: 120px; margin: 0 auto 6px; background: rgba(255,255,255,0.03); border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .tt-portrait img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; }
+    .placeholder-glyph { font-size: 2rem; color: rgba(255,255,255,0.08); }
+    .tt-link { font-size: 0.72rem; color: var(--accent); opacity: 0.7; text-decoration: none; display: block; cursor: pointer; }
+    .tt-link:hover { opacity: 1; text-decoration: underline; }
+
+    /* ── Controls ── */
+    .galaxy-controls {
+      position: absolute; bottom: 50px; left: 16px;
+      background: rgba(8, 10, 20, 0.75);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px; padding: 14px 16px;
+      backdrop-filter: blur(10px); z-index: 20;
+      font-size: 0.78rem;
+    }
+    .galaxy-controls h3 { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-soft); margin-bottom: 8px; }
+    .legend-row { display: flex; align-items: center; gap: 6px; margin-bottom: 3px; color: var(--text-soft); font-size: 0.7rem; line-height: 1.3; cursor: pointer; }
+    .legend-row:hover { color: var(--text); }
+    .legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .galaxy-stats { font-size: 0.68rem; color: var(--text-soft); opacity: 0.6; }
+    .galaxy-controls { max-height: calc(100vh - 160px); overflow-y: auto; min-width: 200px; }
+
+    /* ── Search ── */
+    .galaxy-search {
+      position: absolute; top: 100px; right: 16px;
+      z-index: 20; width: 240px;
+    }
+    .galaxy-search input {
+      width: 100%; padding: 8px 14px;
+      background: rgba(8, 10, 20, 0.8);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px; color: var(--text);
+      font-size: 0.82rem; outline: none;
+      backdrop-filter: blur(10px);
+    }
+    .galaxy-search input::placeholder { color: rgba(255,255,255,0.25); }
+    .galaxy-search input:focus { border-color: rgba(242, 196, 107, 0.3); }
+    .search-results {
+      margin-top: 4px; max-height: 260px;
+      overflow-y: auto; display: none;
+      background: rgba(8, 10, 20, 0.92);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 8px;
+      backdrop-filter: blur(10px);
+    }
+    .search-result-item {
+      padding: 8px 16px; cursor: pointer;
+      font-size: 0.82rem;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      transition: background 0.2s;
+    }
+    .search-result-item:hover { background: rgba(242, 196, 107, 0.08); }
+    .search-result-item .sr-author { color: var(--accent); font-size: 0.75rem; }
+
+    /* Zoom controls */
+    .zoom-controls {
+      position: absolute; bottom: 50px; right: 16px;
+      display: flex; flex-direction: column; gap: 4px;
+      z-index: 20;
+    }
+    .zoom-btn {
+      width: 36px; height: 36px;
+      background: rgba(8, 10, 20, 0.75);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px; color: var(--text);
+      font-size: 1.2rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      backdrop-filter: blur(10px);
+      transition: background 0.2s;
+    }
+    .zoom-btn:hover { background: rgba(242, 196, 107, 0.12); }
+
+    /* Cluster labels */
+    .cluster-label {
+      position: absolute;
+      color: rgba(255,255,255,0.4);
+      font-size: 11px;
+      font-weight: 300;
+      letter-spacing: 0.08em;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      white-space: nowrap;
+      text-shadow: 0 0 12px rgba(0,0,0,0.8);
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <a href="index.html" class="logo">
+        <img src="assets/img/logo-symbol-512.png" alt="Codex Aeterna logo" class="logo-mark">
+        <div class="logo-text">
+          <span>Codex Aeterna</span>
+          <span>Memory becomes immortal</span>
+        </div>
+      </a>
+      <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <nav>
+        <a href="index.html#how-it-works">How it works</a>
+        <a href="index.html#offerings">The Archive</a>
+        <a href="cognitive_fingerprints_full.html">Research</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="demo.html">Try Demo</a>
+        <a href="sentient.html" class="highlight">Sentient</a>
+        <a href="galaxy.html" class="active">Galaxy</a>
+      </nav>
+    </header>
+
+    <div id="galaxy-container">
+      <div class="galaxy-hero">
+        <h1>Codex Galaxy</h1>
+        <p>56,000 minds &middot; 4,000 years &middot; Find your place among them</p>
+      </div>
+
+      <!-- Single transformed world: image + star overlay -->
+      <div id="galaxy-world">
+        <img id="galaxy-image" src="assets/img/galaxy_bg.jpg" alt="Cognitive galaxy map" draggable="false" />
+        <div id="star-overlay"></div>
+      </div>
+
+      <div id="tooltip">
+        <div class="tt-author"></div>
+        <div class="tt-title"></div>
+        <div class="tt-meta">
+          <span class="tt-archetype"></span>
+          <span class="tt-ki"></span>
+        </div>
+        <div class="tt-portrait">
+          <span class="placeholder-glyph">&#10022;</span>
+        </div>
+        <a class="tt-link" href="#" target="_blank">View Full Portrait &rarr;</a>
+      </div>
+
+      <!-- Legend: Archetype Color Map -->
+      <div class="galaxy-controls" id="legendPanel">
+        <h3>Cognitive Archetypes</h3>
+        <div id="archetypeLegend"></div>
+        <div class="galaxy-stats" style="margin-top:10px; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 8px;">
+          <span id="starCount">0</span> interactive stars &middot; 50,387 total
+        </div>
+      </div>
+
+      <!-- Search -->
+      <div class="galaxy-search">
+        <input type="text" id="searchInput" placeholder="Search author or title..." />
+        <div class="search-results" id="searchResults"></div>
+      </div>
+
+      <!-- Zoom -->
+      <div class="zoom-controls">
+        <button class="zoom-btn" id="zoomIn">+</button>
+        <button class="zoom-btn" id="zoomOut">&minus;</button>
+        <button class="zoom-btn" id="zoomReset" title="Reset view">&#8634;</button>
+      </div>
+    </div>
+
+    <footer>
+      <span>&copy; <span id="year"></span> Codex Aeterna LLC. All rights reserved.</span>
+      <span>Patent pending &middot; "Memory becomes immortal."</span>
+    </footer>
+  </div>
+
+  <script>
+  /* =============================================
+     CODEX GALAXY — 2D Image + Interactive Overlay
+     Background: pre-rendered 50K star image
+     Foreground: clickable notable stars (CSS)
+     ============================================= */
+
+  // ── Image dimensions ──
+  const IMG = { width: 2798, height: 1536 };
+
+  // ── Archetype definitions (16 clusters) ──
+  // Colors exactly matched to the 2D Plotly cognitive galaxy
+  const ARCHETYPES = [
+    { id: 0,  name: 'The TED Speaker',   color: '#636EFA' },
+    { id: 1,  name: 'The Revolutionary',  color: '#EF553B' },
+    { id: 2,  name: 'The Family Chronicler', color: '#00CC96' },
+    { id: 3,  name: 'The Tormented Mind', color: '#AB63FA' },
+    { id: 4,  name: 'The Nostalgic Soul', color: '#FFA15A' },
+    { id: 5,  name: 'The Revolutionary (Epic)', color: '#19D3F3' },
+    { id: 6,  name: 'The Family Chronicler (Childhood)', color: '#FF6692' },
+    { id: 7,  name: 'The Family Chronicler (Modern)', color: '#B6E880' },
+    { id: 8,  name: 'The Philosopher',    color: '#FF97FF' },
+    { id: 9,  name: 'The Essayist',       color: '#FECB52' },
+    { id: 10, name: 'The Archivist',      color: '#E45756' },
+    { id: 11, name: 'The Liberator',      color: '#54A24B' },
+    { id: 12, name: 'The War Correspondent', color: '#EECA3B' },
+    { id: 13, name: 'The Historian',      color: '#B279A2' },
+    { id: 14, name: 'The Family Chronicler (Epic)', color: '#72B7B2' },
+    { id: 15, name: 'The Theologian',     color: '#F58518' }
+  ];
+
+  // Cluster pixel positions within the Gemini galaxy image (2798×1536)
+  // Detected via color analysis + manually adjusted for right-side clusters
+  const CENTROIDS = [
+    { id:  0, px:  456, py:  658, spread: 250, name: 'The TED Speaker' },        // blue, far left
+    { id:  1, px: 1100, py:  820, spread: 220, name: 'The Revolutionary' },       // red, center
+    { id:  2, px: 1250, py:  850, spread: 420, name: 'The Family Chronicler' },   // green, center — shifted down, wider to fill void
+    { id:  3, px: 1200, py:  280, spread: 200, name: 'The Tormented Mind' },      // purple, top
+    { id:  4, px:  442, py: 1140, spread: 160, name: 'The Nostalgic Soul' },      // peach, lower-left
+    { id:  5, px: 1180, py:  580, spread: 220, name: 'The Revolutionary (Epic)' },// cyan, upper-center
+    { id:  6, px: 1260, py: 1380, spread: 200, name: 'The Family Chronicler (Childhood)' }, // pink, bottom
+    { id:  7, px:  590, py:  420, spread: 180, name: 'The Family Chronicler (Modern)' },    // lime, upper-left
+    { id:  8, px:  780, py: 1000, spread: 180, name: 'The Philosopher' },         // magenta, center-left
+    { id:  9, px:  340, py:  990, spread: 180, name: 'The Essayist' },            // gold, left
+    { id: 10, px: 1900, py:  750, spread: 260, name: 'The Archivist' },           // salmon, right
+    { id: 11, px:  750, py:  800, spread: 140, name: 'The Liberator' },           // forest green, center-left
+    { id: 12, px:  420, py:  860, spread: 180, name: 'The War Correspondent' },   // amber, left
+    { id: 13, px: 2050, py: 1000, spread: 280, name: 'The Historian' },           // mauve, far right
+    { id: 14, px: 1900, py:  650, spread: 260, name: 'The Family Chronicler (Epic)' }, // teal, right
+    { id: 15, px:  470, py: 1180, spread: 160, name: 'The Theologian' }           // orange, lower-left
+  ];
+
+  // ── Notable interactive stars (mock — replaced by galaxy_data.json when available) ──
+  const INTERACTIVE_STARS = [
+    // [author, title, cluster, type, ki]
+    ['Shakespeare','Hamlet',0,'book',42.1],['Shakespeare','Macbeth',0,'book',38.5],
+    ['Shakespeare','Othello',0,'book',36.2],['Shakespeare','King Lear',0,'book',40.8],
+    ['Shakespeare','The Tempest',0,'book',32.1],['Shakespeare','Romeo and Juliet',0,'book',35.7],
+    ['Tolstoy','War and Peace',5,'book',48.3],['Tolstoy','Anna Karenina',4,'book',44.1],
+    ['Tolstoy','The Death of Ivan Ilyich',3,'book',28.9],
+    ['Dostoevsky','Crime and Punishment',3,'book',46.5],['Dostoevsky','The Brothers Karamazov',3,'book',49.2],
+    ['Dostoevsky','The Idiot',3,'book',38.4],
+    ['Melville','Moby-Dick',7,'book',42.7],['Melville','Bartleby, the Scrivener',9,'book',18.3],
+    ['Dickens','Great Expectations',2,'book',35.6],['Dickens','A Tale of Two Cities',5,'book',38.2],
+    ['Dickens','Oliver Twist',2,'book',31.8],['Dickens','David Copperfield',6,'book',33.4],
+    ['Dickens','Bleak House',2,'book',36.1],
+    ['Twain','Adventures of Huckleberry Finn',6,'book',30.2],['Twain','Tom Sawyer',6,'book',27.8],
+    ['Austen','Pride and Prejudice',4,'book',32.6],['Austen','Sense and Sensibility',4,'book',28.4],
+    ['Austen','Emma',4,'book',30.1],
+    ['Poe','The Fall of the House of Usher',3,'book',24.6],['Poe','The Raven',3,'book',22.1],
+    ['Wilde','The Picture of Dorian Gray',8,'book',34.7],['Wilde','The Importance of Being Earnest',9,'book',26.3],
+    ['Homer','The Iliad',5,'book',47.8],['Homer','The Odyssey',5,'book',45.2],
+    ['Dante','Divine Comedy',15,'book',50.0],['Kafka','The Metamorphosis',3,'book',28.6],
+    ['Kafka','The Trial',3,'book',32.4],
+    ['Joyce','Ulysses',7,'book',45.9],['Joyce','Dubliners',9,'book',29.1],
+    ['Woolf','Mrs Dalloway',4,'book',33.2],['Woolf','To the Lighthouse',4,'book',31.8],
+    ['Conrad','Heart of Darkness',12,'book',36.8],['Conrad','Lord Jim',1,'book',30.5],
+    ['Hugo','Les Misérables',11,'book',47.4],['Hugo','The Hunchback of Notre-Dame',2,'book',38.6],
+    ['Cervantes','Don Quixote',5,'book',44.3],
+    ['Hemingway','The Old Man and the Sea',4,'book',26.4],['Hemingway','A Farewell to Arms',12,'book',34.1],
+    ['Fitzgerald','The Great Gatsby',4,'book',30.8],
+    ['Orwell','1984',1,'book',38.9],['Orwell','Animal Farm',1,'book',25.7],
+    ['Huxley','Brave New World',1,'book',33.2],
+    ['Verne','Twenty Thousand Leagues',10,'book',35.4],['Verne','Around the World in 80 Days',10,'book',29.6],
+    ['Conan Doyle','The Hound of the Baskervilles',10,'book',28.3],
+    ['Conan Doyle','A Study in Scarlet',10,'book',26.8],
+    ['Lovecraft','The Call of Cthulhu',3,'book',24.2],['Lovecraft','At the Mountains of Madness',3,'book',28.9],
+    ['Nietzsche','Thus Spoke Zarathustra',8,'book',42.6],['Nietzsche','Beyond Good and Evil',8,'book',38.1],
+    ['Plato','The Republic',8,'book',44.8],['Aristotle','Nicomachean Ethics',8,'book',40.2],
+    ['Darwin','On the Origin of Species',13,'book',43.5],['Freud','The Interpretation of Dreams',8,'book',36.7],
+    ['Marx','Das Kapital',1,'book',41.3],['Thoreau','Walden',4,'book',29.5],
+    ['Emerson','Self-Reliance',9,'book',27.8],['Whitman','Leaves of Grass',4,'book',31.2],
+    ['Shelley','Frankenstein',3,'book',33.6],['Brontë','Jane Eyre',6,'book',34.2],
+    ['Brontë','Wuthering Heights',3,'book',36.8],
+    ['Stevenson','Treasure Island',6,'book',25.4],['Stevenson','Dr Jekyll and Mr Hyde',3,'book',27.1],
+    ['Swift','Gulliver\'s Travels',9,'book',30.4],['Defoe','Robinson Crusoe',14,'book',28.7],
+    ['Kipling','The Jungle Book',6,'book',24.8],['Kipling','Kim',14,'book',32.5],
+    ['Balzac','Le Père Goriot',2,'book',31.6],['Balzac','Eugénie Grandet',2,'book',27.3],
+    ['Dumas','The Count of Monte Cristo',5,'book',38.4],['Dumas','The Three Musketeers',5,'book',34.7],
+    ['Wells','The Time Machine',1,'book',29.8],['Wells','The War of the Worlds',12,'book',31.2],
+    ['Chekhov','The Cherry Orchard',9,'book',26.5],['Chekhov','Three Sisters',4,'book',24.8],
+    ['Lincoln','Gettysburg Address',11,'book',22.3],['Churchill','Their Finest Hour',12,'book',35.9],
+    ['Einstein','Relativity',13,'book',40.1],['London','The Call of the Wild',14,'book',27.6],
+    ['Hawthorne','The Scarlet Letter',15,'book',33.4],['Byron','Don Juan',4,'book',28.9],
+    ['Milton','Paradise Lost',15,'book',46.2],['Voltaire','Candide',9,'book',30.6],
+    ['Flaubert','Madame Bovary',4,'book',35.2],['Zola','Germinal',1,'book',37.8],
+    ['Hardy','Tess of the d\'Urbervilles',4,'book',32.6],['Gogol','Dead Souls',9,'book',31.4],
+    // Podcasts
+    ['Lex Fridman','Elon Musk: AI, Mars, Consciousness',0,'podcast',8.2],
+    ['Lex Fridman','Sam Altman: OpenAI and the Future',0,'podcast',7.1],
+    ['Lex Fridman','Yann LeCun: Deep Learning',13,'podcast',6.8],
+    ['Lex Fridman','Roger Penrose: Physics of Consciousness',8,'podcast',9.4],
+    ['Lex Fridman','Jordan Peterson: Meaning',0,'podcast',7.6],
+    ['Lex Fridman','Noam Chomsky: Language',8,'podcast',8.8],
+    ['Joe Rogan','Neil deGrasse Tyson: Cosmos',0,'podcast',6.5],
+    ['Joe Rogan','Graham Hancock: Ancient Civilizations',13,'podcast',5.9],
+    ['Joe Rogan','Matthew Walker: Why We Sleep',13,'podcast',7.2],
+    ['Joe Rogan','Naval Ravikant: Happiness',0,'podcast',6.1],
+    ['Joe Rogan','Elon Musk: Neuralink',0,'podcast',5.8],
+    ['Joe Rogan','Edward Snowden: Privacy',1,'podcast',7.4],
+    ['TED','Ken Robinson: Do Schools Kill Creativity?',0,'podcast',4.2],
+    ['TED','Brené Brown: Vulnerability',0,'podcast',3.8],
+    ['TED','Simon Sinek: Start with Why',0,'podcast',4.5],
+    ['TED','Hans Rosling: Best Stats',13,'podcast',5.1],
+    ['Kurzgesagt','The Egg',15,'podcast',3.2],
+    ['Kurzgesagt','Optimistic Nihilism',8,'podcast',4.1]
+  ];
+
+  // ── Seeded random for reproducible star scatter ──
+  function mulberry32(a) {
+    return function() {
+      a |= 0; a = a + 0x6D2B79F5 | 0;
+      var t = Math.imul(a ^ a >>> 15, 1 | a);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    }
+  }
+  const seededRand = mulberry32(42);
+  function gaussRand() {
+    let u = 0, v = 0;
+    while (u === 0) u = seededRand();
+    while (v === 0) v = seededRand();
+    return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+  }
+
+  // Stars are placed using pixel positions directly within the image
+
+  // ── MAIN ──
+  (function() {
+    'use strict';
+
+    const container = document.getElementById('galaxy-container');
+    const world = document.getElementById('galaxy-world');
+    const galaxyImg = document.getElementById('galaxy-image');
+    const overlay = document.getElementById('star-overlay');
+    const tooltip = document.getElementById('tooltip');
+    const searchInput = document.getElementById('searchInput');
+    const searchResults = document.getElementById('searchResults');
+
+    let starElements = [];
+    let starDataList = [];
+    let tooltipPinned = false;
+
+    // Pan/zoom state
+    let scale = 1;
+    let panX = 0, panY = 0;
+    let isDragging = false;
+    let dragStartX, dragStartY, panStartX, panStartY;
+
+    const MIN_SCALE = 0.3;
+    const MAX_SCALE = 5;
+
+    // ── Initialize view to fit galaxy in container ──
+    function fitToContainer() {
+      const cw = container.clientWidth;
+      const ch = container.clientHeight;
+      const sx = cw / IMG.width;
+      const sy = ch / IMG.height;
+      scale = Math.max(sx, sy); // cover the viewport
+      panX = (cw - IMG.width * scale) / 2;
+      panY = (ch - IMG.height * scale) / 2;
+      applyTransform();
+    }
+
+    function applyTransform() {
+      world.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
+    }
+
+    // ── t-SNE to pixel mapping ──
+    // t-SNE centroids computed from galaxy_data.json per cluster
+    const TSNE_CENTROIDS = {
+      0:  { x: 5.17, y: 33.90, sx: 5.16, sy: 4.30 },
+      1:  { x: 8.06, y: 35.78, sx: 5.20, sy: 3.27 },
+      2:  { x: 6.00, y: 35.14, sx: 4.40, sy: 3.88 },
+      3:  { x: 2.42, y: 33.64, sx: 8.50, sy: 9.40 },
+      4:  { x: 7.91, y: 34.52, sx: 4.22, sy: 2.32 },
+      5:  { x: 5.61, y: 35.95, sx: 5.63, sy: 4.05 },
+      6:  { x: 6.35, y: 34.59, sx: 4.48, sy: 4.18 },
+      7:  { x: 2.11, y: 30.47, sx: 8.61, sy: 8.74 },
+      8:  { x: 6.76, y: 35.50, sx: 4.60, sy: 3.25 },
+      9:  { x: 6.81, y: 35.02, sx: 5.64, sy: 4.29 },
+      10: { x: 5.05, y: 34.19, sx: 4.70, sy: 4.28 },
+      11: { x: 6.78, y: 36.93, sx: 2.52, sy: 3.43 },
+      12: { x: 3.67, y: 33.09, sx: 4.23, sy: 1.70 },
+      13: { x: 4.91, y: 34.45, sx: 5.20, sy: 4.73 },
+      14: { x: 6.01, y: 34.61, sx: 6.69, sy: 4.42 },
+      15: { x: 8.51, y: 35.58, sx: 3.52, sy: 3.07 }
+    };
+
+    // Convert a star with t-SNE (x,y) + cluster → pixel (px, py)
+    function tsneToPx(star) {
+      const c = star.cluster;
+      if (c == null || !CENTROIDS[c] || !TSNE_CENTROIDS[c]) return null;
+      const tc = TSNE_CENTROIDS[c];
+      const pc = CENTROIDS[c];
+      // Normalized offset from t-SNE cluster center (-1 to +1 range)
+      const dx = tc.sx > 0 ? (star.x - tc.x) / (tc.sx / 2) : 0;
+      const dy = tc.sy > 0 ? (star.y - tc.y) / (tc.sy / 2) : 0;
+      // Map to pixel offset using the pixel spread
+      return {
+        px: pc.px + dx * pc.spread * 0.8,
+        py: pc.py + dy * pc.spread * 0.8
+      };
+    }
+
+    // ── Create interactive stars ──
+    function createStars(data) {
+      overlay.innerHTML = '';
+      starElements = [];
+      starDataList = [];
+
+      // Use data from galaxy_data.json if available, else mock
+      let stars;
+      if (data) {
+        // Map t-SNE coordinates to pixel positions
+        stars = [];
+        data.forEach(s => {
+          // If star already has px/py, use them
+          if (s.px != null && s.py != null && !isNaN(s.px) && !isNaN(s.py)) {
+            stars.push(s);
+            return;
+          }
+          // Otherwise map from t-SNE via cluster centroid
+          const mapped = tsneToPx(s);
+          if (mapped) {
+            stars.push(Object.assign({}, s, mapped));
+          }
+        });
+        console.log(`Mapped ${stars.length}/${data.length} stars from t-SNE to pixel coords`);
+      } else {
+        stars = generateMockStars();
+      }
+
+      console.log(`Creating ${stars.length} interactive stars`);
+      let validCount = 0;
+
+      // Build all stars using DocumentFragment (single DOM reflow)
+      const frag = document.createDocumentFragment();
+
+      stars.forEach((s, i) => {
+        if (isNaN(s.px) || isNaN(s.py)) return;
+
+        const el = document.createElement('div');
+        el.setAttribute('data-idx', String(validCount));
+
+        const ki = s.ki || 10;
+        const sz = Math.max(6, 6 + (ki / 50) * 8);
+        const arch = ARCHETYPES[s.cluster] || { color: '#FFD866' };
+        const hex = arch.color;
+        const r = parseInt(hex.slice(1,3), 16);
+        const g = parseInt(hex.slice(3,5), 16);
+        const b = parseInt(hex.slice(5,7), 16);
+        const rgb = `${r},${g},${b}`;
+
+        // Minimal inline style — NO box-shadow, NO transition in default state
+        el.style.cssText = `
+          position:absolute;
+          left:${s.px}px;top:${s.py}px;
+          width:${sz}px;height:${sz}px;
+          border-radius:50%;
+          transform:translate(-50%,-50%);
+          pointer-events:all;cursor:pointer;
+          z-index:10;
+          background:radial-gradient(circle,#fff 0%,rgb(${rgb}) 35%,rgba(${rgb},0.3) 75%,transparent 100%);
+        `;
+        // Store color data for hover (avoids recalculating)
+        el._rgb = rgb;
+        el._sz = sz;
+
+        frag.appendChild(el);
+        starElements.push(el);
+        starDataList.push(s);
+        validCount++;
+      });
+
+      overlay.appendChild(frag); // Single DOM insertion
+
+      // ── Event delegation — one set of listeners instead of 10,000+ ──
+      let hoveredEl = null;
+      overlay.addEventListener('mouseover', (e) => {
+        const el = e.target;
+        if (!el.hasAttribute('data-idx')) return;
+        if (el === hoveredEl) return;
+        // Un-hover previous
+        if (hoveredEl) {
+          hoveredEl.style.transform = 'translate(-50%,-50%)';
+          hoveredEl.style.zIndex = '10';
+          hoveredEl.style.boxShadow = '';
+          hoveredEl.style.transition = '';
+        }
+        hoveredEl = el;
+        const rgb = el._rgb;
+        el.style.transition = 'box-shadow 0.25s, transform 0.25s';
+        el.style.transform = 'translate(-50%,-50%) scale(2.5)';
+        el.style.zIndex = '50';
+        el.style.boxShadow = `0 0 16px 6px rgba(${rgb},0.9), 0 0 30px 10px rgba(${rgb},0.4)`;
+        const idx = parseInt(el.getAttribute('data-idx'));
+        if (!tooltipPinned) showTooltip(e, starDataList[idx]);
+      });
+
+      overlay.addEventListener('mouseout', (e) => {
+        const el = e.target;
+        if (!el.hasAttribute('data-idx') || el !== hoveredEl) return;
+        el.style.transform = 'translate(-50%,-50%)';
+        el.style.zIndex = '10';
+        el.style.boxShadow = '';
+        el.style.transition = '';
+        hoveredEl = null;
+        if (!tooltipPinned) hideTooltip();
+      });
+
+      overlay.addEventListener('click', (e) => {
+        const el = e.target;
+        if (!el.hasAttribute('data-idx')) return;
+        e.stopPropagation();
+        const idx = parseInt(el.getAttribute('data-idx'));
+        showTooltip(e, starDataList[idx]);
+        tooltipPinned = true;
+        tooltip.style.pointerEvents = 'auto';
+      });
+
+      console.log(`Rendered ${validCount}/${stars.length} stars (optimized: no per-star listeners, no default box-shadow)`);
+
+      document.getElementById('starCount').textContent = stars.length;
+    }
+
+    function generateMockStars() {
+      const stars = [];
+      let id = 1;
+      INTERACTIVE_STARS.forEach(([author, title, cluster, type, ki]) => {
+        const cent = CENTROIDS[cluster];
+        // Scatter around the pixel centroid position
+        stars.push({
+          id: id++,
+          px: cent.px + gaussRand() * cent.spread * 0.4,
+          py: cent.py + gaussRand() * cent.spread * 0.4,
+          title, author, type, cluster, ki,
+          portrait: null
+        });
+      });
+      return stars;
+    }
+
+    // ── Create cluster labels ──
+    function createLabels() {
+      CENTROIDS.forEach(c => {
+        const el = document.createElement('div');
+        el.className = 'cluster-label';
+        el.textContent = c.name;
+        el.style.left = c.px + 'px';
+        el.style.top = (c.py - 20) + 'px';
+        overlay.appendChild(el);
+      });
+    }
+
+    // Gallery soul portrait images — fallback when no real portrait exists
+    const GALLERY_PORTRAITS = [
+      { thumb: 'assets/img/WilliamShakespeareFull-portrait.webp', full: 'assets/img/WilliamShakespeareFull.webp' },
+      { thumb: 'assets/img/WarandPiece2-portrait.webp',          full: 'assets/img/WarandPiece2.webp' },
+      { thumb: 'assets/img/Onegin-portrait.webp',                full: 'assets/img/Onegin.webp' },
+      { thumb: 'assets/img/ElonFullSingularity-portrait.webp',   full: 'assets/img/ElonFullSingularity.webp' },
+      { thumb: 'assets/img/buddy-metal-samples-portrait.jpg',    full: 'assets/img/buddy-metal-samples.jpg' },
+      { thumb: 'assets/img/max-steel-memorial-portrait.jpg',     full: 'assets/img/max-steel-memorial.jpg' }
+    ];
+
+    // Portrait style: 'black' or 'white'
+    let portraitStyle = 'black';
+
+    // Build portrait URLs for a star — real file first, gallery fallback
+    function getPortraitUrls(star) {
+      const sid = String(star.id);
+      const real = {
+        thumb: `assets/img/portraits/${portraitStyle}/thumbs/${sid}.webp`,
+        full:  `assets/img/portraits/${portraitStyle}/${sid}.webp`
+      };
+      // Deterministic gallery fallback
+      let seed = 0;
+      if (typeof star.id === 'number' && isFinite(star.id)) seed += star.id;
+      if (star.title) seed += star.title.length;
+      const gpIdx = Math.abs(seed) % GALLERY_PORTRAITS.length;
+      const gallery = GALLERY_PORTRAITS[gpIdx] || GALLERY_PORTRAITS[0];
+      return { real, gallery };
+    }
+
+    // ── Tooltip ──
+    function showTooltip(e, star) {
+      const arch = ARCHETYPES[star.cluster] || { name: 'Unknown', color: '#888' };
+      tooltip.querySelector('.tt-author').textContent = star.author;
+      tooltip.querySelector('.tt-title').textContent = star.title;
+      tooltip.querySelector('.tt-archetype').textContent = arch.name;
+      tooltip.querySelector('.tt-archetype').style.color = arch.color;
+      tooltip.querySelector('.tt-ki').textContent = 'KI: ' + (star.ki || '—');
+
+      // Portrait — try real WebP portrait, fallback to gallery placeholder
+      const portraitEl = tooltip.querySelector('.tt-portrait');
+      const urls = getPortraitUrls(star);
+      portraitEl.innerHTML = `<img src="${urls.real.thumb}" alt="Soul portrait" onerror="this.src='${urls.gallery.thumb}'; this.onerror=function(){this.style.display='none'}" />`;
+
+      // Link opens the dedicated portrait viewer page
+      const linkEl = tooltip.querySelector('.tt-link');
+      linkEl.href = `portrait.html?id=${star.id || ''}&from=galaxy`;
+
+      // Position near cursor
+      const x = e.clientX + 16;
+      const y = e.clientY - 20;
+      tooltip.style.left = Math.min(x, window.innerWidth - 320) + 'px';
+      tooltip.style.top = Math.max(y, 10) + 'px';
+      tooltip.style.display = 'block';
+    }
+
+    function hideTooltip() {
+      tooltip.style.display = 'none';
+      tooltip.style.pointerEvents = 'none';
+      tooltipPinned = false;
+    }
+
+    // Click anywhere on container dismisses pinned tooltip
+    container.addEventListener('click', () => {
+      if (tooltipPinned) hideTooltip();
+    });
+
+    // ── Fly to star (smooth pan + zoom) ──
+    function flyToStar(star) {
+      const cw = container.clientWidth;
+      const ch = container.clientHeight;
+      const px = star.px || (CENTROIDS[star.cluster] || {}).px || IMG.width/2;
+      const py = star.py || (CENTROIDS[star.cluster] || {}).py || IMG.height/2;
+      const targetScale = 2.5;
+      const targetPanX = cw / 2 - px * targetScale;
+      const targetPanY = ch / 2 - py * targetScale;
+
+      const startScale = scale;
+      const startPanX = panX;
+      const startPanY = panY;
+      const startTime = performance.now();
+      const duration = 800;
+
+      function ease(t) { return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2, 3)/2; }
+
+      function step(now) {
+        const t = Math.min((now - startTime) / duration, 1);
+        const e = ease(t);
+        scale = startScale + (targetScale - startScale) * e;
+        panX = startPanX + (targetPanX - startPanX) * e;
+        panY = startPanY + (targetPanY - startPanY) * e;
+        applyTransform();
+        if (t < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }
+
+    // ── Pan & Zoom ──
+    container.addEventListener('mousedown', (e) => {
+      if (e.target.classList.contains('star')) return;
+      isDragging = true;
+      dragStartX = e.clientX;
+      dragStartY = e.clientY;
+      panStartX = panX;
+      panStartY = panY;
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      panX = panStartX + (e.clientX - dragStartX);
+      panY = panStartY + (e.clientY - dragStartY);
+      applyTransform();
+    });
+
+    window.addEventListener('mouseup', () => { isDragging = false; });
+
+    container.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const rect = container.getBoundingClientRect();
+      const mx = e.clientX - rect.left;
+      const my = e.clientY - rect.top;
+
+      const oldScale = scale;
+      const delta = e.deltaY > 0 ? 0.9 : 1.1;
+      scale = Math.max(MIN_SCALE, Math.min(MAX_SCALE, scale * delta));
+
+      // Zoom toward cursor
+      panX = mx - (mx - panX) * (scale / oldScale);
+      panY = my - (my - panY) * (scale / oldScale);
+      applyTransform();
+    }, { passive: false });
+
+    // Touch support
+    let lastTouchDist = 0;
+    container.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 1) {
+        isDragging = true;
+        dragStartX = e.touches[0].clientX;
+        dragStartY = e.touches[0].clientY;
+        panStartX = panX;
+        panStartY = panY;
+      } else if (e.touches.length === 2) {
+        isDragging = false;
+        lastTouchDist = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY
+        );
+      }
+    }, { passive: true });
+
+    container.addEventListener('touchmove', (e) => {
+      if (e.touches.length === 1 && isDragging) {
+        panX = panStartX + (e.touches[0].clientX - dragStartX);
+        panY = panStartY + (e.touches[0].clientY - dragStartY);
+        applyTransform();
+      } else if (e.touches.length === 2) {
+        const dist = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY
+        );
+        const delta = dist / lastTouchDist;
+        scale = Math.max(MIN_SCALE, Math.min(MAX_SCALE, scale * delta));
+        lastTouchDist = dist;
+        applyTransform();
+      }
+    }, { passive: true });
+
+    container.addEventListener('touchend', () => { isDragging = false; });
+
+    // Zoom buttons
+    document.getElementById('zoomIn').addEventListener('click', () => {
+      const cw = container.clientWidth;
+      const ch = container.clientHeight;
+      const oldScale = scale;
+      scale = Math.min(MAX_SCALE, scale * 1.3);
+      panX = cw/2 - (cw/2 - panX) * (scale / oldScale);
+      panY = ch/2 - (ch/2 - panY) * (scale / oldScale);
+      applyTransform();
+    });
+
+    document.getElementById('zoomOut').addEventListener('click', () => {
+      const cw = container.clientWidth;
+      const ch = container.clientHeight;
+      const oldScale = scale;
+      scale = Math.max(MIN_SCALE, scale * 0.7);
+      panX = cw/2 - (cw/2 - panX) * (scale / oldScale);
+      panY = ch/2 - (ch/2 - panY) * (scale / oldScale);
+      applyTransform();
+    });
+
+    document.getElementById('zoomReset').addEventListener('click', fitToContainer);
+
+    // ── Search ──
+    searchInput.addEventListener('input', (e) => {
+      const q = e.target.value.toLowerCase().trim();
+      if (q.length < 2) { searchResults.style.display = 'none'; return; }
+
+      const matches = starDataList.filter(s =>
+        s.author.toLowerCase().includes(q) || s.title.toLowerCase().includes(q)
+      ).slice(0, 10);
+
+      if (matches.length === 0) { searchResults.style.display = 'none'; return; }
+
+      searchResults.innerHTML = matches.map((s, i) =>
+        `<div class="search-result-item" data-idx="${starDataList.indexOf(s)}">
+          <div>${s.title}</div>
+          <div class="sr-author">${s.author}</div>
+        </div>`
+      ).join('');
+      searchResults.style.display = 'block';
+
+      searchResults.querySelectorAll('.search-result-item').forEach(el => {
+        el.addEventListener('click', () => {
+          const idx = parseInt(el.dataset.idx);
+          const s = starDataList[idx];
+          flyToStar(s);
+          searchResults.style.display = 'none';
+          searchInput.value = '';
+          // Flash the star
+          const starEl = starElements[idx];
+          starEl.style.transform = 'translate(-50%, -50%) scale(3)';
+          starEl.style.boxShadow = '0 0 24px rgba(242,196,107,1)';
+          setTimeout(() => {
+            starEl.style.transform = '';
+            starEl.style.boxShadow = '';
+          }, 1500);
+        });
+      });
+    });
+
+    // ── Personal star from Soul Interview ──
+    function getPersonalStarFromURL() {
+      const params = new URLSearchParams(window.location.search);
+      if (!params.has('personal')) return null;
+      return {
+        name: params.get('name') || 'You',
+        ki: parseFloat(params.get('ki')) || 0,
+        cluster: parseInt(params.get('cluster')) || 0,
+        words: parseInt(params.get('words')) || 0,
+        edges: parseInt(params.get('edges')) || 0,
+        archetype: params.get('archetype') || 'Unknown',
+        similarity: parseInt(params.get('sim')) || 0,
+        pairs: parseInt(params.get('pairs')) || 0
+      };
+    }
+
+    function addPersonalStar(ps) {
+      if (!ps) return;
+
+      // Place star at the matched cluster centroid with slight random offset
+      const cent = CENTROIDS[ps.cluster] || CENTROIDS[0];
+      const offset = () => (Math.random() - 0.5) * cent.spread * 0.3;
+      const px = cent.px + offset();
+      const py = cent.py + offset();
+
+      // Create the DOM element
+      const el = document.createElement('div');
+      el.className = 'star personal';
+      el.setAttribute('data-star', ps.name);
+      el.style.left = px + 'px';
+      el.style.top = py + 'px';
+
+      // Tooltip data
+      const starData = {
+        title: ps.name + "'s Soul Signature",
+        author: ps.name,
+        type: 'personal',
+        cluster: ps.cluster,
+        ki: ps.ki,
+        id: 'personal',
+        portrait: false
+      };
+
+      el.addEventListener('mouseenter', (e) => {
+        if (!tooltipPinned) showTooltip(e, starData);
+      });
+      el.addEventListener('mouseleave', () => {
+        if (!tooltipPinned) hideTooltip();
+      });
+      el.addEventListener('click', (e) => {
+        e.stopPropagation();
+        showTooltip(e, starData);
+        tooltipPinned = true;
+        tooltip.style.pointerEvents = 'auto';
+      });
+
+      overlay.appendChild(el);
+      starElements.push(el);
+      starDataList.push(Object.assign(starData, { px, py }));
+
+      // Show banner
+      const banner = document.createElement('div');
+      banner.className = 'your-star-banner';
+      banner.innerHTML = `
+        <div class="star-name">${ps.name}'s Star</div>
+        <div class="star-archetype">${ps.archetype} — ${ps.similarity}% match · ${ps.words.toLocaleString()} words · ${ps.pairs.toLocaleString()} unique patterns</div>
+      `;
+      document.body.appendChild(banner);
+
+      // Auto-dismiss banner after 8 seconds
+      setTimeout(() => { banner.style.opacity = '0'; banner.style.transition = 'opacity 1s'; }, 8000);
+      setTimeout(() => { banner.remove(); }, 9000);
+
+      // Pan + zoom to the personal star
+      setTimeout(() => {
+        const cw = container.clientWidth;
+        const ch = container.clientHeight;
+        scale = 2.5;
+        panX = cw / 2 - px * scale;
+        panY = ch / 2 - py * scale;
+        applyTransform();
+      }, 600);
+
+      console.log(`Personal star added: ${ps.name} at cluster ${ps.cluster} (${cent.name}), px=(${Math.round(px)}, ${Math.round(py)})`);
+    }
+
+    // ── Load real data or use mock ──
+    function init() {
+      const personalStar = getPersonalStarFromURL();
+
+      // Try loading galaxy_data.json for real interactive stars
+      fetch('assets/data/galaxy_data.json')
+        .then(r => { if (!r.ok) throw new Error('No data'); return r.json(); })
+        .then(data => {
+          console.log('Loaded galaxy_data.json:', data.stars.length, 'stars');
+          createStars(data.stars);
+          createLabels();
+          addPersonalStar(personalStar);
+        })
+        .catch(() => {
+          console.log('Using mock data');
+          createStars(null);
+          createLabels();
+          addPersonalStar(personalStar);
+        });
+
+      // Wait for image to load, then fit
+      if (galaxyImg.complete) {
+        if (!personalStar) fitToContainer();
+      } else {
+        galaxyImg.onload = () => { if (!personalStar) fitToContainer(); };
+      }
+
+      // Quick diagnostic
+      setTimeout(() => {
+        const starEls = overlay.querySelectorAll('[data-star]');
+        console.log('DIAGNOSTIC — star DOM elements:', starEls.length, '| labels:', overlay.querySelectorAll('.cluster-label').length);
+      }, 500);
+
+      // Debug mode: add ?debug to URL to show calibration dots at each centroid
+      if (window.location.search.includes('debug')) {
+        console.log('DEBUG MODE: showing calibration dots at pixel centroids');
+        CENTROIDS.forEach(c => {
+          const dot = document.createElement('div');
+          dot.style.cssText = `position:absolute;left:${c.px}px;top:${c.py}px;width:14px;height:14px;
+            background:red;border-radius:50%;transform:translate(-50%,-50%);z-index:100;
+            pointer-events:none;border:2px solid white;`;
+          dot.title = `${c.name} (${c.px}, ${c.py})`;
+          overlay.appendChild(dot);
+        });
+      }
+    }
+
+    // ── Populate archetype legend ──
+    function buildLegend() {
+      const legendEl = document.getElementById('archetypeLegend');
+      ARCHETYPES.forEach((arch, i) => {
+        const row = document.createElement('div');
+        row.className = 'legend-row';
+        row.innerHTML = `<span class="legend-dot" style="background:${arch.color};box-shadow:0 0 4px ${arch.color}80;"></span> ${arch.name}`;
+        row.addEventListener('click', () => {
+          const c = CENTROIDS[i];
+          if (c) {
+            flyToStar({ px: c.px, py: c.py, cluster: i });
+          }
+        });
+        legendEl.appendChild(row);
+      });
+    }
+
+    window.addEventListener('resize', fitToContainer);
+    document.getElementById('year').textContent = new Date().getFullYear();
+    buildLegend();
+    init();
+  })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="goldA" x1="30%" y1="0%" x2="70%" y2="100%">
+      <stop offset="0%" stop-color="#FFE4A0"/>
+      <stop offset="30%" stop-color="#F2C96B"/>
+      <stop offset="70%" stop-color="#D4A23A"/>
+      <stop offset="100%" stop-color="#C49030"/>
+    </linearGradient>
+    <linearGradient id="goldRing" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#C49030"/>
+      <stop offset="30%" stop-color="#E8B84A"/>
+      <stop offset="60%" stop-color="#F2C96B"/>
+      <stop offset="100%" stop-color="#FFE4A0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- LAYER 1: Ring BACK — top arc behind A -->
+  <path d="M 162,198
+           C 210,176 330,168 410,210"
+        fill="none" stroke="url(#goldRing)" stroke-width="8" stroke-linecap="round"/>
+
+  <!-- LAYER 1b: Ring BACK — bottom arc behind A (connecting C bottom to right side bottom) -->
+  <path d="M 162,408
+           C 230,430 350,425 390,388"
+        fill="none" stroke="url(#goldRing)" stroke-width="8" stroke-linecap="round"/>
+
+  <!-- LAYER 2: The A — solid, covers ring segments behind it -->
+  <polygon points="256,92 155,408 203,408 256,200" fill="url(#goldA)"/>
+  <polygon points="256,92 309,408 357,408 256,200" fill="url(#goldA)"/>
+  <rect x="188" y="310" width="136" height="22" rx="2" fill="url(#goldA)"/>
+
+  <!-- LAYER 3: Bold C arc — left side -->
+  <path d="M 162,195
+           C 72,215 38,255 38,306
+           C 38,360 74,402 162,412"
+        fill="none" stroke="url(#goldA)" stroke-width="22" stroke-linecap="round"/>
+
+  <!-- LAYER 4: Ring FRONT — right side, in front of A -->
+  <path d="M 410,210
+           C 458,235 478,272 478,304
+           C 478,342 450,375 390,388"
+        fill="none" stroke="url(#goldRing)" stroke-width="8" stroke-linecap="round"/>
+</svg>

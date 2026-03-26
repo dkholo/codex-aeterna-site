@@ -54,23 +54,72 @@
         <span></span><span></span><span></span>
       </button>
       <nav>
+        <a href="galaxy.html" class="highlight">Galaxy</a>
         <a href="index.html#how-it-works">How it works</a>
         <a href="index.html#offerings">The Archive</a>
         <a href="cognitive_fingerprints_full.html">Research</a>
         <a href="gallery.html">Gallery</a>
         <a href="demo.html">Try Demo</a>
-        <a href="sentient.html" class="highlight">Sentient</a>
+        <a href="sentient.html">Sentient</a>
         <a href="index.html#contact">Reserve</a>
       </nav>
     </header>
 
     <main>
+      <!-- ========== GALAXY HERO TEASER ========== -->
+      <section class="galaxy-teaser" aria-label="Galaxy of consciousness">
+        <div class="galaxy-teaser-bg">
+          <img src="assets/img/galaxy_bg.jpg" alt="" class="galaxy-teaser-img" />
+          <div class="galaxy-teaser-vignette"></div>
+        </div>
+
+        <!-- Animated pulsing stars -->
+        <div class="galaxy-teaser-stars">
+          <div class="gh-star" style="top:22%;left:18%;--delay:0s;--size:5px;--color:#636EFA"></div>
+          <div class="gh-star" style="top:35%;left:72%;--delay:1.2s;--size:6px;--color:#EF553B"></div>
+          <div class="gh-star" style="top:58%;left:28%;--delay:0.6s;--size:4px;--color:#00CC96"></div>
+          <div class="gh-star" style="top:42%;left:55%;--delay:2.1s;--size:7px;--color:#f2c46b"></div>
+          <div class="gh-star" style="top:68%;left:80%;--delay:1.8s;--size:5px;--color:#AB63FA"></div>
+          <div class="gh-star" style="top:28%;left:45%;--delay:0.3s;--size:4px;--color:#FFA15A"></div>
+          <div class="gh-star" style="top:75%;left:42%;--delay:2.5s;--size:6px;--color:#19D3F3"></div>
+          <div class="gh-star" style="top:48%;left:88%;--delay:1.5s;--size:5px;--color:#FF6692"></div>
+        </div>
+
+        <div class="galaxy-teaser-content">
+          <p class="galaxy-teaser-kicker">Every mind leaves a pattern. We mapped all of them.</p>
+          <h1 class="galaxy-teaser-title">
+            <span class="galaxy-teaser-title-accent">The Galaxy of<br/>Human Thought</span>
+          </h1>
+          <p class="galaxy-teaser-sub">
+            50,000 books, speeches, and podcasts spanning 4,000 years —<br/>
+            each one a star. Shakespeare next to your favorite podcast host.<br/>
+            Where does your mind belong?
+          </p>
+          <div class="galaxy-teaser-actions">
+            <a href="galaxy.html" class="btn btn-primary btn-galaxy">Enter the Galaxy</a>
+            <a href="#how-it-works" class="btn btn-secondary">How it Works</a>
+          </div>
+          <div class="galaxy-teaser-stats">
+            <span class="galaxy-teaser-stat"><strong>3,246</strong> stars</span>
+            <span class="galaxy-teaser-stat-sep"></span>
+            <span class="galaxy-teaser-stat"><strong>16</strong> cognitive archetypes</span>
+            <span class="galaxy-teaser-stat-sep"></span>
+            <span class="galaxy-teaser-stat"><strong>4,000</strong> years</span>
+          </div>
+        </div>
+
+        <div class="galaxy-teaser-scroll-hint" aria-hidden="true">
+          <span></span>
+        </div>
+      </section>
+
+      <!-- ========== ORIGINAL HERO (now secondary) ========== -->
       <section class="hero">
         <div class="hero-main">
-          <h1>
+          <h2 class="hero-main-h2">
             <span>We have stored everything,</span> <br />
             except what makes us us.
-          </h1>
+          </h2>
           <p class="hero-sub">
             Codex Aeterna reveals the hidden structural patterns beneath human language — spectral portraits of consciousness. Every soul unique. Every soul connected. Every soul preserved.
           </p>
@@ -80,7 +129,7 @@
 
           <div class="hero-actions">
             <a href="gallery.html" class="btn btn-primary">Explore the Archive</a>
-            <a href="#how-it-works" class="btn btn-secondary">How it Works</a>
+            <a href="demo.html" class="btn btn-secondary">Try the Demo</a>
           </div>
 
           <div class="hero-meta">
@@ -95,7 +144,7 @@
             <div class="hero-visual-meta">
               <div id="visual-corpus" class="hero-visual-pill">Corpus: 15 years</div>
               <div id="visual-dim" class="hero-visual-pill">Dimensionality: fixed</div>
-            </div>   
+            </div>
           </div>
 
           <div id="visual-tooltip-wrapper" class="signature-preview" data-tooltip="">

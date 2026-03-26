@@ -1,0 +1,1474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="canonical" href="https://codexaeterna.com/portrait.html" />
+  <meta charset="UTF-8" />
+  <title>Soul Portrait — Codex Aeterna</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="View and explore a soul signature portrait — the cognitive fingerprint of a literary work." />
+
+  <!-- Dynamic OG tags set by JS -->
+  <meta property="og:title" content="Soul Portrait — Codex Aeterna" id="og-title" />
+  <meta property="og:description" content="Explore a unique cognitive fingerprint." id="og-desc" />
+  <meta property="og:image" content="https://codexaeterna.com/og-image.png" id="og-image" />
+  <meta property="og:url" content="https://codexaeterna.com/portrait.html" id="og-url" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@CodexAeterna" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/img/favicon-180x180.png">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="assets/css/styles.css">
+
+  <style>
+    .portrait-page {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    /* Back link */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-soft);
+      font-size: 0.85rem;
+      text-decoration: none;
+      margin-bottom: 32px;
+      transition: color 0.15s;
+    }
+    .back-link:hover { color: var(--accent); }
+    .back-link svg { width: 16px; height: 16px; }
+
+    /* Main layout */
+    .portrait-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: start;
+    }
+
+    @media (max-width: 768px) {
+      .portrait-layout {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+    }
+
+    /* Portrait image area */
+    .portrait-frame {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      background: rgba(2, 3, 10, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .portrait-frame img {
+      width: 100%;
+      display: block;
+      border-radius: 16px;
+    }
+    .portrait-frame .zoom-hint {
+      position: absolute;
+      bottom: 12px;
+      right: 12px;
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.4);
+      background: rgba(0,0,0,0.5);
+      padding: 4px 10px;
+      border-radius: 6px;
+      pointer-events: none;
+    }
+
+    /* Info panel */
+    .portrait-info { display: flex; flex-direction: column; gap: 24px; }
+
+    .portrait-header h1 {
+      font-size: 1.8rem;
+      font-weight: 400;
+      margin-bottom: 4px;
+      line-height: 1.3;
+    }
+    .portrait-author {
+      color: var(--accent);
+      font-size: 0.9rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    /* Metadata pills */
+    .portrait-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .meta-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text-soft);
+    }
+    .meta-pill .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .meta-pill strong { color: var(--text); font-weight: 500; }
+
+    /* Description */
+    .portrait-description {
+      color: var(--text-soft);
+      font-size: 0.92rem;
+      line-height: 1.7;
+    }
+
+    /* Action buttons */
+    .portrait-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.15s;
+      text-decoration: none;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .action-btn svg { width: 16px; height: 16px; }
+    .action-btn.primary {
+      background: var(--accent);
+      color: #1a1307;
+      border-color: var(--accent);
+      font-weight: 600;
+    }
+    .action-btn.primary:hover {
+      filter: brightness(1.15);
+      transform: translateY(-1px);
+    }
+    .action-btn.secondary {
+      background: rgba(255,255,255,0.04);
+      color: var(--text-soft);
+    }
+    .action-btn.secondary:hover {
+      background: rgba(255,255,255,0.08);
+      color: var(--text);
+      border-color: rgba(255,255,255,0.2);
+    }
+
+    /* Share dropdown */
+    .share-wrapper { position: relative; }
+    .share-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      margin-top: 6px;
+      background: rgba(8, 10, 20, 0.95);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      padding: 6px 0;
+      min-width: 180px;
+      z-index: 100;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+    }
+    .share-menu.open { display: block; }
+    .share-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      color: var(--text-soft);
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: background 0.15s;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+    }
+    .share-option:hover {
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+    }
+    .share-option svg { width: 14px; height: 14px; flex-shrink: 0; }
+    .copied-toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--accent);
+      color: #1a1307;
+      padding: 10px 24px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      opacity: 0;
+      transition: opacity 0.3s;
+      z-index: 1000;
+      pointer-events: none;
+    }
+    .copied-toast.show { opacity: 1; }
+
+    /* Print ordering section */
+    .print-section {
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding-top: 24px;
+    }
+    .print-section h3 {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-soft);
+      margin-bottom: 14px;
+    }
+    .print-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .print-opt {
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.03);
+      color: var(--text-soft);
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .print-opt:hover {
+      border-color: rgba(255,255,255,0.2);
+      color: var(--text);
+    }
+    .print-opt.selected {
+      border-color: var(--accent);
+      background: rgba(242, 196, 107, 0.08);
+      color: var(--accent);
+    }
+    .print-opt .price { display: block; font-size: 0.7rem; margin-top: 2px; opacity: 0.7; }
+
+    /* Email gate modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(8px);
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal-box {
+      background: #0e1019;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 36px 32px;
+      max-width: 440px;
+      width: 100%;
+      position: relative;
+    }
+    .modal-box h3 {
+      font-size: 1.1rem;
+      font-weight: 500;
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+    .modal-box p {
+      font-size: 0.85rem;
+      color: var(--text-soft);
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    .modal-close {
+      position: absolute;
+      top: 12px;
+      right: 16px;
+      font-size: 1.4rem;
+      color: rgba(255,255,255,0.4);
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+    .modal-close:hover { color: #fff; }
+    .form-field {
+      margin-bottom: 14px;
+    }
+    .form-field label {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--text-soft);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 5px;
+    }
+    .form-field input, .form-field textarea {
+      width: 100%;
+      padding: 10px 14px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 0.88rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-field input:focus, .form-field textarea:focus {
+      border-color: var(--accent);
+    }
+    .form-field input::placeholder { color: rgba(255,255,255,0.2); }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .btn-submit {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      background: var(--accent);
+      color: #1a1307;
+      border: none;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: filter 0.15s;
+      width: 100%;
+      justify-content: center;
+      margin-top: 6px;
+    }
+    .btn-submit:hover { filter: brightness(1.15); }
+    .btn-submit:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .form-note {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      margin-top: 10px;
+      text-align: center;
+    }
+    .success-msg {
+      text-align: center;
+      padding: 20px 0;
+    }
+    .success-msg .checkmark {
+      font-size: 2.5rem;
+      margin-bottom: 8px;
+    }
+
+    /* Order form section */
+    .order-form-section {
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding-top: 24px;
+      margin-top: 8px;
+    }
+    .order-summary {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    .order-summary .os-item {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      color: var(--text-soft);
+      margin-bottom: 4px;
+    }
+    .order-summary .os-total {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1rem;
+      color: var(--accent);
+      font-weight: 600;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: 8px;
+      margin-top: 8px;
+    }
+
+    /* Related portraits */
+    .related-section {
+      margin-top: 64px;
+      padding-top: 48px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .related-section h2 {
+      font-size: 1.2rem;
+      font-weight: 400;
+      margin-bottom: 24px;
+      color: var(--text-soft);
+    }
+    .related-section h2 span { color: var(--text); }
+    .related-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+    }
+    .related-card {
+      border-radius: 12px;
+      background: rgba(2, 3, 10, 0.85);
+      border: 1px solid rgba(255,255,255,0.06);
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      text-decoration: none;
+      color: inherit;
+    }
+    .related-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+    }
+    .related-card img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      background: #080810;
+    }
+    .related-card-info {
+      padding: 12px;
+    }
+    .related-card-info h4 { font-size: 0.85rem; font-weight: 500; margin-bottom: 2px; }
+    .related-card-info p { font-size: 0.75rem; color: var(--text-soft); }
+
+    /* Loading state */
+    .portrait-loading {
+      text-align: center;
+      padding: 120px 20px;
+      color: var(--text-soft);
+    }
+    .portrait-loading .spinner {
+      width: 32px; height: 32px;
+      border: 2px solid rgba(255,255,255,0.1);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Zoom lightbox overlay */
+    .zoom-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: rgba(0, 0, 0, 0.92);
+      backdrop-filter: blur(8px);
+      cursor: zoom-out;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .zoom-overlay.active { display: flex; }
+    .zoom-overlay img {
+      max-width: 95vw;
+      max-height: 92vh;
+      object-fit: contain;
+      border-radius: 8px;
+      box-shadow: 0 20px 80px rgba(0,0,0,0.6);
+      transition: transform 0.3s ease;
+      cursor: grab;
+    }
+    .zoom-overlay img.zoomed-in {
+      cursor: grab;
+      max-width: none;
+      max-height: none;
+    }
+    .zoom-close {
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      font-size: 2rem;
+      color: rgba(255,255,255,0.6);
+      cursor: pointer;
+      background: none;
+      border: none;
+      transition: color 0.15s;
+      z-index: 1001;
+    }
+    .zoom-close:hover { color: #fff; }
+    .zoom-hint-text {
+      position: absolute;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.4);
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <a href="index.html" class="logo">
+        <img src="assets/img/logo-symbol-512.png" alt="Codex Aeterna logo" class="logo-mark">
+        <div class="logo-text">
+          <span>Codex Aeterna</span>
+          <span>Memory becomes immortal</span>
+        </div>
+      </a>
+      <button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <nav>
+        <a href="index.html#how-it-works">How it works</a>
+        <a href="index.html#offerings">The Archive</a>
+        <a href="cognitive_fingerprints_full.html">Research</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="demo.html">Try Demo</a>
+        <a href="sentient.html" class="highlight">Sentient</a>
+        <a href="galaxy.html">Galaxy</a>
+      </nav>
+    </header>
+
+    <main class="portrait-page" id="portraitPage">
+      <!-- Loading state (shown while data loads) -->
+      <div class="portrait-loading" id="loadingState">
+        <div class="spinner"></div>
+        <p>Loading soul portrait...</p>
+      </div>
+
+      <!-- Main content (hidden until loaded) -->
+      <div id="portraitContent" style="display:none;">
+        <a href="galaxy.html" class="back-link" id="backLink">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          Back to Galaxy
+        </a>
+
+        <div class="portrait-layout">
+          <!-- Left: Image -->
+          <div class="portrait-frame" id="portraitFrame">
+            <img id="portraitImg" src="" alt="Soul portrait" />
+            <span class="zoom-hint">Click to zoom</span>
+          </div>
+
+          <!-- Right: Info + Actions -->
+          <div class="portrait-info">
+            <div class="portrait-header">
+              <div class="portrait-author" id="pAuthor"></div>
+              <h1 id="pTitle"></h1>
+            </div>
+
+            <div class="portrait-meta" id="pMeta"></div>
+
+            <p class="portrait-description" id="pDesc"></p>
+
+            <!-- Action buttons -->
+            <div class="portrait-actions">
+              <div class="share-wrapper">
+                <button class="action-btn secondary" id="shareBtn">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+                  Share
+                </button>
+                <div class="share-menu" id="shareMenu">
+                  <button class="share-option" id="shareCopy">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                    Copy link
+                  </button>
+                  <button class="share-option" id="shareTwitter">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    Share on X
+                  </button>
+                  <button class="share-option" id="shareFacebook">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                    Share on Facebook
+                  </button>
+                </div>
+              </div>
+
+              <button class="action-btn secondary" id="styleToggleBtn" title="Switch portrait style">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 010 20V2z" fill="currentColor"/></svg>
+                <span id="styleLabel">White</span>
+              </button>
+
+              <button class="action-btn secondary" id="downloadBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Download HD — Free
+              </button>
+
+              <button class="action-btn primary" id="orderPrintBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg>
+                Order Print
+              </button>
+            </div>
+
+            <!-- Print ordering (hidden until toggled) -->
+            <div class="print-section" id="printSection" style="display:none;">
+              <h3>Choose your format</h3>
+
+              <h4 style="font-size:0.72rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--text-dim); margin-bottom:8px;">Digital</h4>
+              <div class="print-options">
+                <div class="print-opt" data-size="digital-hd" data-price="999" data-stripe="">
+                  Digital HD Download
+                  <span class="price">$9.99</span>
+                  <span style="display:block; font-size:0.65rem; color:var(--text-dim); margin-top:2px;">PNG + SVG vector</span>
+                </div>
+              </div>
+
+              <h4 style="font-size:0.72rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--text-dim); margin:16px 0 8px;">Paper Posters</h4>
+              <div class="print-options">
+                <div class="print-opt" data-size="poster-8x10" data-price="2900" data-stripe="">
+                  Poster 8&times;10&Prime;
+                  <span class="price">$29</span>
+                  <span style="display:block; font-size:0.65rem; color:var(--text-dim); margin-top:2px;">Archival matte paper</span>
+                </div>
+                <div class="print-opt" data-size="poster-11x14" data-price="4900" data-stripe="">
+                  Poster 11&times;14&Prime;
+                  <span class="price">$49</span>
+                  <span style="display:block; font-size:0.65rem; color:var(--text-dim); margin-top:2px;">Archival matte paper</span>
+                </div>
+                <div class="print-opt" data-size="poster-18x24" data-price="7900" data-stripe="">
+                  Poster 18&times;24&Prime;
+                  <span class="price">$79</span>
+                  <span style="display:block; font-size:0.65rem; color:var(--text-dim); margin-top:2px;">Archival cotton paper</span>
+                </div>
+                <div class="print-opt" data-size="poster-24x36" data-price="12900" data-stripe="">
+                  Poster 24&times;36&Prime;
+                  <span class="price">$129</span>
+                  <span style="display:block; font-size:0.65rem; color:var(--text-dim); margin-top:2px;">Archival cotton paper</span>
+                </div>
+              </div>
+
+              <h4 style="font-size:0.72rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--text-dim); margin:16px 0 8px;">Canvas Prints</h4>
+              <div class="print-options">
+                <div class="print-opt" data-size="canvas-8x10" data-price="8900" data-stripe="">
+                  Canvas 8&times;10&Prime;
+                  <span class="price">$89</span>
+                  <span style="display:block; font-size:0.65rem; color:var(--text-dim); margin-top:2px;">Gallery-wrapped, 1.5&Prime; depth</span>
+                </div>
+                <div class="print-opt" data-size="canvas-12x16" data-price="14900" data-stripe="">
+                  Canvas 12&times;16&Prime;
+                  <span class="price">$149</span>
+                  <span style="display:block; font-size:0.65rem; color:var(--text-dim); margin-top:2px;">Gallery-wrapped, 1.5&Prime; depth</span>
+                </div>
+                <div class="print-opt" data-size="canvas-16x20" data-price="19900" data-stripe="">
+                  Canvas 16&times;20&Prime;
+                  <span class="price">$199</span>
+                  <span style="display:block; font-size:0.65rem; color:var(--text-dim); margin-top:2px;">Gallery-wrapped, 1.5&Prime; depth</span>
+                </div>
+                <div class="print-opt" data-size="canvas-20x30" data-price="29900" data-stripe="">
+                  Canvas 20&times;30&Prime;
+                  <span class="price">$299</span>
+                  <span style="display:block; font-size:0.65rem; color:var(--text-dim); margin-top:2px;">Gallery-wrapped, 1.5&Prime; depth</span>
+                </div>
+                <div class="print-opt" data-size="canvas-24x36" data-price="39900" data-stripe="">
+                  Canvas 24&times;36&Prime;
+                  <span class="price">$399</span>
+                  <span style="display:block; font-size:0.65rem; color:var(--text-dim); margin-top:2px;">Gallery-wrapped, 1.5&Prime; depth</span>
+                </div>
+              </div>
+
+              <h4 style="font-size:0.72rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--text-dim); margin:16px 0 8px;">Aluminum Prints</h4>
+              <div class="print-options">
+                <div class="print-opt" data-size="aluminum-8x10" data-price="14900" data-stripe="">
+                  Aluminum 8&times;10&Prime;
+                  <span class="price">$149</span>
+                  <span style="display:block; font-size:0.65rem; color:var(--text-dim); margin-top:2px;">Floating mount, vibrant color</span>
+                </div>
+                <div class="print-opt" data-size="aluminum-12x16" data-price="24900" data-stripe="">
+                  Aluminum 12&times;16&Prime;
+                  <span class="price">$249</span>
+                  <span style="display:block; font-size:0.65rem; color:var(--text-dim); margin-top:2px;">Floating mount, vibrant color</span>
+                </div>
+                <div class="print-opt" data-size="aluminum-16x20" data-price="34900" data-stripe="">
+                  Aluminum 16&times;20&Prime;
+                  <span class="price">$349</span>
+                  <span style="display:block; font-size:0.65rem; color:var(--text-dim); margin-top:2px;">Floating mount, vibrant color</span>
+                </div>
+                <div class="print-opt" data-size="aluminum-20x30" data-price="49900" data-stripe="">
+                  Aluminum 20&times;30&Prime;
+                  <span class="price">$499</span>
+                  <span style="display:block; font-size:0.65rem; color:var(--text-dim); margin-top:2px;">Floating mount, vibrant color</span>
+                </div>
+                <div class="print-opt" data-size="aluminum-24x36" data-price="69900" data-stripe="">
+                  Aluminum 24&times;36&Prime;
+                  <span class="price">$699</span>
+                  <span style="display:block; font-size:0.65rem; color:var(--text-dim); margin-top:2px;">Floating mount, vibrant color</span>
+                </div>
+              </div>
+
+              <h4 style="font-size:0.72rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--text-dim); margin:16px 0 8px;">Titanium &mdash; Built for 10,000 Years</h4>
+              <div class="print-options">
+                <div class="print-opt" data-size="titanium-4x6" data-price="99900" data-stripe="">
+                  Titanium 4&times;6&Prime;
+                  <span class="price">$999</span>
+                  <span style="display:block; font-size:0.65rem; color:var(--text-dim); margin-top:2px;">Grade 5 aerospace, laser-etched</span>
+                </div>
+                <div class="print-opt" data-size="titanium-6x9" data-price="149900" data-stripe="">
+                  Titanium 6&times;9&Prime;
+                  <span class="price">$1,499</span>
+                  <span style="display:block; font-size:0.65rem; color:var(--text-dim); margin-top:2px;">Grade 5 aerospace, laser-etched</span>
+                </div>
+                <div class="print-opt" data-size="titanium-8x12" data-price="199900" data-stripe="">
+                  Titanium 8&times;12&Prime;
+                  <span class="price">$1,999</span>
+                  <span style="display:block; font-size:0.65rem; color:var(--text-dim); margin-top:2px;">Grade 5 aerospace, space-mission ready</span>
+                </div>
+              </div>
+              <p style="font-size:0.78rem; color:var(--text-soft); margin: 16px 0 12px;">
+                All prints include certificate of authenticity. Available in Solid or Dot-Dash line style. Titanium editions laser-etched for deep time preservation.
+              </p>
+
+              <!-- Order form appears when a size is selected -->
+              <div class="order-form-section" id="orderFormSection" style="display:none;">
+                <div class="order-summary" id="orderSummary">
+                  <div class="os-item"><span id="osProduct">—</span><span id="osPrice">—</span></div>
+                  <div class="os-item"><span>Shipping</span><span>Calculated at checkout</span></div>
+                  <div class="os-total"><span>Total</span><span id="osTotal">—</span></div>
+                </div>
+
+                <div class="form-field">
+                  <label>Full Name *</label>
+                  <input type="text" id="orderName" placeholder="First and last name" required />
+                </div>
+                <div class="form-field">
+                  <label>Email *</label>
+                  <input type="email" id="orderEmail" placeholder="you@example.com" required />
+                </div>
+                <div class="form-field">
+                  <label>Phone *</label>
+                  <input type="tel" id="orderPhone" placeholder="+1 (555) 123-4567" required />
+                </div>
+                <div class="form-field">
+                  <label>Shipping Address *</label>
+                  <input type="text" id="orderAddress" placeholder="Street address" required />
+                </div>
+                <div class="form-row">
+                  <div class="form-field">
+                    <label>City *</label>
+                    <input type="text" id="orderCity" placeholder="City" required />
+                  </div>
+                  <div class="form-field">
+                    <label>State / Province</label>
+                    <input type="text" id="orderState" placeholder="State" />
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-field">
+                    <label>ZIP / Postal Code *</label>
+                    <input type="text" id="orderZip" placeholder="ZIP" required />
+                  </div>
+                  <div class="form-field">
+                    <label>Country *</label>
+                    <input type="text" id="orderCountry" placeholder="Country" value="United States" />
+                  </div>
+                </div>
+
+                <!-- Titanium-only: inscription -->
+                <div class="form-field" id="inscriptionField" style="display:none;">
+                  <label>Inscription for Titanium Plate (optional)</label>
+                  <input type="text" id="orderInscription" placeholder="Your name or message to be etched alongside the portrait" maxlength="120" />
+                  <span style="font-size:0.68rem; color:var(--text-dim);">Max 120 characters. Etched permanently on the titanium exhibit.</span>
+                </div>
+
+                <button class="btn-submit" id="checkoutBtn" disabled>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                  Proceed to Payment
+                </button>
+                <p class="form-note">Secure payment powered by Stripe. Your card details never touch our servers.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Related portraits from same archetype -->
+        <div class="related-section" id="relatedSection">
+          <h2>More from <span id="relatedArchetype">this archetype</span></h2>
+          <div class="related-grid" id="relatedGrid"></div>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <span>&copy; <span id="year"></span> Codex Aeterna LLC. All rights reserved.</span>
+      <span>Patent pending &middot; "Memory becomes immortal."</span>
+    </footer>
+  </div>
+
+  <div class="copied-toast" id="copiedToast">Link copied to clipboard</div>
+
+  <!-- Email gate modal for free download -->
+  <div class="modal-overlay" id="downloadModal">
+    <div class="modal-box">
+      <button class="modal-close" id="downloadModalClose">&times;</button>
+      <div id="downloadFormView">
+        <h3>Download your soul portrait</h3>
+        <p>Enter your email to receive the high-resolution portrait file. We'll also notify you about new features and archive updates.</p>
+        <div class="form-field">
+          <label>Email Address</label>
+          <input type="email" id="dlEmail" placeholder="you@example.com" />
+        </div>
+        <div class="form-field">
+          <label>Name (optional)</label>
+          <input type="text" id="dlName" placeholder="Your name" />
+        </div>
+        <button class="btn-submit" id="dlSubmitBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download Portrait
+        </button>
+        <p class="form-note">Free &middot; High resolution &middot; No spam, ever.</p>
+      </div>
+      <div id="downloadSuccessView" style="display:none;">
+        <div class="success-msg">
+          <div class="checkmark">&#10003;</div>
+          <h3>Your download is starting!</h3>
+          <p style="color:var(--text-soft); font-size:0.88rem; margin-top:8px;">Thank you. Check your downloads folder for the portrait file.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Zoom overlay -->
+  <div class="zoom-overlay" id="zoomOverlay">
+    <button class="zoom-close" id="zoomClose">&times;</button>
+    <img id="zoomImg" src="" alt="Zoomed portrait" draggable="false" />
+    <span class="zoom-hint-text">Scroll to zoom &middot; Drag to pan &middot; Click to close</span>
+  </div>
+
+  <script>
+  (function() {
+    'use strict';
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Gallery portrait pairs (thumbnail + full)
+    const GALLERY_PORTRAITS = [
+      { thumb: 'assets/img/WilliamShakespeareFull-portrait.webp', full: 'assets/img/WilliamShakespeareFull.webp' },
+      { thumb: 'assets/img/WarandPiece2-portrait.webp',          full: 'assets/img/WarandPiece2.webp' },
+      { thumb: 'assets/img/Onegin-portrait.webp',                full: 'assets/img/Onegin.webp' },
+      { thumb: 'assets/img/ElonFullSingularity-portrait.webp',   full: 'assets/img/ElonFullSingularity.webp' },
+      { thumb: 'assets/img/buddy-metal-samples-portrait.jpg',    full: 'assets/img/buddy-metal-samples.jpg' },
+      { thumb: 'assets/img/max-steel-memorial-portrait.jpg',     full: 'assets/img/max-steel-memorial.jpg' }
+    ];
+
+    const ARCHETYPES = [
+      { id: 0,  name: 'The TED Speaker',   color: '#636EFA' },
+      { id: 1,  name: 'The Revolutionary',  color: '#EF553B' },
+      { id: 2,  name: 'The Family Chronicler', color: '#00CC96' },
+      { id: 3,  name: 'The Tormented Mind', color: '#AB63FA' },
+      { id: 4,  name: 'The Nostalgic Soul', color: '#FFA15A' },
+      { id: 5,  name: 'The Revolutionary (Epic)', color: '#19D3F3' },
+      { id: 6,  name: 'The Family Chronicler (Childhood)', color: '#FF6692' },
+      { id: 7,  name: 'The Family Chronicler (Modern)', color: '#B6E880' },
+      { id: 8,  name: 'The Philosopher',    color: '#FF97FF' },
+      { id: 9,  name: 'The Essayist',       color: '#FECB52' },
+      { id: 10, name: 'The Archivist',      color: '#E45756' },
+      { id: 11, name: 'The Liberator',      color: '#54A24B' },
+      { id: 12, name: 'The War Correspondent', color: '#EECA3B' },
+      { id: 13, name: 'The Historian',      color: '#B279A2' },
+      { id: 14, name: 'The Family Chronicler (Epic)', color: '#72B7B2' },
+      { id: 15, name: 'The Theologian',     color: '#F58518' }
+    ];
+
+    // Parse URL params
+    const params = new URLSearchParams(window.location.search);
+    const rawId = params.get('id');
+    const starId = rawId; // keep as string; match flexibly below
+    const fromGalaxy = params.get('from') === 'galaxy';
+
+    // Portrait style: 'black' or 'white' (read from URL or default)
+    let portraitStyle = params.get('style') || 'black';
+
+    // Build portrait URLs — real file with gallery fallback
+    function getPortraitUrls(star) {
+      const sid = String(star.id);
+      const real = {
+        thumb: `assets/img/portraits/${portraitStyle}/thumbs/${sid}.webp`,
+        full:  `assets/img/portraits/${portraitStyle}/${sid}.webp`
+      };
+      // Deterministic gallery fallback
+      let seed = 0;
+      if (typeof star.id === 'number' && isFinite(star.id)) seed += star.id;
+      if (star.title) seed += star.title.length;
+      const idx = Math.abs(seed) % GALLERY_PORTRAITS.length;
+      const gallery = GALLERY_PORTRAITS[idx] || GALLERY_PORTRAITS[0];
+      return { real, gallery };
+    }
+
+    // Legacy wrapper for backward compat
+    function getPortrait(id, titleLen) {
+      let seed = 0;
+      if (typeof id === 'number' && isFinite(id)) seed += id;
+      seed += (titleLen || 0);
+      const idx = Math.abs(seed) % GALLERY_PORTRAITS.length;
+      return GALLERY_PORTRAITS[idx] || GALLERY_PORTRAITS[0];
+    }
+
+    // Load star data
+    let allStars = [];
+
+    fetch('assets/data/galaxy_data.json')
+      .then(r => { if (!r.ok) throw new Error('No data'); return r.json(); })
+      .then(data => {
+        allStars = data.stars || [];
+        // Match by string or numeric ID (podcasts have string IDs like YouTube video IDs)
+        const star = allStars.find(s => String(s.id) === String(starId));
+        if (star) {
+          renderPortrait(star);
+        } else {
+          renderFallback();
+        }
+      })
+      .catch(() => {
+        renderFallback();
+      });
+
+    function renderPortrait(star) {
+      const arch = ARCHETYPES[star.cluster] || { name: 'Unknown', color: '#888' };
+      const urls = getPortraitUrls(star);
+      const fallback = urls.gallery;
+
+      // Update page title
+      document.title = `${star.title} — ${star.author} | Codex Aeterna`;
+
+      // Set OG tags
+      document.getElementById('og-title').content = `${star.title} by ${star.author} — Soul Portrait`;
+      document.getElementById('og-desc').content = `Explore the cognitive fingerprint of "${star.title}" — classified as ${arch.name}.`;
+
+      // Fill content
+      document.getElementById('pAuthor').textContent = star.author;
+      document.getElementById('pTitle').textContent = star.title.replace(/\s*\(\d+\)$/, ''); // strip trailing (id)
+
+      // Try real portrait, fallback to gallery
+      const portraitImg = document.getElementById('portraitImg');
+      portraitImg.src = urls.real.full;
+      portraitImg.onerror = function() {
+        this.src = fallback.full;
+        this.onerror = function() { this.style.display = 'none'; };
+      };
+      document.getElementById('downloadBtn').href = urls.real.full;
+
+      // Meta pills
+      const metaEl = document.getElementById('pMeta');
+      metaEl.innerHTML = `
+        <span class="meta-pill">
+          <span class="dot" style="background:${arch.color};box-shadow:0 0 6px ${arch.color}80;"></span>
+          ${arch.name}
+        </span>
+        <span class="meta-pill"><strong>KI:</strong> ${star.ki || '—'}</span>
+        <span class="meta-pill">${star.type === 'podcast' ? 'Podcast' : 'Book'}</span>
+      `;
+
+      // Description
+      document.getElementById('pDesc').textContent =
+        `This soul portrait captures the cognitive fingerprint of "${star.title.replace(/\s*\(\d+\)$/, '')}" by ${star.author}. ` +
+        `Classified under the ${arch.name} archetype, this work's signature reveals patterns of thought, narrative structure, and emotional resonance ` +
+        `unique to this piece among 50,000+ analyzed texts in the Codex Aeterna archive.`;
+
+      // Back link
+      if (fromGalaxy) {
+        document.getElementById('backLink').href = 'galaxy.html';
+        document.getElementById('backLink').innerHTML =
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Back to Galaxy';
+      }
+
+      // Render related portraits
+      renderRelated(star, arch);
+
+      // Show content
+      document.getElementById('loadingState').style.display = 'none';
+      document.getElementById('portraitContent').style.display = 'block';
+    }
+
+    function renderRelated(star, arch) {
+      const related = allStars
+        .filter(s => s.cluster === star.cluster && s.id !== star.id)
+        .sort((a, b) => (b.ki || 0) - (a.ki || 0))
+        .slice(0, 8);
+
+      document.getElementById('relatedArchetype').textContent = arch.name;
+      const grid = document.getElementById('relatedGrid');
+
+      if (related.length === 0) {
+        document.getElementById('relatedSection').style.display = 'none';
+        return;
+      }
+
+      grid.innerHTML = related.map(s => {
+        const u = getPortraitUrls(s);
+        const cleanTitle = s.title.replace(/\s*\(\d+\)$/, '');
+        return `
+          <a class="related-card" href="portrait.html?id=${s.id}&from=${fromGalaxy ? 'galaxy' : 'gallery'}&style=${portraitStyle}">
+            <img src="${u.real.thumb}" alt="${cleanTitle}" loading="lazy"
+                 onerror="this.src='${u.gallery.thumb}';this.onerror=null" />
+            <div class="related-card-info">
+              <h4>${cleanTitle}</h4>
+              <p>${s.author}</p>
+            </div>
+          </a>`;
+      }).join('');
+    }
+
+    function renderFallback() {
+      document.getElementById('loadingState').innerHTML = `
+        <p style="font-size:1.1rem;">Portrait not found</p>
+        <p style="margin-top:8px;"><a href="galaxy.html" style="color:var(--accent);">Return to the Galaxy</a></p>
+      `;
+    }
+
+    // ── Share functionality ──
+    const shareBtn = document.getElementById('shareBtn');
+    const shareMenu = document.getElementById('shareMenu');
+
+    shareBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      shareMenu.classList.toggle('open');
+    });
+
+    document.addEventListener('click', () => {
+      shareMenu.classList.remove('open');
+    });
+
+    document.getElementById('shareCopy').addEventListener('click', () => {
+      navigator.clipboard.writeText(window.location.href).then(() => {
+        const toast = document.getElementById('copiedToast');
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2000);
+      });
+      shareMenu.classList.remove('open');
+    });
+
+    document.getElementById('shareTwitter').addEventListener('click', () => {
+      const title = document.getElementById('pTitle').textContent;
+      const author = document.getElementById('pAuthor').textContent;
+      const url = encodeURIComponent(window.location.href);
+      const text = encodeURIComponent(`Explore the soul portrait of "${title}" by ${author} — a unique cognitive fingerprint from @CodexAeterna`);
+      window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
+      shareMenu.classList.remove('open');
+    });
+
+    document.getElementById('shareFacebook').addEventListener('click', () => {
+      const url = encodeURIComponent(window.location.href);
+      window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank');
+      shareMenu.classList.remove('open');
+    });
+
+    // ══════════════════════════════════════════════════
+    // STRIPE CONFIGURATION
+    // Replace with your live key when ready to go live.
+    // Test key: pk_test_... (from Stripe Dashboard > Developers > API keys)
+    // Live key: pk_live_... (activate after testing)
+    // ══════════════════════════════════════════════════
+    const STRIPE_CONFIG = {
+      // ── PASTE YOUR STRIPE PUBLISHABLE KEY HERE ──
+      publishableKey: 'pk_test_REPLACE_WITH_YOUR_KEY',
+
+      // ── STRIPE PAYMENT LINKS ──
+      // Create these in Stripe Dashboard > Payment Links
+      // Each link corresponds to a product. Create one per size.
+      // The URL format is: https://buy.stripe.com/XXXXXXX
+      paymentLinks: {
+        'digital-hd':      '',  // Digital HD ($9.99)
+        'poster-8x10':     '',  // Poster 8×10 ($29)
+        'poster-11x14':    '',  // Poster 11×14 ($49)
+        'poster-18x24':    '',  // Poster 18×24 ($79)
+        'poster-24x36':    '',  // Poster 24×36 ($129)
+        'canvas-8x10':     '',  // Canvas 8×10 ($89)
+        'canvas-12x16':    '',  // Canvas 12×16 ($149)
+        'canvas-16x20':    '',  // Canvas 16×20 ($199)
+        'canvas-20x30':    '',  // Canvas 20×30 ($299)
+        'canvas-24x36':    '',  // Canvas 24×36 ($399)
+        'aluminum-8x10':   '',  // Aluminum 8×10 ($149)
+        'aluminum-12x16':  '',  // Aluminum 12×16 ($249)
+        'aluminum-16x20':  '',  // Aluminum 16×20 ($349)
+        'aluminum-20x30':  '',  // Aluminum 20×30 ($499)
+        'aluminum-24x36':  '',  // Aluminum 24×36 ($699)
+        'titanium-4x6':    '',  // Titanium 4×6 ($999)
+        'titanium-6x9':    '',  // Titanium 6×9 ($1,499)
+        'titanium-8x12':   ''   // Titanium 8×12 ($1,999)
+      },
+
+      // Prices in cents for display
+      prices: {
+        'digital-hd':      999,
+        'poster-8x10':     2900,
+        'poster-11x14':    4900,
+        'poster-18x24':    7900,
+        'poster-24x36':    12900,
+        'canvas-8x10':     8900,
+        'canvas-12x16':    14900,
+        'canvas-16x20':    19900,
+        'canvas-20x30':    29900,
+        'canvas-24x36':    39900,
+        'aluminum-8x10':   14900,
+        'aluminum-12x16':  24900,
+        'aluminum-16x20':  34900,
+        'aluminum-20x30':  49900,
+        'aluminum-24x36':  69900,
+        'titanium-4x6':    99900,
+        'titanium-6x9':    149900,
+        'titanium-8x12':   199900
+      },
+
+      productNames: {
+        'digital-hd':      'Digital HD Download (PNG + SVG)',
+        'poster-8x10':     'Paper Poster 8×10″',
+        'poster-11x14':    'Paper Poster 11×14″',
+        'poster-18x24':    'Paper Poster 18×24″',
+        'poster-24x36':    'Paper Poster 24×36″',
+        'canvas-8x10':     'Canvas 8×10″',
+        'canvas-12x16':    'Canvas 12×16″',
+        'canvas-16x20':    'Canvas 16×20″',
+        'canvas-20x30':    'Canvas 20×30″',
+        'canvas-24x36':    'Canvas 24×36″',
+        'aluminum-8x10':   'Aluminum 8×10″',
+        'aluminum-12x16':  'Aluminum 12×16″',
+        'aluminum-16x20':  'Aluminum 16×20″',
+        'aluminum-20x30':  'Aluminum 20×30″',
+        'aluminum-24x36':  'Aluminum 24×36″',
+        'titanium-4x6':    'Titanium 4×6″ — 10,000 Year Archive',
+        'titanium-6x9':    'Titanium 6×9″ — 10,000 Year Archive',
+        'titanium-8x12':   'Titanium 8×12″ — 10,000 Year Archive'
+      }
+    };
+
+    // ── Print ordering ──
+    const printSection = document.getElementById('printSection');
+    const orderFormSection = document.getElementById('orderFormSection');
+    const inscriptionField = document.getElementById('inscriptionField');
+    let selectedSize = null;
+
+    document.getElementById('orderPrintBtn').addEventListener('click', () => {
+      printSection.style.display = printSection.style.display === 'none' ? 'block' : 'none';
+    });
+
+    document.querySelectorAll('.print-opt').forEach(opt => {
+      opt.addEventListener('click', () => {
+        document.querySelectorAll('.print-opt').forEach(o => o.classList.remove('selected'));
+        opt.classList.add('selected');
+        selectedSize = opt.dataset.size;
+
+        // Show order form
+        orderFormSection.style.display = 'block';
+
+        // Update order summary
+        const price = STRIPE_CONFIG.prices[selectedSize] || 0;
+        const name = STRIPE_CONFIG.productNames[selectedSize] || selectedSize;
+        document.getElementById('osProduct').textContent = name;
+        document.getElementById('osPrice').textContent = '$' + (price / 100).toLocaleString();
+        document.getElementById('osTotal').textContent = '$' + (price / 100).toLocaleString() + '+';
+
+        // Show inscription field for titanium sizes only
+        inscriptionField.style.display = selectedSize.startsWith('titanium') ? 'block' : 'none';
+
+        // Enable checkout button
+        validateOrderForm();
+
+        // Scroll to form
+        orderFormSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+    });
+
+    // Form validation — digital products skip shipping
+    function validateOrderForm() {
+      const isDigital = selectedSize === 'digital-hd';
+      const name = document.getElementById('orderName').value.trim();
+      const email = document.getElementById('orderEmail').value.trim();
+      const phone = document.getElementById('orderPhone').value.trim();
+      const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      const btn = document.getElementById('checkoutBtn');
+
+      // Show/hide shipping fields for physical products
+      document.querySelectorAll('#orderAddress, #orderCity, #orderState, #orderZip, #orderCountry').forEach(el => {
+        el.closest('.form-field, .form-row').style.display = isDigital ? 'none' : '';
+      });
+      document.getElementById('orderPhone').closest('.form-field').style.display = isDigital ? 'none' : '';
+
+      if (isDigital) {
+        btn.disabled = !(name && emailValid && selectedSize);
+      } else {
+        const address = document.getElementById('orderAddress').value.trim();
+        const city = document.getElementById('orderCity').value.trim();
+        const zip = document.getElementById('orderZip').value.trim();
+        btn.disabled = !(name && emailValid && phone && address && city && zip && selectedSize);
+      }
+    }
+
+    // Listen on all order form inputs
+    ['orderName','orderEmail','orderPhone','orderAddress','orderCity','orderState','orderZip','orderCountry'].forEach(id => {
+      document.getElementById(id).addEventListener('input', validateOrderForm);
+    });
+
+    // Checkout button — redirect to Stripe
+    document.getElementById('checkoutBtn').addEventListener('click', () => {
+      if (!selectedSize) return;
+
+      const title = document.getElementById('pTitle').textContent;
+      const author = document.getElementById('pAuthor').textContent;
+
+      // Collect customer data
+      const customerData = {
+        name: document.getElementById('orderName').value.trim(),
+        email: document.getElementById('orderEmail').value.trim(),
+        phone: document.getElementById('orderPhone').value.trim(),
+        address: document.getElementById('orderAddress').value.trim(),
+        city: document.getElementById('orderCity').value.trim(),
+        state: document.getElementById('orderState').value.trim(),
+        zip: document.getElementById('orderZip').value.trim(),
+        country: document.getElementById('orderCountry').value.trim(),
+        inscription: document.getElementById('orderInscription')?.value.trim() || '',
+        product: selectedSize,
+        portrait: title + ' by ' + author,
+        portraitUrl: window.location.href,
+        starId: starId,
+        timestamp: new Date().toISOString()
+      };
+
+      // Save order to localStorage for record keeping
+      const orders = JSON.parse(localStorage.getItem('codex_orders') || '[]');
+      orders.push(customerData);
+      localStorage.setItem('codex_orders', JSON.stringify(orders));
+
+      // Check if Stripe Payment Link is configured
+      const paymentLink = STRIPE_CONFIG.paymentLinks[selectedSize];
+      if (paymentLink) {
+        // Redirect to Stripe Payment Link with prefilled email
+        const url = new URL(paymentLink);
+        url.searchParams.set('prefilled_email', customerData.email);
+        // Add metadata via client_reference_id
+        url.searchParams.set('client_reference_id', `${starId}_${selectedSize}_${Date.now()}`);
+        window.location.href = url.toString();
+      } else {
+        // Fallback: send order details via email until Stripe is configured
+        const subject = encodeURIComponent(`Order: ${STRIPE_CONFIG.productNames[selectedSize]} — "${title}" by ${author}`);
+        const body = encodeURIComponent(
+          `NEW ORDER\n` +
+          `═══════════════════════════\n` +
+          `Product: ${STRIPE_CONFIG.productNames[selectedSize]}\n` +
+          `Price: $${(STRIPE_CONFIG.prices[selectedSize] / 100).toLocaleString()}\n` +
+          `Portrait: "${title}" by ${author}\n` +
+          `Portrait URL: ${window.location.href}\n\n` +
+          `CUSTOMER DETAILS\n` +
+          `═══════════════════════════\n` +
+          `Name: ${customerData.name}\n` +
+          `Email: ${customerData.email}\n` +
+          `Phone: ${customerData.phone}\n` +
+          `Address: ${customerData.address}\n` +
+          `City: ${customerData.city}\n` +
+          `State: ${customerData.state}\n` +
+          `ZIP: ${customerData.zip}\n` +
+          `Country: ${customerData.country}\n` +
+          (customerData.inscription ? `Inscription: ${customerData.inscription}\n` : '') +
+          `\nTimestamp: ${customerData.timestamp}`
+        );
+        window.location.href = `mailto:dmitry.kholodkov@gmail.com?subject=${subject}&body=${body}`;
+      }
+    });
+
+    // ── Email-gated download ──
+    const downloadModal = document.getElementById('downloadModal');
+    const downloadFormView = document.getElementById('downloadFormView');
+    const downloadSuccessView = document.getElementById('downloadSuccessView');
+
+    document.getElementById('downloadBtn').addEventListener('click', () => {
+      // Check if user already provided email this session
+      const savedEmail = sessionStorage.getItem('codex_dl_email');
+      if (savedEmail) {
+        triggerDownload();
+        return;
+      }
+      downloadModal.classList.add('active');
+    });
+
+    document.getElementById('downloadModalClose').addEventListener('click', () => {
+      downloadModal.classList.remove('active');
+    });
+    downloadModal.addEventListener('click', (e) => {
+      if (e.target === downloadModal) downloadModal.classList.remove('active');
+    });
+
+    document.getElementById('dlSubmitBtn').addEventListener('click', () => {
+      const email = document.getElementById('dlEmail').value.trim();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        document.getElementById('dlEmail').style.borderColor = '#e85d5d';
+        return;
+      }
+
+      const dlName = document.getElementById('dlName').value.trim();
+      const title = document.getElementById('pTitle').textContent;
+      const author = document.getElementById('pAuthor').textContent;
+
+      // Save download lead
+      const leads = JSON.parse(localStorage.getItem('codex_download_leads') || '[]');
+      leads.push({
+        email,
+        name: dlName,
+        portrait: title + ' by ' + author,
+        starId,
+        timestamp: new Date().toISOString()
+      });
+      localStorage.setItem('codex_download_leads', JSON.stringify(leads));
+
+      // Remember email for this session
+      sessionStorage.setItem('codex_dl_email', email);
+
+      // Show success and trigger download
+      downloadFormView.style.display = 'none';
+      downloadSuccessView.style.display = 'block';
+      triggerDownload();
+
+      // Close modal after delay
+      setTimeout(() => {
+        downloadModal.classList.remove('active');
+        // Reset for next time
+        downloadFormView.style.display = 'block';
+        downloadSuccessView.style.display = 'none';
+      }, 2500);
+    });
+
+    function triggerDownload() {
+      const portraitImg = document.getElementById('portraitImg');
+      if (!portraitImg.src) return;
+      const a = document.createElement('a');
+      a.href = portraitImg.src;
+      const title = (document.getElementById('pTitle').textContent || 'portrait').replace(/[^a-zA-Z0-9]/g, '_');
+      a.download = `codex_aeterna_${title}.webp`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    // ── Image zoom lightbox ──
+    const zoomOverlay = document.getElementById('zoomOverlay');
+    const zoomImg = document.getElementById('zoomImg');
+    let zoomScale = 1;
+    let zoomPanX = 0, zoomPanY = 0;
+    let zoomDragging = false, zoomDragStartX, zoomDragStartY, zoomPanStartX, zoomPanStartY;
+
+    function openZoom() {
+      const src = document.getElementById('portraitImg').src;
+      if (!src) return;
+      zoomImg.src = src;
+      zoomScale = 1;
+      zoomPanX = 0;
+      zoomPanY = 0;
+      applyZoomTransform();
+      zoomOverlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeZoom() {
+      zoomOverlay.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    function applyZoomTransform() {
+      zoomImg.style.transform = `translate(${zoomPanX}px, ${zoomPanY}px) scale(${zoomScale})`;
+      zoomImg.classList.toggle('zoomed-in', zoomScale > 1.05);
+    }
+
+    document.getElementById('portraitFrame').addEventListener('click', openZoom);
+    document.getElementById('zoomClose').addEventListener('click', (e) => { e.stopPropagation(); closeZoom(); });
+
+    zoomOverlay.addEventListener('click', (e) => {
+      if (e.target === zoomOverlay || (e.target === zoomImg && zoomScale <= 1.05)) closeZoom();
+    });
+
+    // Scroll to zoom
+    zoomOverlay.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const delta = e.deltaY > 0 ? 0.9 : 1.12;
+      zoomScale = Math.max(0.5, Math.min(8, zoomScale * delta));
+      if (zoomScale < 1.05) { zoomPanX = 0; zoomPanY = 0; }
+      applyZoomTransform();
+    }, { passive: false });
+
+    // Drag to pan
+    zoomImg.addEventListener('mousedown', (e) => {
+      if (zoomScale <= 1.05) return;
+      e.preventDefault();
+      zoomDragging = true;
+      zoomDragStartX = e.clientX;
+      zoomDragStartY = e.clientY;
+      zoomPanStartX = zoomPanX;
+      zoomPanStartY = zoomPanY;
+      zoomImg.style.cursor = 'grabbing';
+    });
+    window.addEventListener('mousemove', (e) => {
+      if (!zoomDragging) return;
+      zoomPanX = zoomPanStartX + (e.clientX - zoomDragStartX);
+      zoomPanY = zoomPanStartY + (e.clientY - zoomDragStartY);
+      applyZoomTransform();
+    });
+    window.addEventListener('mouseup', () => {
+      zoomDragging = false;
+      zoomImg.style.cursor = '';
+    });
+
+    // Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && zoomOverlay.classList.contains('active')) closeZoom();
+    });
+
+    // ── Style toggle (black ↔ white) ──
+    const styleToggleBtn = document.getElementById('styleToggleBtn');
+    const styleLabel = document.getElementById('styleLabel');
+
+    // Update label to show the OTHER style (what you'll switch to)
+    const STYLES = ['black', 'white', 'laser'];
+    const STYLE_LABELS = { black: 'Black', white: 'White', laser: 'Laser' };
+    function nextStyleLabel() {
+      const idx = STYLES.indexOf(portraitStyle);
+      const next = STYLES[(idx + 1) % STYLES.length];
+      return STYLE_LABELS[next];
+    }
+    styleLabel.textContent = nextStyleLabel();
+
+    styleToggleBtn.addEventListener('click', () => {
+      const idx = STYLES.indexOf(portraitStyle);
+      portraitStyle = STYLES[(idx + 1) % STYLES.length];
+      styleLabel.textContent = nextStyleLabel();
+
+      // Update URL without reload
+      const url = new URL(window.location);
+      url.searchParams.set('style', portraitStyle);
+      history.replaceState(null, '', url);
+
+      // Re-render current star portrait
+      const star = allStars.find(s => String(s.id) === String(starId));
+      if (star) {
+        const urls = getPortraitUrls(star);
+        const portraitImg = document.getElementById('portraitImg');
+        portraitImg.src = urls.real.full;
+        portraitImg.onerror = function() {
+          this.src = urls.gallery.full;
+          this.onerror = function() { this.style.display = 'none'; };
+        };
+        document.getElementById('downloadBtn').href = urls.real.full;
+
+        // Re-render related with new style
+        const arch = ARCHETYPES[star.cluster] || { name: 'Unknown', color: '#888' };
+        renderRelated(star, arch);
+      }
+    });
+
+  })();
+  </script>
+</body>
+</html>

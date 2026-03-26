@@ -6,8 +6,10 @@
 // EMAILJS CONFIGURATION
 // ============================================
 
-// Initialize EmailJS
-emailjs.init("kNEutPBZIXOEln6NO");
+// Initialize EmailJS (only if loaded — not every page includes the SDK)
+if (typeof emailjs !== 'undefined') {
+  emailjs.init("kNEutPBZIXOEln6NO");
+}
 
 // ============================================
 // FORM SUBMISSION HANDLER
@@ -58,6 +60,12 @@ document.addEventListener('DOMContentLoaded', function() {
       };
       
       // Send email via EmailJS
+      if (typeof emailjs === 'undefined') {
+        alert('Email service not loaded. Please email directly:\nhello@codexaeterna.com');
+        submitButton.textContent = originalText;
+        submitButton.disabled = false;
+        return;
+      }
       emailjs.send(
         'service_0kveogc',
         'template_c00j2et',
@@ -205,6 +213,19 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   });
+
+  // ============================================
+  // GALAXY HERO CLICK-THROUGH
+  // ============================================
+
+  const galaxyHero = document.querySelector('.galaxy-teaser');
+  if (galaxyHero) {
+    galaxyHero.addEventListener('click', function(e) {
+      // Don't navigate if clicking a button/link (they handle themselves)
+      if (e.target.closest('a') || e.target.closest('button')) return;
+      window.location.href = 'galaxy.html';
+    });
+  }
 
   // ============================================
   // AUTO-UPDATE COPYRIGHT YEAR

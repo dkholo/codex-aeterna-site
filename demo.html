@@ -3,34 +3,503 @@
 <head>
   <link rel="canonical" href="https://codexaeterna.com/demo.html" />
   <meta charset="UTF-8" />
-  <title>Soul Signature Demo | Codex Aeterna</title>
+  <title>Soul Interview | Codex Aeterna</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="See the shape of your thoughts. Generate a soul signature from your text." />
-  
-  <!-- Google Analytics - Replace GA_MEASUREMENT_ID with your actual ID -->
-  <!--
-  <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'GA_MEASUREMENT_ID');
-  </script>
-  -->
-  
+  <meta name="description" content="Discover your soul signature. Answer a few questions — watch your cognitive portrait emerge in real time." />
+
   <!-- Favicon -->
   <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicon-16x16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="assets/img/favicon-180x180.png">
-  
+
   <!-- Stylesheet -->
   <link rel="stylesheet" href="assets/css/styles.css">
+
+  <style>
+    /* ============================================
+       SOUL INTERVIEW STYLES
+       ============================================ */
+
+    .interview-page {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px 24px 80px;
+    }
+
+    /* ── LANDING STATE ── */
+    .interview-landing {
+      text-align: center;
+      padding: 40px 0 60px;
+    }
+    .interview-landing-title {
+      font-size: 2.4rem;
+      font-weight: 300;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+    .interview-landing-title span {
+      color: var(--accent);
+    }
+    .interview-landing-sub {
+      color: var(--text-soft);
+      font-size: 1.05rem;
+      max-width: 520px;
+      margin: 0 auto 48px;
+      line-height: 1.6;
+    }
+
+    /* Mode cards */
+    .mode-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      max-width: 800px;
+      margin: 0 auto 40px;
+    }
+    @media (max-width: 640px) {
+      .mode-cards { grid-template-columns: 1fr; max-width: 360px; }
+    }
+    .mode-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 28px 20px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+    .mode-card:hover {
+      border-color: rgba(242,196,107,0.3);
+      background: rgba(242,196,107,0.04);
+      transform: translateY(-2px);
+    }
+    .mode-card.recommended {
+      border-color: rgba(242,196,107,0.2);
+      background: rgba(242,196,107,0.03);
+    }
+    .mode-card-icon {
+      font-size: 1.8rem;
+      margin-bottom: 12px;
+      display: block;
+    }
+    .mode-card h3 {
+      font-size: 1.1rem;
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+    .mode-card .mode-meta {
+      color: var(--text-soft);
+      font-size: 0.8rem;
+      margin-bottom: 8px;
+    }
+    .mode-card .mode-desc {
+      color: var(--text-soft);
+      font-size: 0.82rem;
+      line-height: 1.5;
+    }
+    .mode-card .mode-badge {
+      display: inline-block;
+      background: rgba(242,196,107,0.12);
+      color: var(--accent);
+      font-size: 0.7rem;
+      padding: 3px 10px;
+      border-radius: 99px;
+      margin-top: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .paste-link {
+      color: var(--text-soft);
+      font-size: 0.82rem;
+      text-decoration: underline;
+      cursor: pointer;
+      opacity: 0.6;
+      transition: opacity 0.15s;
+    }
+    .paste-link:hover { opacity: 1; }
+
+    /* ── INTERVIEW FLOW ── */
+    .interview-flow {
+      display: none;
+    }
+    .interview-flow.active {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+    @media (max-width: 768px) {
+      .interview-flow.active {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+    }
+
+    /* Left panel: questions */
+    .question-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .question-progress {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--text-soft);
+    }
+    .question-progress-bar {
+      flex: 1;
+      height: 3px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 2px;
+      margin: 0 16px;
+      overflow: hidden;
+    }
+    .question-progress-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 2px;
+      transition: width 0.4s ease;
+    }
+
+    .question-category {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      opacity: 0.7;
+    }
+
+    .question-text {
+      font-size: 1.35rem;
+      font-weight: 300;
+      line-height: 1.5;
+      min-height: 80px;
+      transition: opacity 0.3s;
+    }
+
+    .answer-area {
+      position: relative;
+    }
+    .answer-area textarea {
+      width: 100%;
+      min-height: 180px;
+      padding: 16px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      resize: vertical;
+      transition: border-color 0.2s;
+    }
+    .answer-area textarea:focus {
+      outline: none;
+      border-color: rgba(242,196,107,0.4);
+    }
+    .answer-area textarea::placeholder {
+      color: rgba(255,255,255,0.2);
+    }
+    .answer-word-count {
+      position: absolute;
+      bottom: 10px;
+      right: 14px;
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.25);
+    }
+
+    .question-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .question-actions .btn {
+      flex: 0 0 auto;
+    }
+    .skip-btn {
+      background: none;
+      border: none;
+      color: var(--text-soft);
+      font-size: 0.8rem;
+      cursor: pointer;
+      opacity: 0.5;
+      transition: opacity 0.15s;
+      padding: 8px 12px;
+    }
+    .skip-btn:hover { opacity: 1; }
+
+    .mic-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.03);
+      color: var(--text-soft);
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .mic-btn:hover {
+      border-color: rgba(255,255,255,0.3);
+      color: var(--text);
+    }
+    .mic-btn.recording {
+      border-color: #ff4444;
+      background: rgba(255,68,68,0.1);
+      color: #ff4444;
+      animation: pulse-mic 1.5s infinite;
+    }
+    @keyframes pulse-mic {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(255,68,68,0.3); }
+      50% { box-shadow: 0 0 0 8px rgba(255,68,68,0); }
+    }
+
+    /* Right panel: portrait + saturation */
+    .portrait-panel {
+      position: sticky;
+      top: 100px;
+    }
+
+    .live-canvas-wrap {
+      position: relative;
+      background: rgba(2,3,10,0.85);
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.06);
+      aspect-ratio: 4/5;
+    }
+    .live-canvas-wrap canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* Saturation meter */
+    .saturation-meter {
+      margin-top: 16px;
+      padding: 16px;
+      background: rgba(255,255,255,0.02);
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .saturation-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .saturation-label {
+      font-size: 0.78rem;
+      color: var(--text-soft);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .saturation-stage {
+      font-size: 0.78rem;
+      color: var(--accent);
+      font-weight: 500;
+    }
+    .saturation-bar {
+      height: 6px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 3px;
+      overflow: hidden;
+      position: relative;
+    }
+    .saturation-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 0.6s ease, background 0.6s ease;
+      background: linear-gradient(90deg, #4a6cf7, #c8a45e, #e87040);
+    }
+    .saturation-stages {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 6px;
+      font-size: 0.62rem;
+      color: rgba(255,255,255,0.2);
+    }
+    .saturation-stages span.active {
+      color: var(--accent);
+    }
+    .saturation-stats {
+      display: flex;
+      gap: 16px;
+      margin-top: 10px;
+      font-size: 0.72rem;
+      color: var(--text-soft);
+    }
+    .saturation-stats span strong {
+      color: var(--text);
+    }
+
+    /* ── COMPLETION STATE ── */
+    .completion-overlay {
+      display: none;
+    }
+    .completion-overlay.active {
+      display: block;
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 40px 0;
+    }
+    .completion-portrait {
+      max-width: 480px;
+      margin: 0 auto 32px;
+      border-radius: 16px;
+      overflow: hidden;
+      background: rgba(2,3,10,0.85);
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+    .completion-portrait canvas {
+      width: 100%;
+      display: block;
+    }
+    .completion-glow {
+      animation: glow-pulse 2s ease-in-out 1;
+    }
+    @keyframes glow-pulse {
+      0% { box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+      50% { box-shadow: 0 20px 80px rgba(242,196,107,0.2), 0 0 120px rgba(242,196,107,0.08); }
+      100% { box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+    }
+
+    .completion-title {
+      font-size: 1.8rem;
+      font-weight: 300;
+      margin-bottom: 8px;
+    }
+    .completion-archetype {
+      color: var(--accent);
+      font-size: 1rem;
+      margin-bottom: 4px;
+    }
+    .completion-ki {
+      color: var(--text-soft);
+      font-size: 0.85rem;
+      margin-bottom: 32px;
+    }
+
+    .completion-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+    .completion-actions .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-download-free {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: var(--text);
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-download-free:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: rgba(255,255,255,0.25);
+    }
+    .btn-download-hd {
+      background: var(--accent);
+      color: #1a1307;
+      padding: 12px 28px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-download-hd:hover {
+      filter: brightness(1.12);
+      transform: translateY(-1px);
+    }
+    .btn-download-hd .price-tag {
+      font-weight: 400;
+      opacity: 0.8;
+      margin-left: 4px;
+    }
+
+    .completion-secondary {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: center;
+      font-size: 0.82rem;
+    }
+    .completion-secondary a, .completion-secondary button {
+      color: var(--text-soft);
+      text-decoration: underline;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: inherit;
+      transition: color 0.15s;
+    }
+    .completion-secondary a:hover, .completion-secondary button:hover {
+      color: var(--text);
+    }
+
+    /* ── PASTE MODE (legacy) ── */
+    .paste-mode {
+      display: none;
+    }
+    .paste-mode.active {
+      display: block;
+    }
+    .paste-mode .demo-section {
+      margin-top: 0;
+    }
+
+    /* ── KI Result Panel (reused from demo) ── */
+    .ki-result-inline {
+      text-align: left;
+      max-width: 480px;
+      margin: 24px auto 0;
+    }
+
+    /* ── Continue prompt ── */
+    .continue-prompt {
+      display: none;
+      text-align: center;
+      padding: 16px;
+      background: rgba(242,196,107,0.04);
+      border: 1px solid rgba(242,196,107,0.15);
+      border-radius: 12px;
+      margin-top: 16px;
+    }
+    .continue-prompt.active { display: block; }
+    .continue-prompt p {
+      font-size: 0.85rem;
+      color: var(--text-soft);
+      margin-bottom: 10px;
+    }
+    .continue-prompt .btn { margin: 0 6px; }
+  </style>
 </head>
 <body>
   <div class="page">
     <header>
       <a href="index.html" class="logo">
-        <img src="assets/img/logo-symbol-512.png" alt="Codex Aeterna logo — stylized consciousness signature symbol" class="logo-mark">
+        <img src="assets/img/logo-symbol-512.png" alt="Codex Aeterna logo" class="logo-mark">
         <div class="logo-text">
           <span>Codex Aeterna</span>
           <span>Memory becomes immortal</span>
@@ -44,65 +513,828 @@
         <a href="index.html#offerings">The Archive</a>
         <a href="cognitive_fingerprints_full.html">Research</a>
         <a href="gallery.html">Gallery</a>
-        <a href="demo.html" class="active">Try Demo</a>
+        <a href="demo.html" class="active">Soul Interview</a>
         <a href="sentient.html" class="highlight">Sentient</a>
-        <a href="index.html#contact">Reserve</a>
+        <a href="galaxy.html">Galaxy</a>
       </nav>
     </header>
 
-    <main>
-      <h1 class="page-title">SOUL SIGNATURE</h1>
-      <p class="page-subtitle">See the shape of your thoughts</p>
+    <main class="interview-page">
 
-      <div class="demo-section">
-        <div class="input-panel">
-          <h2>Enter Your Text</h2>
-          <textarea id="textInput" placeholder="Paste your text here...
+      <!-- ═══════════════════════════════════════════ -->
+      <!-- LANDING STATE                               -->
+      <!-- ═══════════════════════════════════════════ -->
+      <div class="interview-landing" id="landingState">
+        <h1 class="interview-landing-title">Discover Your <span>Soul Signature</span></h1>
+        <p class="interview-landing-sub">Answer a few questions. Watch your cognitive portrait emerge in real time. Every mind has a unique pattern — let's find yours.</p>
+
+        <div class="mode-cards">
+          <div class="mode-card" onclick="startInterview('quick')">
+            <span class="mode-card-icon">&#x2727;</span>
+            <h3>Quick Glimpse</h3>
+            <div class="mode-meta">5 questions &middot; ~5 min</div>
+            <div class="mode-desc">A fast sketch of your cognitive style. Perfect for the curious.</div>
+          </div>
+          <div class="mode-card recommended" onclick="startInterview('portrait')">
+            <span class="mode-card-icon">&#x2736;</span>
+            <h3>Portrait</h3>
+            <div class="mode-meta">10 questions &middot; ~15 min</div>
+            <div class="mode-desc">A full portrait with rich detail. The sweet spot for most people.</div>
+            <span class="mode-badge">Recommended</span>
+          </div>
+          <div class="mode-card" onclick="startInterview('deep')">
+            <span class="mode-card-icon">&#x2735;</span>
+            <h3>Deep Soul</h3>
+            <div class="mode-meta">16 questions &middot; ~30 min</div>
+            <div class="mode-desc">Maximum depth. For those who want to see everything.</div>
+          </div>
+        </div>
+
+        <span class="paste-link" onclick="showPasteMode()">Or paste your own text</span>
+      </div>
+
+      <!-- ═══════════════════════════════════════════ -->
+      <!-- INTERVIEW FLOW                              -->
+      <!-- ═══════════════════════════════════════════ -->
+      <div class="interview-flow" id="interviewFlow">
+        <!-- Left: Questions -->
+        <div class="question-panel">
+          <div class="question-progress">
+            <span id="qProgressLabel">Question 1 of 10</span>
+            <div class="question-progress-bar">
+              <div class="question-progress-fill" id="qProgressFill" style="width:10%"></div>
+            </div>
+            <span id="qModeName">Portrait</span>
+          </div>
+
+          <div class="question-category" id="qCategory">Present State</div>
+          <div class="question-text" id="qText">What's on your mind right now — not what's important, just what's actually occupying your thoughts?</div>
+
+          <div class="answer-area">
+            <textarea id="answerInput" placeholder="Take your time. Write whatever comes to mind..."></textarea>
+            <div class="answer-word-count" id="answerWordCount">0 words</div>
+          </div>
+
+          <div class="question-actions">
+            <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()">Next Question</button>
+            <button class="mic-btn" id="interviewMicBtn" onclick="toggleInterviewVoice()" title="Speak your answer">&#x1F3A4;</button>
+            <button class="skip-btn" onclick="skipQuestion()">Skip</button>
+            <button class="skip-btn" onclick="finishEarly()" style="margin-left:auto;">Finish early</button>
+          </div>
+
+          <div class="continue-prompt" id="continuePrompt">
+            <p>Your signature has more room to grow. Want to keep going?</p>
+            <button class="btn btn-primary btn-sm" onclick="continueInterview()">Keep going</button>
+            <button class="btn btn-secondary btn-sm" onclick="completeInterview()">I'm done</button>
+          </div>
+        </div>
+
+        <!-- Right: Live Portrait -->
+        <div class="portrait-panel">
+          <div class="live-canvas-wrap">
+            <canvas id="liveCanvas" width="400" height="500"></canvas>
+          </div>
+
+          <div class="saturation-meter">
+            <div class="saturation-header">
+              <span class="saturation-label">Signature Depth</span>
+              <span class="saturation-stage" id="satStage">Seed</span>
+            </div>
+            <div class="saturation-bar">
+              <div class="saturation-fill" id="satFill" style="width:0%"></div>
+            </div>
+            <div class="saturation-stages">
+              <span id="stgSeed" class="active">Seed</span>
+              <span id="stgEmerge">Emerging</span>
+              <span id="stgDevelop">Developing</span>
+              <span id="stgComplete">Complete</span>
+              <span id="stgDeep">Deep</span>
+            </div>
+            <div class="saturation-stats">
+              <span><strong id="statPairs">0</strong> word pairs</span>
+              <span><strong id="statWords">0</strong> words</span>
+              <span><strong id="statCategories">0</strong>/8 categories</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════ -->
+      <!-- COMPLETION STATE                            -->
+      <!-- ═══════════════════════════════════════════ -->
+      <div class="completion-overlay" id="completionState">
+        <div class="completion-portrait completion-glow">
+          <canvas id="finalCanvas" width="600" height="750"></canvas>
+        </div>
+        <h2 class="completion-title">Your Soul Signature</h2>
+        <div class="completion-archetype" id="compArchetype">The Philosopher</div>
+        <div class="completion-ki" id="compKI">Cognitive Structure Score: 62 &middot; Strong structure &middot; 87% match</div>
+
+        <div class="completion-actions">
+          <button class="btn-download-free" onclick="downloadFree()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download Preview
+          </button>
+          <button class="btn-download-hd" onclick="downloadHD()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download Full Resolution<span class="price-tag">$9.99</span>
+          </button>
+        </div>
+
+        <div class="completion-secondary">
+          <a href="galaxy.html" id="galaxyLink">Find your star in the galaxy</a>
+          <button onclick="keepGoing()">Keep deepening</button>
+          <button onclick="shareSignature()">Share</button>
+          <button onclick="startOver()">Start over</button>
+        </div>
+
+        <div class="ki-result-inline" id="compKIDetail"></div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════ -->
+      <!-- PASTE MODE (legacy)                         -->
+      <!-- ═══════════════════════════════════════════ -->
+      <div class="paste-mode" id="pasteMode">
+        <div class="demo-section">
+          <div class="input-panel">
+            <h2>Paste Your Text</h2>
+            <textarea id="textInput" placeholder="Paste your text here...
 
 Journal entries, emails, social media posts, essays — any text that represents your voice.
 
 Minimum 500 words recommended for meaningful patterns."></textarea>
-          <div class="controls">
-            <button id="generateBtn" class="btn btn-primary" onclick="generateSoul()">Generate Soul</button>
-            <button id="micBtn" class="btn btn-secondary" onclick="toggleVoice()">🎤 Speak</button>
-            <button class="btn btn-secondary" onclick="loadSample()">Load Sample</button>
-            <button class="btn btn-secondary" onclick="clearAll()">Clear</button>
+            <div class="controls">
+              <button id="generateBtn" class="btn btn-primary" onclick="generateSoul()">Generate Soul</button>
+              <button id="micBtn" class="btn btn-secondary" onclick="toggleVoice()">&#x1F3A4; Speak</button>
+              <button class="btn btn-secondary" onclick="loadSample()">Load Sample</button>
+              <button class="btn btn-secondary" onclick="backToInterview()">Back to Interview</button>
+            </div>
           </div>
-        </div>
-
-        <div class="output-panel">
-          <h2>Your Soul Signature</h2>
-          <div class="canvas-container">
-            <canvas id="soulCanvas" width="400" height="500"></canvas>
-            <p class="placeholder" id="placeholder">Enter text and click Generate</p>
+          <div class="output-panel">
+            <h2>Your Soul Signature</h2>
+            <div class="canvas-container">
+              <canvas id="soulCanvas" width="400" height="500"></canvas>
+              <p class="placeholder" id="placeholder">Enter text and click Generate</p>
+            </div>
+            <div id="kiResultPanel" style="display: none;"></div>
+            <div class="controls" style="justify-content: center; margin-top: 20px;">
+              <button id="downloadBtn" class="btn btn-secondary" onclick="downloadSoul()" disabled>Download PNG</button>
+            </div>
           </div>
-          <div id="kiResultPanel" style="display: none;"></div>
-          <div class="controls" style="justify-content: center; margin-top: 20px;">
-            <button id="downloadBtn" class="btn btn-secondary" onclick="downloadSoul()" disabled>Download PNG</button>
-            <button id="revealBtn" class="btn btn-secondary" onclick="revealSoul()" style="display: none;">Reveal</button>
-            <button id="growBtn" class="btn btn-secondary" onclick="growSoul()" style="display: none;">Growth</button>
-          </div>
-          <p id="animProgress" style="text-align: center; color: var(--accent); font-size: 0.9rem; min-height: 1.4em; margin-top: 8px;"></p>
         </div>
       </div>
 
-      <p class="footer-note">
-        This is a simplified preview. Full resolution signatures with professional rendering available at 
-        <a href="index.html#contact">Codex Aeterna</a>.
-      </p>
     </main>
 
     <footer>
-      <span>© <span id="year"></span> Codex Aeterna LLC. All rights reserved.</span>
-      <span>Patent pending · "Memory becomes immortal."</span>
+      <span>&copy; <span id="year"></span> Codex Aeterna LLC. All rights reserved.</span>
+      <span>Patent pending &middot; "Memory becomes immortal."</span>
     </footer>
   </div>
 
-  <!-- Scripts -->
-  <script src="assets/js/demo.min.js"></script>
+  <!-- Load the existing demo engine (processText, drawSoul, KI, archetypes) -->
+  <script src="assets/js/demo.js"></script>
+
+  <!-- Soul Interview Engine -->
   <script>
-    // Set current year in footer
+  (function() {
+    'use strict';
+
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    // ================================================================
+    // QUESTION BANK
+    // ================================================================
+    const QUESTIONS = {
+      A: {
+        name: 'Present State',
+        questions: [
+          "What\u2019s on your mind right now \u2014 not what\u2019s important, just what\u2019s actually occupying your thoughts?",
+          "What\u2019s something you\u2019ve been putting off talking about?",
+          "If someone could read your thoughts for the last hour, what would surprise them?",
+          "What\u2019s the question you keep asking yourself lately?"
+        ]
+      },
+      B: {
+        name: 'People & Relationships',
+        questions: [
+          "Describe someone who shaped who you are. What did they give you that you still carry?",
+          "Who do you miss in a way you can\u2019t fully explain?",
+          "Tell me about a conversation that changed the direction of your life.",
+          "Who believed in you before you believed in yourself? What did they see?",
+          "Describe someone you\u2019ve lost touch with but still think about."
+        ]
+      },
+      C: {
+        name: 'Belief & Conviction',
+        questions: [
+          "What do you know to be true that you couldn\u2019t prove to anyone?",
+          "What\u2019s something you used to believe completely that you\u2019ve since abandoned?",
+          "What\u2019s a rule most people follow that you\u2019ve quietly decided doesn\u2019t apply to you?",
+          "What hill would you die on that most people wouldn\u2019t understand?"
+        ]
+      },
+      D: {
+        name: 'Memory & Meaning',
+        questions: [
+          "Tell me about a moment you keep coming back to \u2014 one that meant more than it should have.",
+          "Describe something beautiful you witnessed that no one else noticed.",
+          "What\u2019s a small moment from childhood that somehow defined everything after it?",
+          "What sound or smell immediately takes you somewhere else?"
+        ]
+      },
+      E: {
+        name: 'Failure & Contradiction',
+        questions: [
+          "Describe a time you were wrong about something that mattered. How did you realize it?",
+          "What\u2019s the biggest gap between who people think you are and who you actually are?",
+          "What\u2019s something you\u2019re proud of that nobody ever praised you for?",
+          "Tell me about a failure that taught you something no success ever could."
+        ]
+      },
+      F: {
+        name: 'Inner Life',
+        questions: [
+          "What do you do when no one is watching \u2014 the thing that\u2019s just for you?",
+          "What are you afraid of that you\u2019ve never said out loud?",
+          "What\u2019s the hardest thing you\u2019ve ever tried to explain to someone?",
+          "What thought keeps you awake at 3am?"
+        ]
+      },
+      G: {
+        name: 'Legacy & Purpose',
+        questions: [
+          "If you disappeared tomorrow, what would remain unfinished?",
+          "What would you build if failure wasn\u2019t possible? Why haven\u2019t you started?",
+          "What do you owe the world? What does the world owe you?",
+          "If your life had a thesis \u2014 one sentence that everything you\u2019ve done has been proving \u2014 what is it?",
+          "What do you want to be remembered for \u2014 and is that different from what you\u2019ll actually be remembered for?"
+        ]
+      },
+      H: {
+        name: 'Hypothetical & Philosophical',
+        questions: [
+          "If you could hear one honest answer from anyone \u2014 living or dead \u2014 what would you ask, and who?",
+          "If you could send one message to everyone alive at once, what would you say?",
+          "What would you tell a stranger who was living your life for a day?"
+        ]
+      }
+    };
+
+    const CATEGORY_KEYS = ['A','B','C','D','E','F','G','H'];
+
+    // Session mode definitions
+    const MODES = {
+      quick: {
+        name: 'Quick Glimpse',
+        count: 5,
+        // One from each of A, B, C, D, G
+        categories: ['A','B','C','D','G']
+      },
+      portrait: {
+        name: 'Portrait',
+        count: 10,
+        // One from each + 2 extras from random categories
+        categories: ['A','B','C','D','E','F','G','H'],
+        extras: 2
+      },
+      deep: {
+        name: 'Deep Soul',
+        count: 16,
+        // Two from each
+        categories: ['A','B','C','D','E','F','G','H'],
+        perCategory: 2
+      }
+    };
+
+    // ================================================================
+    // STATE
+    // ================================================================
+    let currentMode = null;
+    let questionQueue = [];
+    let currentQuestionIndex = 0;
+    let allAnswers = '';          // Running text corpus
+    let answeredCategories = new Set();
+    let bigramSet = new Set();    // Unique bigrams seen
+    let totalWords = 0;
+    let totalPairs = 0;
+    let interviewComplete = false;
+    let lastProcessedLength = 0;
+
+    // Voice
+    let ivRecognition = null;
+    let ivRecording = false;
+    let ivFinalTranscript = '';
+
+    // ================================================================
+    // QUESTION SELECTION
+    // ================================================================
+    function buildQuestionQueue(modeKey) {
+      const mode = MODES[modeKey];
+      const queue = [];
+      const used = {}; // track used question indices per category
+
+      CATEGORY_KEYS.forEach(k => { used[k] = []; });
+
+      function pickFrom(cat) {
+        const available = QUESTIONS[cat].questions
+          .map((q, i) => i)
+          .filter(i => !used[cat].includes(i));
+        if (available.length === 0) return null;
+        const idx = available[Math.floor(Math.random() * available.length)];
+        used[cat].push(idx);
+        return { category: cat, categoryName: QUESTIONS[cat].name, text: QUESTIONS[cat].questions[idx] };
+      }
+
+      if (modeKey === 'quick') {
+        mode.categories.forEach(cat => {
+          const q = pickFrom(cat);
+          if (q) queue.push(q);
+        });
+      } else if (modeKey === 'portrait') {
+        // One from each
+        mode.categories.forEach(cat => {
+          const q = pickFrom(cat);
+          if (q) queue.push(q);
+        });
+        // 2 extras from random categories
+        for (let i = 0; i < mode.extras; i++) {
+          const cat = CATEGORY_KEYS[Math.floor(Math.random() * CATEGORY_KEYS.length)];
+          const q = pickFrom(cat);
+          if (q) queue.push(q);
+        }
+      } else if (modeKey === 'deep') {
+        // Two from each
+        mode.categories.forEach(cat => {
+          for (let i = 0; i < mode.perCategory; i++) {
+            const q = pickFrom(cat);
+            if (q) queue.push(q);
+          }
+        });
+      }
+
+      // Shuffle (Fisher-Yates) but keep first question from A (grounding)
+      const first = queue.find(q => q.category === 'A');
+      const rest = queue.filter(q => q !== first);
+      for (let i = rest.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [rest[i], rest[j]] = [rest[j], rest[i]];
+      }
+
+      return first ? [first, ...rest] : rest;
+    }
+
+    // ================================================================
+    // INTERVIEW CONTROL
+    // ================================================================
+    window.startInterview = function(modeKey) {
+      currentMode = modeKey;
+      questionQueue = buildQuestionQueue(modeKey);
+      currentQuestionIndex = 0;
+      allAnswers = '';
+      answeredCategories = new Set();
+      bigramSet = new Set();
+      totalWords = 0;
+      totalPairs = 0;
+      interviewComplete = false;
+      lastProcessedLength = 0;
+
+      // Hide landing, show flow
+      document.getElementById('landingState').style.display = 'none';
+      document.getElementById('completionState').classList.remove('active');
+      document.getElementById('pasteMode').classList.remove('active');
+      document.getElementById('interviewFlow').classList.add('active');
+      document.getElementById('continuePrompt').classList.remove('active');
+
+      // Init canvas
+      const canvas = document.getElementById('liveCanvas');
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#000000';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      showQuestion(0);
+      updateSaturation();
+    };
+
+    function showQuestion(index) {
+      if (index >= questionQueue.length) {
+        // All questions done
+        checkCompletion();
+        return;
+      }
+
+      const q = questionQueue[index];
+      document.getElementById('qCategory').textContent = q.categoryName;
+      document.getElementById('qText').textContent = q.text;
+      document.getElementById('qProgressLabel').textContent = `Question ${index + 1} of ${questionQueue.length}`;
+      document.getElementById('qModeName').textContent = MODES[currentMode].name;
+      document.getElementById('qProgressFill').style.width = ((index + 1) / questionQueue.length * 100) + '%';
+      document.getElementById('answerInput').value = '';
+      document.getElementById('answerWordCount').textContent = '0 words';
+      document.getElementById('answerInput').focus();
+    }
+
+    window.nextQuestion = function() {
+      const answer = document.getElementById('answerInput').value.trim();
+      if (answer.length > 0 && currentQuestionIndex < questionQueue.length) {
+        // Append to corpus
+        allAnswers += ' ' + answer;
+        answeredCategories.add(questionQueue[currentQuestionIndex].category);
+
+        // Update live portrait
+        updateLivePortrait();
+        updateSaturation();
+      }
+
+      currentQuestionIndex++;
+      showQuestion(currentQuestionIndex);
+    };
+
+    window.skipQuestion = function() {
+      currentQuestionIndex++;
+      showQuestion(currentQuestionIndex);
+    };
+
+    window.finishEarly = function() {
+      // Grab any text in the current answer box
+      const answer = document.getElementById('answerInput').value.trim();
+      if (answer.length > 0 && currentQuestionIndex < questionQueue.length) {
+        allAnswers += ' ' + answer;
+        answeredCategories.add(questionQueue[currentQuestionIndex].category);
+        updateLivePortrait();
+        updateSaturation();
+      }
+      completeInterview();
+    };
+
+    function checkCompletion() {
+      // Check if saturation suggests more questions
+      const pairRate = getNewPairRate();
+      if (pairRate > 5 && getExtraQuestions().length > 0) {
+        document.getElementById('continuePrompt').classList.add('active');
+        document.getElementById('nextBtn').style.display = 'none';
+      } else {
+        completeInterview();
+      }
+    }
+
+    window.continueInterview = function() {
+      document.getElementById('continuePrompt').classList.remove('active');
+      document.getElementById('nextBtn').style.display = '';
+
+      // Add extra questions from under-represented categories
+      const extras = getExtraQuestions();
+      extras.forEach(q => questionQueue.push(q));
+      showQuestion(currentQuestionIndex);
+    };
+
+    function getExtraQuestions() {
+      const extras = [];
+      const catCounts = {};
+      CATEGORY_KEYS.forEach(k => { catCounts[k] = 0; });
+      questionQueue.slice(0, currentQuestionIndex).forEach(q => {
+        catCounts[q.category]++;
+      });
+      // Find under-represented categories
+      const minCount = Math.min(...Object.values(catCounts));
+      const underRep = CATEGORY_KEYS.filter(k => catCounts[k] <= minCount);
+      underRep.slice(0, 3).forEach(cat => {
+        const available = QUESTIONS[cat].questions.filter((q, i) =>
+          !questionQueue.some(qq => qq.text === q)
+        );
+        if (available.length > 0) {
+          const text = available[Math.floor(Math.random() * available.length)];
+          extras.push({ category: cat, categoryName: QUESTIONS[cat].name, text });
+        }
+      });
+      return extras;
+    }
+
+    window.completeInterview = function() {
+      interviewComplete = true;
+
+      // Process final portrait at high quality
+      const data = processText(allAnswers);
+      if (!data || data.edges.length < 5) {
+        // Not enough text — show inline warning instead of blocking alert
+        const warn = document.getElementById('compKI');
+        if (warn) warn.textContent = 'Your answers were quite short. Try adding more detail for a richer portrait.';
+        return;
+      }
+
+      // Draw final portrait on completion canvas
+      const wasAdmin = adminMode;
+      adminMode = true; // Use high-res canvas
+      const finalCanvas = document.getElementById('finalCanvas');
+      const origCanvas = document.getElementById('soulCanvas');
+      // Temporarily swap
+      const tempId = origCanvas.id;
+      finalCanvas.id = 'soulCanvas';
+      drawSoul(data);
+      finalCanvas.id = 'finalCanvas';
+      origCanvas.id = tempId;
+      adminMode = wasAdmin;
+
+      // Compute KI
+      const ki = computeKIComponents(data);
+      const kiScore = normalizeKI(ki.KI_Raw);
+      const archetype = matchArchetype(ki, data, allAnswers);
+
+      // Update completion UI
+      document.getElementById('compArchetype').textContent = archetype.name + ' \u2014 ' + archetype.similarity + '% match';
+      document.getElementById('compKI').textContent =
+        'Cognitive Structure Score: ' + Math.round(kiScore) + ' \u00B7 ' + getKILabel(kiScore) +
+        ' \u00B7 ' + data.stats.wordCount.toLocaleString() + ' words \u00B7 ' + totalPairs + ' unique pairs';
+
+      // Render KI detail panel
+      renderResultPanel(data, ki, kiScore, archetype);
+      const kiPanel = document.getElementById('kiResultPanel');
+      if (kiPanel) {
+        document.getElementById('compKIDetail').innerHTML = kiPanel.innerHTML;
+        kiPanel.style.display = 'none';
+      }
+
+      // Switch views
+      document.getElementById('interviewFlow').classList.remove('active');
+      document.getElementById('completionState').classList.add('active');
+
+      // Trigger glow animation
+      document.querySelector('.completion-portrait').classList.remove('completion-glow');
+      void document.querySelector('.completion-portrait').offsetWidth; // reflow
+      document.querySelector('.completion-portrait').classList.add('completion-glow');
+
+      // Build galaxy URL with personal star data
+      const galaxyLink = document.getElementById('galaxyLink');
+      if (galaxyLink && totalPairs >= 200) {
+        // Build galaxy link with default name "You" — user can change on galaxy page
+        const params = new URLSearchParams({
+          personal: '1',
+          name: 'You',
+          ki: Math.round(kiScore),
+          cluster: archetype.cluster,
+          words: data.stats.wordCount,
+          edges: data.stats.edgeCount,
+          pairs: totalPairs,
+          archetype: archetype.name,
+          sim: archetype.similarity
+        });
+        galaxyLink.href = 'galaxy.html?' + params.toString();
+        galaxyLink.style.display = '';
+        galaxyLink.textContent = '\u2728 Find your star in the galaxy';
+      } else if (galaxyLink) {
+        // Not enough data for a meaningful star
+        galaxyLink.style.display = 'none';
+      }
+    };
+
+    // ================================================================
+    // LIVE PORTRAIT RENDERING
+    // ================================================================
+    function updateLivePortrait() {
+      const data = processText(allAnswers);
+      if (!data) return;
+
+      // Draw on live canvas
+      const liveCanvas = document.getElementById('liveCanvas');
+      const origCanvas = document.getElementById('soulCanvas');
+      const tempId = origCanvas.id;
+      liveCanvas.id = 'soulCanvas';
+      drawSoul(data);
+      liveCanvas.id = 'liveCanvas';
+      origCanvas.id = tempId;
+    }
+
+    // ================================================================
+    // SATURATION TRACKING
+    // ================================================================
+    function updateSaturation() {
+      // Extract all words and bigrams from full corpus
+      const words = allAnswers.toLowerCase().match(/\b[a-z]{3,}\b/g) || [];
+      const filteredWords = words.filter(w => !STOP_WORDS.has(w));
+
+      // Count unique bigrams
+      const newBigrams = new Set();
+      for (let i = 0; i < filteredWords.length - 1; i++) {
+        const pair = filteredWords[i] + '|' + filteredWords[i + 1];
+        newBigrams.add(pair);
+      }
+
+      totalWords = words.length;
+      totalPairs = newBigrams.size;
+      bigramSet = newBigrams;
+
+      // Determine stage
+      let stage = 'Seed';
+      let pct = 0;
+      if (totalPairs >= 2500) { stage = 'Deep'; pct = 100; }
+      else if (totalPairs >= 1200) { stage = 'Complete'; pct = 80 + (totalPairs - 1200) / 1300 * 20; }
+      else if (totalPairs >= 500) { stage = 'Developing'; pct = 40 + (totalPairs - 500) / 700 * 40; }
+      else if (totalPairs >= 200) { stage = 'Emerging'; pct = 15 + (totalPairs - 200) / 300 * 25; }
+      else { pct = totalPairs / 200 * 15; }
+
+      // Update UI
+      document.getElementById('satStage').textContent = stage;
+      document.getElementById('satFill').style.width = pct + '%';
+      document.getElementById('statPairs').textContent = totalPairs;
+      document.getElementById('statWords').textContent = totalWords;
+      document.getElementById('statCategories').textContent = answeredCategories.size;
+
+      // Highlight active stages
+      const stages = { Seed: 'stgSeed', Emerging: 'stgEmerge', Developing: 'stgDevelop', Complete: 'stgComplete', Deep: 'stgDeep' };
+      const stageOrder = ['Seed', 'Emerging', 'Developing', 'Complete', 'Deep'];
+      const currentIdx = stageOrder.indexOf(stage);
+      stageOrder.forEach((s, i) => {
+        const el = document.getElementById(stages[s]);
+        if (el) el.classList.toggle('active', i <= currentIdx);
+      });
+    }
+
+    function getNewPairRate() {
+      if (totalWords < 50) return 100;
+      // Approximate: new pairs per 100 words
+      return (totalPairs / Math.max(1, totalWords)) * 100;
+    }
+
+    // ================================================================
+    // WORD COUNT LIVE UPDATE
+    // ================================================================
+    document.getElementById('answerInput').addEventListener('input', function() {
+      const words = this.value.trim().split(/\s+/).filter(w => w.length > 0);
+      document.getElementById('answerWordCount').textContent = words.length + ' words';
+    });
+
+    // Enter to submit (Shift+Enter for newline)
+    document.getElementById('answerInput').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        nextQuestion();
+      }
+    });
+
+    // ================================================================
+    // VOICE INPUT FOR INTERVIEW
+    // ================================================================
+    window.toggleInterviewVoice = function() {
+      if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+        alert('Voice input is not supported in your browser. Try Chrome.');
+        return;
+      }
+      if (ivRecording) {
+        stopInterviewVoice();
+      } else {
+        startInterviewVoice();
+      }
+    };
+
+    function startInterviewVoice() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      ivRecognition = new SpeechRecognition();
+      ivRecognition.continuous = true;
+      ivRecognition.interimResults = true;
+      ivRecognition.lang = 'en-US';
+
+      const textarea = document.getElementById('answerInput');
+      const micBtn = document.getElementById('interviewMicBtn');
+      ivFinalTranscript = textarea.value;
+
+      ivRecognition.onstart = function() {
+        ivRecording = true;
+        micBtn.textContent = '\u23F9';
+        micBtn.classList.add('recording');
+      };
+
+      ivRecognition.onresult = function(event) {
+        let interimTranscript = '';
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          const transcript = event.results[i][0].transcript;
+          if (event.results[i].isFinal) {
+            ivFinalTranscript += transcript + ' ';
+          } else {
+            interimTranscript += transcript;
+          }
+        }
+        textarea.value = ivFinalTranscript + interimTranscript;
+        // Update word count
+        const words = textarea.value.trim().split(/\s+/).filter(w => w.length > 0);
+        document.getElementById('answerWordCount').textContent = words.length + ' words';
+      };
+
+      ivRecognition.onerror = function() { stopInterviewVoice(); };
+      ivRecognition.onend = function() { if (ivRecording) ivRecognition.start(); };
+      ivRecognition.start();
+    }
+
+    function stopInterviewVoice() {
+      ivRecording = false;
+      if (ivRecognition) {
+        ivRecognition.onend = null;
+        ivRecognition.stop();
+        ivRecognition = null;
+      }
+      const micBtn = document.getElementById('interviewMicBtn');
+      if (micBtn) {
+        micBtn.textContent = '\uD83C\uDFA4';
+        micBtn.classList.remove('recording');
+      }
+    }
+
+    // ================================================================
+    // COMPLETION ACTIONS
+    // ================================================================
+    window.downloadFree = function() {
+      const canvas = document.getElementById('finalCanvas');
+      // Create low-res version (512px)
+      const tempCanvas = document.createElement('canvas');
+      tempCanvas.width = 512;
+      tempCanvas.height = 640;
+      const ctx = tempCanvas.getContext('2d');
+      ctx.drawImage(canvas, 0, 0, 512, 640);
+      // Add watermark
+      ctx.save();
+      ctx.font = '14px system-ui, sans-serif';
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.25)';
+      ctx.textAlign = 'center';
+      ctx.fillText('codexaeterna.com', 256, 625);
+      ctx.restore();
+
+      const link = document.createElement('a');
+      link.download = 'soul-signature-preview.png';
+      link.href = tempCanvas.toDataURL('image/png');
+      link.click();
+    };
+
+    window.downloadHD = function() {
+      // For now, link to payment (Stripe Payment Link placeholder)
+      // In production: creates Stripe Checkout session, delivers file on success
+      alert('Full resolution download ($9.99) coming soon!\n\nFor now, enjoy your free preview.');
+      // Future: window.location.href = '/api/checkout/create-session?product=hd_download&...';
+    };
+
+    window.shareSignature = function() {
+      if (navigator.share) {
+        navigator.share({
+          title: 'My Soul Signature \u2014 Codex Aeterna',
+          text: 'I just discovered my cognitive soul signature. Every mind has a unique pattern.',
+          url: window.location.href
+        }).catch(() => {});
+      } else {
+        // Copy URL
+        navigator.clipboard.writeText(window.location.href).then(() => {
+          alert('Link copied to clipboard!');
+        });
+      }
+    };
+
+    window.keepGoing = function() {
+      interviewComplete = false;
+      // Add more questions
+      const extras = getExtraQuestions();
+      if (extras.length === 0) {
+        alert('You\u2019ve answered all available questions! Your signature is at maximum depth.');
+        return;
+      }
+      extras.forEach(q => questionQueue.push(q));
+      document.getElementById('completionState').classList.remove('active');
+      document.getElementById('interviewFlow').classList.add('active');
+      document.getElementById('continuePrompt').classList.remove('active');
+      document.getElementById('nextBtn').style.display = '';
+      showQuestion(currentQuestionIndex);
+    };
+
+    window.startOver = function() {
+      document.getElementById('completionState').classList.remove('active');
+      document.getElementById('interviewFlow').classList.remove('active');
+      document.getElementById('pasteMode').classList.remove('active');
+      document.getElementById('landingState').style.display = '';
+    };
+
+    // ================================================================
+    // PASTE MODE (legacy)
+    // ================================================================
+    window.showPasteMode = function() {
+      document.getElementById('landingState').style.display = 'none';
+      document.getElementById('interviewFlow').classList.remove('active');
+      document.getElementById('completionState').classList.remove('active');
+      document.getElementById('pasteMode').classList.add('active');
+    };
+
+    window.backToInterview = function() {
+      document.getElementById('pasteMode').classList.remove('active');
+      document.getElementById('landingState').style.display = '';
+    };
+
+    // ================================================================
+    // INIT
+    // ================================================================
+    // Initialize live canvas
+    const liveCanvas = document.getElementById('liveCanvas');
+    if (liveCanvas) {
+      const ctx = liveCanvas.getContext('2d');
+      ctx.fillStyle = '#000000';
+      ctx.fillRect(0, 0, liveCanvas.width, liveCanvas.height);
+    }
+
+  })();
   </script>
 </body>
 </html>
