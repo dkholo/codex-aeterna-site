@@ -1,2 +1,5 @@
 # Source files — obfuscated version committed instead
 assets/js/demo.js
+
+# Portrait images — served from CDN, too large for git (~15GB)
+assets/img/portraits/
