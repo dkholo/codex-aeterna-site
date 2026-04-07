@@ -3,9 +3,9 @@
 <head>
   <link rel="canonical" href="https://codexaeterna.com/portrait.html" />
   <meta charset="UTF-8" />
-  <title>Soul Portrait — Codex Aeterna</title>
+  <title>Soul Portrait — Consciousness Signature Visualization | Codex Aeterna</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="View and explore a soul signature portrait — the cognitive fingerprint of a literary work." />
+  <meta name="description" content="View a soul portrait — the unique cognitive fingerprint of a book, speech, or podcast. Every consciousness produces a distinct spectral signature. Explore the shape of thought made visible." />
 
   <!-- Dynamic OG tags set by JS -->
   <meta property="og:title" content="Soul Portrait — Codex Aeterna" id="og-title" />
@@ -132,6 +132,38 @@
       font-size: 0.92rem;
       line-height: 1.7;
     }
+
+    /* Text Fragment — "A Whisper from the Text" */
+    .portrait-fragment {
+      display: none;
+      margin-top: 4px;
+      padding: 20px 24px;
+      position: relative;
+      border-left: 2px solid var(--accent);
+      background: linear-gradient(135deg, rgba(255,215,100,0.03) 0%, rgba(255,255,255,0.01) 100%);
+      border-radius: 0 12px 12px 0;
+    }
+    .portrait-fragment.visible { display: block; }
+    .fragment-label {
+      display: block;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--accent);
+      opacity: 0.7;
+      margin-bottom: 10px;
+      font-weight: 500;
+    }
+    .fragment-quote {
+      color: var(--text-soft);
+      font-size: 0.88rem;
+      line-height: 1.8;
+      font-style: italic;
+      margin: 0;
+      quotes: "\201C" "\201D";
+    }
+    .fragment-quote::before { content: open-quote; color: var(--accent); font-size: 1.4em; vertical-align: -0.15em; margin-right: 2px; }
+    .fragment-quote::after  { content: close-quote; color: var(--accent); font-size: 1.4em; vertical-align: -0.15em; margin-left: 2px; }
 
     /* Action buttons */
     .portrait-actions {
@@ -579,6 +611,12 @@
 
             <p class="portrait-description" id="pDesc"></p>
 
+            <!-- Text Fragment -->
+            <div class="portrait-fragment" id="pFragment">
+              <span class="fragment-label">A whisper from the text</span>
+              <p class="fragment-quote" id="pFragmentText"></p>
+            </div>
+
             <!-- Action buttons -->
             <div class="portrait-actions">
               <div class="share-wrapper">
@@ -624,122 +662,92 @@
 
               <h4 style="font-size:0.72rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--text-dim); margin-bottom:8px;">Digital</h4>
               <div class="print-options">
-                <div class="print-opt" data-size="digital-hd" data-price="999" data-stripe="">
+                <div class="print-opt" data-size="digital-hd" data-price="999">
                   Digital HD Download
                   <span class="price">$9.99</span>
-                  <span style="display:block; font-size:0.65rem; color:var(--text-dim); margin-top:2px;">PNG + SVG vector</span>
+                  <span style="display:block; font-size:0.65rem; color:var(--text-dim); margin-top:2px;">PNG + SVG vector — instant download</span>
                 </div>
               </div>
 
-              <h4 style="font-size:0.72rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--text-dim); margin:16px 0 8px;">Paper Posters</h4>
+              <h4 style="font-size:0.72rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--text-dim); margin:16px 0 8px;">Art Poster</h4>
               <div class="print-options">
-                <div class="print-opt" data-size="poster-8x10" data-price="2900" data-stripe="">
-                  Poster 8&times;10&Prime;
-                  <span class="price">$29</span>
-                  <span style="display:block; font-size:0.65rem; color:var(--text-dim); margin-top:2px;">Archival matte paper</span>
-                </div>
-                <div class="print-opt" data-size="poster-11x14" data-price="4900" data-stripe="">
-                  Poster 11&times;14&Prime;
+                <div class="print-opt" data-size="poster-22x28" data-price="4900">
+                  Poster 22&times;28&Prime;
                   <span class="price">$49</span>
-                  <span style="display:block; font-size:0.65rem; color:var(--text-dim); margin-top:2px;">Archival matte paper</span>
-                </div>
-                <div class="print-opt" data-size="poster-18x24" data-price="7900" data-stripe="">
-                  Poster 18&times;24&Prime;
-                  <span class="price">$79</span>
-                  <span style="display:block; font-size:0.65rem; color:var(--text-dim); margin-top:2px;">Archival cotton paper</span>
-                </div>
-                <div class="print-opt" data-size="poster-24x36" data-price="12900" data-stripe="">
-                  Poster 24&times;36&Prime;
-                  <span class="price">$129</span>
-                  <span style="display:block; font-size:0.65rem; color:var(--text-dim); margin-top:2px;">Archival cotton paper</span>
+                  <span style="display:block; font-size:0.65rem; color:var(--text-dim); margin-top:2px;">Museum-grade archival paper · Free shipping</span>
                 </div>
               </div>
 
               <h4 style="font-size:0.72rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--text-dim); margin:16px 0 8px;">Canvas Prints</h4>
               <div class="print-options">
-                <div class="print-opt" data-size="canvas-8x10" data-price="8900" data-stripe="">
-                  Canvas 8&times;10&Prime;
-                  <span class="price">$89</span>
-                  <span style="display:block; font-size:0.65rem; color:var(--text-dim); margin-top:2px;">Gallery-wrapped, 1.5&Prime; depth</span>
+                <div class="print-opt" data-size="canvas-10x20" data-price="21400">
+                  Canvas 10&times;20&Prime;
+                  <span class="price">$214</span>
+                  <span style="display:block; font-size:0.65rem; color:var(--text-dim); margin-top:2px;">Gallery-wrapped, 1.5&Prime; depth · Free shipping</span>
                 </div>
-                <div class="print-opt" data-size="canvas-12x16" data-price="14900" data-stripe="">
-                  Canvas 12&times;16&Prime;
-                  <span class="price">$149</span>
-                  <span style="display:block; font-size:0.65rem; color:var(--text-dim); margin-top:2px;">Gallery-wrapped, 1.5&Prime; depth</span>
+                <div class="print-opt" data-size="canvas-10x24" data-price="20000">
+                  Canvas 10&times;24&Prime;
+                  <span class="price">$200</span>
+                  <span style="display:block; font-size:0.65rem; color:var(--text-dim); margin-top:2px;">Gallery-wrapped, 1.5&Prime; depth · Free shipping</span>
                 </div>
-                <div class="print-opt" data-size="canvas-16x20" data-price="19900" data-stripe="">
-                  Canvas 16&times;20&Prime;
-                  <span class="price">$199</span>
-                  <span style="display:block; font-size:0.65rem; color:var(--text-dim); margin-top:2px;">Gallery-wrapped, 1.5&Prime; depth</span>
-                </div>
-                <div class="print-opt" data-size="canvas-20x30" data-price="29900" data-stripe="">
-                  Canvas 20&times;30&Prime;
-                  <span class="price">$299</span>
-                  <span style="display:block; font-size:0.65rem; color:var(--text-dim); margin-top:2px;">Gallery-wrapped, 1.5&Prime; depth</span>
-                </div>
-                <div class="print-opt" data-size="canvas-24x36" data-price="39900" data-stripe="">
-                  Canvas 24&times;36&Prime;
-                  <span class="price">$399</span>
-                  <span style="display:block; font-size:0.65rem; color:var(--text-dim); margin-top:2px;">Gallery-wrapped, 1.5&Prime; depth</span>
+                <div class="print-opt" data-size="canvas-12x36" data-price="30200">
+                  Canvas 12&times;36&Prime;
+                  <span class="price">$302</span>
+                  <span style="display:block; font-size:0.65rem; color:var(--text-dim); margin-top:2px;">Gallery-wrapped, 1.5&Prime; depth · Free shipping</span>
                 </div>
               </div>
 
-              <h4 style="font-size:0.72rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--text-dim); margin:16px 0 8px;">Aluminum Prints</h4>
+              <h4 style="font-size:0.72rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--text-dim); margin:16px 0 8px;">Metal Prints</h4>
               <div class="print-options">
-                <div class="print-opt" data-size="aluminum-8x10" data-price="14900" data-stripe="">
-                  Aluminum 8&times;10&Prime;
-                  <span class="price">$149</span>
-                  <span style="display:block; font-size:0.65rem; color:var(--text-dim); margin-top:2px;">Floating mount, vibrant color</span>
+                <div class="print-opt" data-size="metal-8x10" data-price="13000">
+                  Metal 8&times;10&Prime;
+                  <span class="price">$130</span>
+                  <span style="display:block; font-size:0.65rem; color:var(--text-dim); margin-top:2px;">Float mount, vibrant color · Free shipping</span>
                 </div>
-                <div class="print-opt" data-size="aluminum-12x16" data-price="24900" data-stripe="">
-                  Aluminum 12&times;16&Prime;
-                  <span class="price">$249</span>
-                  <span style="display:block; font-size:0.65rem; color:var(--text-dim); margin-top:2px;">Floating mount, vibrant color</span>
+                <div class="print-opt" data-size="metal-10x20" data-price="22000">
+                  Metal 10&times;20&Prime;
+                  <span class="price">$220</span>
+                  <span style="display:block; font-size:0.65rem; color:var(--text-dim); margin-top:2px;">Float mount, vibrant color · Free shipping</span>
                 </div>
-                <div class="print-opt" data-size="aluminum-16x20" data-price="34900" data-stripe="">
-                  Aluminum 16&times;20&Prime;
-                  <span class="price">$349</span>
-                  <span style="display:block; font-size:0.65rem; color:var(--text-dim); margin-top:2px;">Floating mount, vibrant color</span>
+                <div class="print-opt" data-size="metal-12x36" data-price="31000">
+                  Metal 12&times;36&Prime;
+                  <span class="price">$310</span>
+                  <span style="display:block; font-size:0.65rem; color:var(--text-dim); margin-top:2px;">Float mount, vibrant color · Free shipping</span>
                 </div>
-                <div class="print-opt" data-size="aluminum-20x30" data-price="49900" data-stripe="">
-                  Aluminum 20&times;30&Prime;
-                  <span class="price">$499</span>
-                  <span style="display:block; font-size:0.65rem; color:var(--text-dim); margin-top:2px;">Floating mount, vibrant color</span>
-                </div>
-                <div class="print-opt" data-size="aluminum-24x36" data-price="69900" data-stripe="">
-                  Aluminum 24&times;36&Prime;
-                  <span class="price">$699</span>
-                  <span style="display:block; font-size:0.65rem; color:var(--text-dim); margin-top:2px;">Floating mount, vibrant color</span>
+                <div class="print-opt" data-size="metal-12x36-framed" data-price="51000">
+                  Metal 12&times;36&Prime; (Black Frame)
+                  <span class="price">$510</span>
+                  <span style="display:block; font-size:0.65rem; color:var(--text-dim); margin-top:2px;">With black frame · Free shipping</span>
                 </div>
               </div>
 
               <h4 style="font-size:0.72rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--text-dim); margin:16px 0 8px;">Titanium &mdash; Built for 10,000 Years</h4>
               <div class="print-options">
-                <div class="print-opt" data-size="titanium-4x6" data-price="99900" data-stripe="">
+                <div class="print-opt" data-size="titanium-4x6" data-price="99900">
                   Titanium 4&times;6&Prime;
                   <span class="price">$999</span>
                   <span style="display:block; font-size:0.65rem; color:var(--text-dim); margin-top:2px;">Grade 5 aerospace, laser-etched</span>
                 </div>
-                <div class="print-opt" data-size="titanium-6x9" data-price="149900" data-stripe="">
+                <div class="print-opt" data-size="titanium-6x9" data-price="149900">
                   Titanium 6&times;9&Prime;
                   <span class="price">$1,499</span>
                   <span style="display:block; font-size:0.65rem; color:var(--text-dim); margin-top:2px;">Grade 5 aerospace, laser-etched</span>
                 </div>
-                <div class="print-opt" data-size="titanium-8x12" data-price="199900" data-stripe="">
+                <div class="print-opt" data-size="titanium-8x12" data-price="199900">
                   Titanium 8&times;12&Prime;
                   <span class="price">$1,999</span>
                   <span style="display:block; font-size:0.65rem; color:var(--text-dim); margin-top:2px;">Grade 5 aerospace, space-mission ready</span>
                 </div>
               </div>
               <p style="font-size:0.78rem; color:var(--text-soft); margin: 16px 0 12px;">
-                All prints include certificate of authenticity. Available in Solid or Dot-Dash line style. Titanium editions laser-etched for deep time preservation.
+                All prints include free shipping and certificate of authenticity. Available in Solid or Dot-Dash line style. Titanium editions laser-etched for deep time preservation.
               </p>
 
               <!-- Order form appears when a size is selected -->
               <div class="order-form-section" id="orderFormSection" style="display:none;">
                 <div class="order-summary" id="orderSummary">
                   <div class="os-item"><span id="osProduct">—</span><span id="osPrice">—</span></div>
-                  <div class="os-item"><span>Shipping</span><span>Calculated at checkout</span></div>
+                  <div class="os-item"><span>Shipping</span><span>Free</span></div>
                   <div class="os-total"><span>Total</span><span id="osTotal">—</span></div>
                 </div>
 
@@ -892,15 +900,24 @@
     const starId = rawId; // keep as string; match flexibly below
     const fromGalaxy = params.get('from') === 'galaxy';
 
-    // Portrait style: 'black' or 'white' (read from URL or default)
-    let portraitStyle = params.get('style') || 'black';
+    // Deterministic per-star style (same hash as galaxy.html)
+    function starStyleDefault(id) {
+      const n = typeof id === 'number' ? id : parseInt(id, 10) || 0;
+      return ((n * 2654435761) >>> 0) % 2 === 0 ? 'black' : 'white';
+    }
 
-    // Build portrait URLs — real file with gallery fallback
+    // Portrait style: from URL param, or deterministic mix
+    let portraitStyle = params.get('style') || starStyleDefault(rawId);
+
+    // R2 CDN base URL for soul portraits
+    const R2_CDN = 'https://pub-f1990f9b95634a13b7b579039d24f46c.r2.dev';
+
+    // Build portrait URLs — R2 CDN with gallery fallback
     function getPortraitUrls(star) {
       const sid = String(star.id);
       const real = {
-        thumb: `assets/img/portraits/${portraitStyle}/thumbs/${sid}.webp`,
-        full:  `assets/img/portraits/${portraitStyle}/${sid}.webp`
+        thumb: `${R2_CDN}/portraits/${portraitStyle}/${sid}.webp`,
+        full:  `${R2_CDN}/portraits/${portraitStyle}/${sid}.webp`
       };
       // Deterministic gallery fallback
       let seed = 0;
@@ -980,6 +997,12 @@
         `This soul portrait captures the cognitive fingerprint of "${star.title.replace(/\s*\(\d+\)$/, '')}" by ${star.author}. ` +
         `Classified under the ${arch.name} archetype, this work's signature reveals patterns of thought, narrative structure, and emotional resonance ` +
         `unique to this piece among 50,000+ analyzed texts in the Codex Aeterna archive.`;
+
+      // Text fragment (if available)
+      if (star.fragment) {
+        document.getElementById('pFragmentText').textContent = star.fragment;
+        document.getElementById('pFragment').classList.add('visible');
+      }
 
       // Back link
       if (fromGalaxy) {
@@ -1070,81 +1093,58 @@
     });
 
     // ══════════════════════════════════════════════════
-    // STRIPE CONFIGURATION
-    // Replace with your live key when ready to go live.
-    // Test key: pk_test_... (from Stripe Dashboard > Developers > API keys)
-    // Live key: pk_live_... (activate after testing)
+    // STRIPE CONFIGURATION — LIVE MODE
+    // Publishable key is safe to include client-side.
+    // Payment links are static Stripe-hosted URLs.
     // ══════════════════════════════════════════════════
     const STRIPE_CONFIG = {
-      // ── PASTE YOUR STRIPE PUBLISHABLE KEY HERE ──
-      publishableKey: 'pk_test_REPLACE_WITH_YOUR_KEY',
+      publishableKey: 'pk_live_51TGo49RqX2egPtxdyNG7cix9MprWSYNorQoNS2ZY2B8Qn3IRcqjyQvpztywfstZ522JVLfI175q29sfcLWastLlb00WZwBURgO',
 
-      // ── STRIPE PAYMENT LINKS ──
-      // Create these in Stripe Dashboard > Payment Links
-      // Each link corresponds to a product. Create one per size.
-      // The URL format is: https://buy.stripe.com/XXXXXXX
+      // ── LIVE STRIPE PAYMENT LINKS ──
       paymentLinks: {
-        'digital-hd':      '',  // Digital HD ($9.99)
-        'poster-8x10':     '',  // Poster 8×10 ($29)
-        'poster-11x14':    '',  // Poster 11×14 ($49)
-        'poster-18x24':    '',  // Poster 18×24 ($79)
-        'poster-24x36':    '',  // Poster 24×36 ($129)
-        'canvas-8x10':     '',  // Canvas 8×10 ($89)
-        'canvas-12x16':    '',  // Canvas 12×16 ($149)
-        'canvas-16x20':    '',  // Canvas 16×20 ($199)
-        'canvas-20x30':    '',  // Canvas 20×30 ($299)
-        'canvas-24x36':    '',  // Canvas 24×36 ($399)
-        'aluminum-8x10':   '',  // Aluminum 8×10 ($149)
-        'aluminum-12x16':  '',  // Aluminum 12×16 ($249)
-        'aluminum-16x20':  '',  // Aluminum 16×20 ($349)
-        'aluminum-20x30':  '',  // Aluminum 20×30 ($499)
-        'aluminum-24x36':  '',  // Aluminum 24×36 ($699)
-        'titanium-4x6':    '',  // Titanium 4×6 ($999)
-        'titanium-6x9':    '',  // Titanium 6×9 ($1,499)
-        'titanium-8x12':   ''   // Titanium 8×12 ($1,999)
+        'digital-hd':          'https://buy.stripe.com/eVq8wRfEe2vk1ZR38l2B20c',
+        'poster-22x28':        'https://buy.stripe.com/dRm5kF2Rsfi65c3dMZ2B20d',
+        'canvas-10x20':        'https://buy.stripe.com/fZucN763E4DsgULaAN2B20i',
+        'canvas-10x24':        'https://buy.stripe.com/28E00l63E9XM1ZRaAN2B20f',
+        'canvas-12x36':        'https://buy.stripe.com/5kQfZj9fQc5U8of5gt2B20g',
+        'metal-8x10':          'https://buy.stripe.com/3cI28tajUee25c3aAN2B20j',
+        'metal-10x20':         'https://buy.stripe.com/9B6bJ3fEe2vk8of5gt2B20h',
+        'metal-12x36':         'https://buy.stripe.com/5kQ7sN77Ib1Q33VaAN2B20e',
+        'metal-12x36-framed':  'https://buy.stripe.com/fZu5kF4ZA5Hw33V10d2B20n',
+        'titanium-4x6':        'https://buy.stripe.com/fZu28t0Jkfi60VNbER2B20l',
+        'titanium-6x9':        'https://buy.stripe.com/cNi3cxajU6LAgUL7oB2B20k',
+        'titanium-8x12':       'https://buy.stripe.com/fZueVfdw68TIeMD6kx2B20m'
       },
 
       // Prices in cents for display
       prices: {
-        'digital-hd':      999,
-        'poster-8x10':     2900,
-        'poster-11x14':    4900,
-        'poster-18x24':    7900,
-        'poster-24x36':    12900,
-        'canvas-8x10':     8900,
-        'canvas-12x16':    14900,
-        'canvas-16x20':    19900,
-        'canvas-20x30':    29900,
-        'canvas-24x36':    39900,
-        'aluminum-8x10':   14900,
-        'aluminum-12x16':  24900,
-        'aluminum-16x20':  34900,
-        'aluminum-20x30':  49900,
-        'aluminum-24x36':  69900,
-        'titanium-4x6':    99900,
-        'titanium-6x9':    149900,
-        'titanium-8x12':   199900
+        'digital-hd':          999,
+        'poster-22x28':        4900,
+        'canvas-10x20':        21400,
+        'canvas-10x24':        20000,
+        'canvas-12x36':        30200,
+        'metal-8x10':          13000,
+        'metal-10x20':         22000,
+        'metal-12x36':         31000,
+        'metal-12x36-framed':  51000,
+        'titanium-4x6':        99900,
+        'titanium-6x9':        149900,
+        'titanium-8x12':       199900
       },
 
       productNames: {
-        'digital-hd':      'Digital HD Download (PNG + SVG)',
-        'poster-8x10':     'Paper Poster 8×10″',
-        'poster-11x14':    'Paper Poster 11×14″',
-        'poster-18x24':    'Paper Poster 18×24″',
-        'poster-24x36':    'Paper Poster 24×36″',
-        'canvas-8x10':     'Canvas 8×10″',
-        'canvas-12x16':    'Canvas 12×16″',
-        'canvas-16x20':    'Canvas 16×20″',
-        'canvas-20x30':    'Canvas 20×30″',
-        'canvas-24x36':    'Canvas 24×36″',
-        'aluminum-8x10':   'Aluminum 8×10″',
-        'aluminum-12x16':  'Aluminum 12×16″',
-        'aluminum-16x20':  'Aluminum 16×20″',
-        'aluminum-20x30':  'Aluminum 20×30″',
-        'aluminum-24x36':  'Aluminum 24×36″',
-        'titanium-4x6':    'Titanium 4×6″ — 10,000 Year Archive',
-        'titanium-6x9':    'Titanium 6×9″ — 10,000 Year Archive',
-        'titanium-8x12':   'Titanium 8×12″ — 10,000 Year Archive'
+        'digital-hd':          'Digital HD Download (PNG + SVG)',
+        'poster-22x28':        'Art Poster 22×28″',
+        'canvas-10x20':        'Canvas 10×20″',
+        'canvas-10x24':        'Canvas 10×24″',
+        'canvas-12x36':        'Canvas 12×36″',
+        'metal-8x10':          'Metal 8×10″',
+        'metal-10x20':         'Metal 10×20″',
+        'metal-12x36':         'Metal 12×36″',
+        'metal-12x36-framed':  'Metal 12×36″ (Black Frame)',
+        'titanium-4x6':        'Titanium 4×6″ — 10,000 Year Archive',
+        'titanium-6x9':        'Titanium 6×9″ — 10,000 Year Archive',
+        'titanium-8x12':       'Titanium 8×12″ — 10,000 Year Archive'
       }
     };
 
@@ -1172,7 +1172,7 @@
         const name = STRIPE_CONFIG.productNames[selectedSize] || selectedSize;
         document.getElementById('osProduct').textContent = name;
         document.getElementById('osPrice').textContent = '$' + (price / 100).toLocaleString();
-        document.getElementById('osTotal').textContent = '$' + (price / 100).toLocaleString() + '+';
+        document.getElementById('osTotal').textContent = '$' + (price / 100).toLocaleString();
 
         // Show inscription field for titanium sizes only
         inscriptionField.style.display = selectedSize.startsWith('titanium') ? 'block' : 'none';
