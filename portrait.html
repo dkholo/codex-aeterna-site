@@ -1245,40 +1245,36 @@
       orders.push(customerData);
       localStorage.setItem('codex_orders', JSON.stringify(orders));
 
-      // Check if Stripe Payment Link is configured
-      const paymentLink = STRIPE_CONFIG.paymentLinks[selectedSize];
-      if (paymentLink) {
-        // Redirect to Stripe Payment Link with prefilled email
-        const url = new URL(paymentLink);
-        url.searchParams.set('prefilled_email', customerData.email);
-        // Add metadata via client_reference_id
-        url.searchParams.set('client_reference_id', `${starId}_${selectedSize}_${Date.now()}`);
-        window.location.href = url.toString();
-      } else {
-        // Fallback: send order details via email until Stripe is configured
-        const subject = encodeURIComponent(`Order: ${STRIPE_CONFIG.productNames[selectedSize]} — "${title}" by ${author}`);
-        const body = encodeURIComponent(
-          `NEW ORDER\n` +
-          `═══════════════════════════\n` +
-          `Product: ${STRIPE_CONFIG.productNames[selectedSize]}\n` +
-          `Price: $${(STRIPE_CONFIG.prices[selectedSize] / 100).toLocaleString()}\n` +
-          `Portrait: "${title}" by ${author}\n` +
-          `Portrait URL: ${window.location.href}\n\n` +
-          `CUSTOMER DETAILS\n` +
-          `═══════════════════════════\n` +
-          `Name: ${customerData.name}\n` +
-          `Email: ${customerData.email}\n` +
-          `Phone: ${customerData.phone}\n` +
-          `Address: ${customerData.address}\n` +
-          `City: ${customerData.city}\n` +
-          `State: ${customerData.state}\n` +
-          `ZIP: ${customerData.zip}\n` +
-          `Country: ${customerData.country}\n` +
-          (customerData.inscription ? `Inscription: ${customerData.inscription}\n` : '') +
-          `\nTimestamp: ${customerData.timestamp}`
-        );
-        window.location.href = `mailto:dmitry.kholodkov@gmail.com?subject=${subject}&body=${body}`;
-      }
+      // Create Stripe Checkout Session via serverless API
+      const btn = document.getElementById('checkoutBtn');
+      btn.disabled = true;
+      btn.textContent = 'Redirecting to checkout...';
+
+      fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          productKey: selectedSize,
+          starId: starId || '',
+          starTitle: title,
+          starAuthor: author,
+          lineStyle: document.querySelector('.style-btn.active')?.dataset?.style || 'solid',
+        }),
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.url) {
+            window.location.href = data.url;
+          } else {
+            throw new Error(data.error || 'Checkout failed');
+          }
+        })
+        .catch(err => {
+          console.error('Checkout error:', err);
+          btn.disabled = false;
+          btn.textContent = 'Proceed to Payment';
+          alert('Unable to start checkout. Please try again or contact hello@codexaeterna.com');
+        });
     });
 
     // ── Email-gated download ──
