@@ -4,7 +4,7 @@ User-agent: *
 Allow: /
 
 # Sitemap location
-Sitemap: https://codexaeterna.com/sitemap.xml
+Sitemap: https://www.codexaeterna.com/sitemap.xml
 
 # Disallow admin/private areas (add paths if needed)
 # Disallow: /private/
