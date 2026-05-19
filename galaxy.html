@@ -800,7 +800,7 @@
     function showTooltip(e, star) {
       const arch = ARCHETYPES[star.cluster] || { name: 'Unknown', color: '#888' };
       tooltip.querySelector('.tt-author').textContent = star.author;
-      tooltip.querySelector('.tt-title').textContent = star.title;
+      tooltip.querySelector('.tt-title').textContent = (star.title || '').replace(/\s*\(\d+\)$/, '');
       tooltip.querySelector('.tt-archetype').textContent = arch.name;
       tooltip.querySelector('.tt-archetype').style.color = arch.color;
       tooltip.querySelector('.tt-ki').textContent = 'KI: ' + (star.ki || '—');
@@ -971,7 +971,7 @@
 
       searchResults.innerHTML = matches.map((s, i) =>
         `<div class="search-result-item" data-idx="${starDataList.indexOf(s)}">
-          <div>${s.title}</div>
+          <div>${(s.title || '').replace(/\s*\(\d+\)$/, '')}</div>
           <div class="sr-author">${s.author}</div>
         </div>`
       ).join('');
@@ -1109,12 +1109,6 @@
         galaxyImg.onload = () => { if (!personalStar) fitToContainer(); };
       }
 
-      // Quick diagnostic
-      setTimeout(() => {
-        const starEls = overlay.querySelectorAll('[data-star]');
-        console.log('DIAGNOSTIC — star DOM elements:', starEls.length, '| labels:', overlay.querySelectorAll('.cluster-label').length);
-      }, 500);
-
       // Debug mode: add ?debug to URL to show calibration dots at each centroid
       if (window.location.search.includes('debug')) {
         console.log('DEBUG MODE: showing calibration dots at pixel centroids');
@@ -1150,6 +1144,12 @@
     document.getElementById('year').textContent = new Date().getFullYear();
     buildLegend();
     init();
+
+    // Hamburger menu toggle (mobile nav)
+    document.querySelector('.hamburger').addEventListener('click', function() {
+      document.querySelector('nav').classList.toggle('open');
+      this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'false' ? 'true' : 'false');
+    });
   })();
   </script>
   <script src="assets/js/main.js"></script>
