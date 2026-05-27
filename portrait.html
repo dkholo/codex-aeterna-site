@@ -1308,6 +1308,40 @@
       if (e.target === downloadModal) downloadModal.classList.remove('active');
     });
 
+    // ── Supabase config (same project as codexaeterna.org) ──
+    const SUPABASE_URL = 'https://whgcjfniqallsmpoxagi.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndoZ2NqZm5pcWFsbHNtcG94YWdpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ0NTg3MTksImV4cCI6MjA5MDAzNDcxOX0.XcCKdgMwJ6Zi6ABnqWiGHT8sXrS0J1v7u4XEELWfqJo';
+
+    function saveDownloadLead(email, name, portrait) {
+      // 1. Supabase — persistent storage
+      fetch(SUPABASE_URL + '/rest/v1/founding_supporters', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({
+          email: email,
+          source: 'codexaeterna.com/portrait | ' + (name || '') + ' | ' + (portrait || '')
+        })
+      }).catch(err => console.warn('Supabase save failed (non-critical):', err));
+
+      // 2. EmailJS — instant notification to inbox
+      if (typeof emailjs !== 'undefined') {
+        emailjs.send('service_0kveogc', 'template_c00j2et', {
+          from_name: name || 'Portrait Download',
+          from_email: email,
+          message: 'New portrait download lead:\n\nEmail: ' + email +
+                   '\nName: ' + (name || '—') +
+                   '\nPortrait: ' + (portrait || '—') +
+                   '\nStar ID: ' + (starId || '—') +
+                   '\nSource: codexaeterna.com portrait page'
+        }).catch(err => console.warn('EmailJS notification failed (non-critical):', err));
+      }
+    }
+
     document.getElementById('dlSubmitBtn').addEventListener('click', () => {
       const email = document.getElementById('dlEmail').value.trim();
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
@@ -1318,17 +1352,10 @@
       const dlName = document.getElementById('dlName').value.trim();
       const title = document.getElementById('pTitle').textContent;
       const author = document.getElementById('pAuthor').textContent;
+      const portrait = title + ' by ' + author;
 
-      // Save download lead
-      const leads = JSON.parse(localStorage.getItem('codex_download_leads') || '[]');
-      leads.push({
-        email,
-        name: dlName,
-        portrait: title + ' by ' + author,
-        starId,
-        timestamp: new Date().toISOString()
-      });
-      localStorage.setItem('codex_download_leads', JSON.stringify(leads));
+      // Save to Supabase + notify via EmailJS
+      saveDownloadLead(email, dlName, portrait);
 
       // Remember email for this session
       sessionStorage.setItem('codex_dl_email', email);
@@ -1475,6 +1502,7 @@
 
   })();
   </script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
   <script src="assets/js/main.js"></script>
 </body>
 </html>
