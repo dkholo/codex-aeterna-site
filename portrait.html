@@ -3,13 +3,13 @@
 <head>
   <link rel="canonical" href="https://www.codexaeterna.com/portrait.html" />
   <meta charset="UTF-8" />
-  <title>Soul Portrait — Consciousness Signature Visualization | Codex Aeterna</title>
+  <title>Soul Portrait — Soul Portrait Visualization | Codex Aeterna</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="View a soul portrait — the unique cognitive fingerprint of a book, speech, or podcast. Every consciousness produces a distinct spectral signature. Explore the shape of thought made visible." />
+  <meta name="description" content="View a soul portrait — the unique soul portrait of a book, speech, or podcast. Every consciousness produces a distinct spectral portrait. Explore the shape of thought made visible." />
 
   <!-- Dynamic OG tags set by JS -->
   <meta property="og:title" content="Soul Portrait — Codex Aeterna" id="og-title" />
-  <meta property="og:description" content="Explore a unique cognitive fingerprint." id="og-desc" />
+  <meta property="og:description" content="Explore a unique soul portrait." id="og-desc" />
   <meta property="og:image" content="https://www.codexaeterna.com/og-image.png" id="og-image" />
   <meta property="og:url" content="https://www.codexaeterna.com/portrait.html" id="og-url" />
   <meta property="og:type" content="website" />
@@ -571,7 +571,7 @@
       <nav>
         <a href="index.html#how-it-works">How it works</a>
         <a href="index.html#offerings">The Archive</a>
-        <a href="cognitive_fingerprints_full.html">Research</a>
+        <a href="cognitive_portraits_full.html">Research</a>
         <a href="gallery.html">Gallery</a>
         <a href="demo.html">Try Demo</a>
         <a href="sentient.html" class="highlight">Sentient</a>
@@ -966,7 +966,7 @@
 
       // Set OG tags
       document.getElementById('og-title').content = `${star.title} by ${star.author} — Soul Portrait`;
-      document.getElementById('og-desc').content = `Explore the cognitive fingerprint of "${star.title}" — classified as ${arch.name}.`;
+      document.getElementById('og-desc').content = `Explore the soul portrait of "${star.title}" — classified as ${arch.name}.`;
 
       // Fill content
       document.getElementById('pAuthor').textContent = star.author;
@@ -994,8 +994,8 @@
 
       // Description
       document.getElementById('pDesc').textContent =
-        `This soul portrait captures the cognitive fingerprint of "${star.title.replace(/\s*\(\d+\)$/, '')}" by ${star.author}. ` +
-        `Classified under the ${arch.name} archetype, this work's signature reveals patterns of thought, narrative structure, and emotional resonance ` +
+        `This soul portrait captures the soul portrait of "${star.title.replace(/\s*\(\d+\)$/, '')}" by ${star.author}. ` +
+        `Classified under the ${arch.name} archetype, this work's portrait reveals patterns of thought, narrative structure, and emotional resonance ` +
         `unique to this piece among 50,000+ analyzed texts in the Codex Aeterna archive.`;
 
       // Text fragment (if available)
@@ -1081,7 +1081,7 @@
       const title = document.getElementById('pTitle').textContent;
       const author = document.getElementById('pAuthor').textContent;
       const url = encodeURIComponent(window.location.href);
-      const text = encodeURIComponent(`Explore the soul portrait of "${title}" by ${author} — a unique cognitive fingerprint from @CodexAeterna`);
+      const text = encodeURIComponent(`Explore the soul portrait of "${title}" by ${author} — a unique soul portrait from @CodexAeterna`);
       window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
       shareMenu.classList.remove('open');
     });

@@ -231,7 +231,7 @@ nav a.highlight {
   border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
-.signature-preview {
+.portrait-preview {
   background: radial-gradient(circle at 15% 15%, rgba(242, 196, 107, 0.18), transparent 55%),
     radial-gradient(circle at 80% 80%, rgba(102, 126, 234, 0.28), transparent 55%),
     #020309;
@@ -249,7 +249,7 @@ nav a.highlight {
   overflow: visible !important;
 }
 
-.signature-lines {
+.portrait-lines {
   width: 100%;
   height: 100%;
   background-size: cover;
@@ -259,11 +259,11 @@ nav a.highlight {
   animation: pulse-soul 8s infinite ease-in-out;
 }
 
-.signature-lines.fade-out {
+.portrait-lines.fade-out {
   opacity: 0;
 }
 
-.signature-fade {
+.portrait-fade {
   position: absolute;
   inset: 0;
   background: radial-gradient(circle at center, transparent 0, transparent 48%, rgba(2, 3, 9, 0.85) 100%);
@@ -550,12 +550,12 @@ footer {
    TOOLTIPS
    ============================================ */
 
-.signature-preview[data-tooltip] {
+.portrait-preview[data-tooltip] {
   position: relative;
   overflow: visible;
 }
 
-.signature-preview[data-tooltip]::after {
+.portrait-preview[data-tooltip]::after {
   content: attr(data-tooltip);
   position: absolute;
   left: 50%;
@@ -576,7 +576,7 @@ footer {
   z-index: 9999;
 }
 
-.signature-preview[data-tooltip]::before {
+.portrait-preview[data-tooltip]::before {
   content: "";
   position: absolute;
   left: 50%;
@@ -590,8 +590,8 @@ footer {
   transition: opacity 0.2s ease;
 }
 
-.signature-preview[data-tooltip]:hover::after,
-.signature-preview[data-tooltip]:hover::before {
+.portrait-preview[data-tooltip]:hover::after,
+.portrait-preview[data-tooltip]:hover::before {
   opacity: 1;
   transform: translateX(-50%);
 }

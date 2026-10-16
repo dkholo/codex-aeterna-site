@@ -3,9 +3,9 @@
 <head>
   <link rel="canonical" href="https://www.codexaeterna.com/demo.html" />
   <meta charset="UTF-8" />
-  <title>Discover Your Soul Signature — Free Consciousness Portrait Generator | Codex Aeterna</title>
+  <title>Discover Your Soul Portrait — Free Consciousness Portrait Generator | Codex Aeterna</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Generate your free soul signature portrait. Answer a few questions or paste your text — watch your unique consciousness visualization emerge in real time. See the shape of your thoughts." />
+  <meta name="description" content="Generate your free soul portrait portrait. Answer a few questions or paste your text — watch your unique consciousness visualization emerge in real time. See the shape of your thoughts." />
 
   <!-- Favicon -->
   <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32x32.png">
@@ -511,7 +511,7 @@
       <nav>
         <a href="index.html#how-it-works">How it works</a>
         <a href="index.html#offerings">The Archive</a>
-        <a href="cognitive_fingerprints_full.html">Research</a>
+        <a href="cognitive_portraits_full.html">Research</a>
         <a href="gallery.html">Gallery</a>
         <a href="demo.html" class="active">Soul Interview</a>
         <a href="sentient.html" class="highlight">Sentient</a>
@@ -525,7 +525,7 @@
       <!-- LANDING STATE                               -->
       <!-- ═══════════════════════════════════════════ -->
       <div class="interview-landing" id="landingState">
-        <h1 class="interview-landing-title">Discover Your <span>Soul Signature</span></h1>
+        <h1 class="interview-landing-title">Discover Your <span>Soul Portrait</span></h1>
         <p class="interview-landing-sub">Answer a few questions. Watch your cognitive portrait emerge in real time. Every mind has a unique pattern — let's find yours.</p>
 
         <div class="mode-cards">
@@ -583,7 +583,7 @@
           </div>
 
           <div class="continue-prompt" id="continuePrompt">
-            <p>Your signature has more room to grow. Want to keep going?</p>
+            <p>Your portrait has more room to grow. Want to keep going?</p>
             <button class="btn btn-primary btn-sm" onclick="continueInterview()">Keep going</button>
             <button class="btn btn-secondary btn-sm" onclick="completeInterview()">I'm done</button>
           </div>
@@ -597,7 +597,7 @@
 
           <div class="saturation-meter">
             <div class="saturation-header">
-              <span class="saturation-label">Signature Depth</span>
+              <span class="saturation-label">Soul Depth</span>
               <span class="saturation-stage" id="satStage">Seed</span>
             </div>
             <div class="saturation-bar">
@@ -611,7 +611,7 @@
               <span id="stgDeep">Deep</span>
             </div>
             <div class="saturation-stats">
-              <span><strong id="statPairs">0</strong> word pairs</span>
+              <span><strong id="statPairs">0</strong> threads</span>
               <span><strong id="statWords">0</strong> words</span>
               <span><strong id="statCategories">0</strong>/8 categories</span>
             </div>
@@ -626,9 +626,9 @@
         <div class="completion-portrait completion-glow">
           <canvas id="finalCanvas" width="600" height="750"></canvas>
         </div>
-        <h2 class="completion-title">Your Soul Signature</h2>
+        <h2 class="completion-title">Your Soul Portrait</h2>
         <div class="completion-archetype" id="compArchetype">The Philosopher</div>
-        <div class="completion-ki" id="compKI">Cognitive Structure Score: 62 &middot; Strong structure &middot; 87% match</div>
+        <div class="completion-ki" id="compKI">Soul Depth: 62 &middot; Deep soul &middot; 87% match</div>
 
         <div class="completion-actions">
           <button class="btn-download-free" onclick="downloadFree()">
@@ -644,7 +644,7 @@
         <div class="completion-secondary">
           <a href="galaxy.html" id="galaxyLink">Find your star in the galaxy</a>
           <button onclick="keepGoing()">Keep deepening</button>
-          <button onclick="shareSignature()">Share</button>
+          <button onclick="sharePortrait()">Share</button>
           <button onclick="startOver()">Start over</button>
         </div>
 
@@ -671,7 +671,7 @@ Minimum 500 words recommended for meaningful patterns."></textarea>
             </div>
           </div>
           <div class="output-panel">
-            <h2>Your Soul Signature</h2>
+            <h2>Your Soul Portrait</h2>
             <div class="canvas-container">
               <canvas id="soulCanvas" width="400" height="500"></canvas>
               <p class="placeholder" id="placeholder">Enter text and click Generate</p>
@@ -815,7 +815,7 @@ Minimum 500 words recommended for meaningful patterns."></textarea>
     let currentQuestionIndex = 0;
     let allAnswers = '';          // Running text corpus
     let answeredCategories = new Set();
-    let bigramSet = new Set();    // Unique bigrams seen
+    let wpairSet = new Set();    // Unique threads seen
     let totalWords = 0;
     let totalPairs = 0;
     let interviewComplete = false;
@@ -893,7 +893,7 @@ Minimum 500 words recommended for meaningful patterns."></textarea>
       currentQuestionIndex = 0;
       allAnswers = '';
       answeredCategories = new Set();
-      bigramSet = new Set();
+      wpairSet = new Set();
       totalWords = 0;
       totalPairs = 0;
       interviewComplete = false;
@@ -1043,7 +1043,7 @@ Minimum 500 words recommended for meaningful patterns."></textarea>
       // Update completion UI
       document.getElementById('compArchetype').textContent = archetype.name + ' \u2014 ' + archetype.similarity + '% match';
       document.getElementById('compKI').textContent =
-        'Cognitive Structure Score: ' + Math.round(kiScore) + ' \u00B7 ' + getKILabel(kiScore) +
+        'Soul Depth: ' + Math.round(kiScore) + ' \u00B7 ' + getKILabel(kiScore) +
         ' \u00B7 ' + data.stats.wordCount.toLocaleString() + ' words \u00B7 ' + totalPairs + ' unique pairs';
 
       // Render KI detail panel
@@ -1108,20 +1108,20 @@ Minimum 500 words recommended for meaningful patterns."></textarea>
     // SATURATION TRACKING
     // ================================================================
     function updateSaturation() {
-      // Extract all words and bigrams from full corpus
+      // Extract all words and threads from full corpus
       const words = allAnswers.toLowerCase().match(/\b[a-z]{3,}\b/g) || [];
       const filteredWords = words.filter(w => !STOP_WORDS.has(w));
 
-      // Count unique bigrams
-      const newBigrams = new Set();
+      // Count unique threads
+      const newThreads = new Set();
       for (let i = 0; i < filteredWords.length - 1; i++) {
         const pair = filteredWords[i] + '|' + filteredWords[i + 1];
-        newBigrams.add(pair);
+        newThreads.add(pair);
       }
 
       totalWords = words.length;
-      totalPairs = newBigrams.size;
-      bigramSet = newBigrams;
+      totalPairs = newThreads.size;
+      wpairSet = newThreads;
 
       // Determine stage
       let stage = 'Seed';
@@ -1258,7 +1258,7 @@ Minimum 500 words recommended for meaningful patterns."></textarea>
       ctx.restore();
 
       const link = document.createElement('a');
-      link.download = 'soul-signature-preview.png';
+      link.download = 'soul-portrait-preview.png';
       link.href = tempCanvas.toDataURL('image/png');
       link.click();
     };
@@ -1270,11 +1270,11 @@ Minimum 500 words recommended for meaningful patterns."></textarea>
       // Future: window.location.href = '/api/checkout/create-session?product=hd_download&...';
     };
 
-    window.shareSignature = function() {
+    window.sharePortrait = function() {
       if (navigator.share) {
         navigator.share({
-          title: 'My Soul Signature \u2014 Codex Aeterna',
-          text: 'I just discovered my cognitive soul signature. Every mind has a unique pattern.',
+          title: 'My Soul Portrait \u2014 Codex Aeterna',
+          text: 'I just discovered my soul portrait. Every mind is one of a kind.',
           url: window.location.href
         }).catch(() => {});
       } else {
@@ -1290,7 +1290,7 @@ Minimum 500 words recommended for meaningful patterns."></textarea>
       // Add more questions
       const extras = getExtraQuestions();
       if (extras.length === 0) {
-        alert('You\u2019ve answered all available questions! Your signature is at maximum depth.');
+        alert('You\u2019ve answered all available questions! Your portrait is at maximum depth.');
         return;
       }
       extras.forEach(q => questionQueue.push(q));

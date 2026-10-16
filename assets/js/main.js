@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', function() {
       label: "Shakespeare · Folio",
       corpus: "37 plays",
       dim: "Drama",
-      tooltip: "The complete spectral signature of Shakespeare's folio — poetic density rendered as geometric form."
+      tooltip: "The complete spectral portrait of Shakespeare's folio — poetic density rendered as geometric form."
     },
     {
       type: "image",
@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', function() {
       label: "Pushkin · Onegin",
       corpus: "Novel",
       dim: "Poetry",
-      tooltip: "Pushkin's Eugene Onegin — a rotationally aligned signature emphasizing its verse structure."
+      tooltip: "Pushkin's Eugene Onegin — a rotationally aligned portrait emphasizing its verse structure."
     },
     {
       type: "image",
@@ -153,7 +153,7 @@ document.addEventListener('DOMContentLoaded', function() {
       label: "Buddy · Material Tests",
       corpus: "Pet Memorial",
       dim: "Steel & Aluminum",
-      tooltip: "The same soul signature rendered across different metals and laser techniques. Steel, anodized aluminum, varying finishes."
+      tooltip: "The same soul portrait rendered across different metals and laser techniques. Steel, anodized aluminum, varying finishes."
     }
   ];
 
